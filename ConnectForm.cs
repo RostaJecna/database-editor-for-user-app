@@ -13,11 +13,34 @@ namespace DatabaseEditorForUser
 {
     public partial class ConnectForm : Form
     {
+        private enum Panels
+        {
+            Welcome,
+            Connection
+        }
+
         Point lastMouseCoor;
+        int connectionTimerCounter;
 
         public ConnectForm()
         {
             InitializeComponent();
+            SwitchPanelTo(Panels.Welcome);
+        }
+
+        private void SwitchPanelTo(Panels panel)
+        {
+            switch(panel)
+            {
+                case Panels.Welcome:
+                    welcomePanel.Visible = true;
+                    connectionPanel.Visible = false;
+                    break;
+                case Panels.Connection:
+                    welcomePanel.Visible = false;
+                    connectionPanel.Visible = true;
+                    break;
+            }
         }
 
         private void BgPanel_Paint(object sender, PaintEventArgs e)
@@ -38,6 +61,43 @@ namespace DatabaseEditorForUser
             {
                 Left += e.X - lastMouseCoor.X;
                 Top += e.Y - lastMouseCoor.Y;
+            }
+        }
+
+        private void FormCloseBtn_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void WelcomeConnectBtn_Click(object sender, EventArgs e)
+        {
+            SwitchPanelTo(Panels.Connection);
+            connectionTimer.Enabled = true;
+            connectionTimer.Start();
+        }
+
+        private void ConnectionTimer_Tick(object sender, EventArgs e)
+        {
+            switch (connectionTimerCounter)
+            {
+                case 0:
+                    connectionStatusLabel.Text = "Connecting.";
+                    connectionTimerCounter++;
+                    break;
+                case 50:
+                    connectionStatusLabel.Text = "Connecting..";
+                    connectionTimerCounter++;
+                    break;
+                case 100:
+                    connectionStatusLabel.Text = "Connecting...";
+                    connectionTimerCounter++;
+                    break;
+                case 150:
+                    connectionTimerCounter = 0;
+                    break;
+                default:
+                    connectionTimerCounter++;
+                    break;
             }
         }
     }
