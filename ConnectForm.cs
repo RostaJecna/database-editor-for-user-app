@@ -21,6 +21,7 @@ namespace DatabaseEditorForUser
 
         Point lastMouseCoor;
         int connectionTimerCounter;
+        Task connectionTask;
 
         public ConnectForm()
         {
@@ -74,6 +75,11 @@ namespace DatabaseEditorForUser
             SwitchPanelTo(Panels.Connection);
             connectionTimer.Enabled = true;
             connectionTimer.Start();
+
+            connectionTask = new Task(() =>
+            {
+
+            });
         }
 
         private void ConnectionTimer_Tick(object sender, EventArgs e)
