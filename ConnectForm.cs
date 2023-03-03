@@ -78,12 +78,38 @@ namespace DatabaseEditorForUser
 
             connectionTask = new Task(() =>
             {
-
+                try
+                {
+                    DatabaseSingleton.Instance().Open();
+                    DatabaseSingleton.status = DatabaseSingleton.Status.Connected;
+                }
+                catch(Exception ex)
+                {
+                    DatabaseSingleton.status = DatabaseSingleton.Status.Failure;
+                    MessageBox.Show(ex.Message);
+                }
             });
+
+            connectionTask.Start();
         }
 
         private void ConnectionTimer_Tick(object sender, EventArgs e)
         {
+            if(DatabaseSingleton.IsConnected())
+            {
+                DatabaseSingleton.status = DatabaseSingleton.Status.Success;
+                Close();
+            }
+            else if (DatabaseSingleton.IsFailure())
+            {
+                SwitchPanelTo(Panels.Welcome);
+                connectionTimer.Enabled = false;
+                connectionTimer.Stop();
+                connectionTimerCounter = 0;
+                welcomeConnectBtn.Text = "Re-connect To Database";
+                DatabaseSingleton.CloseAndDispose();
+            }
+
             switch (connectionTimerCounter)
             {
                 case 0:
