@@ -10,9 +10,18 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DatabaseEditorForUser
 {
-    internal class DatabaseSingleton
+    internal static class DatabaseSingleton
     {
+        internal enum Status
+        {
+            None,
+            Success,
+            Connected,
+            Failure
+        }
+
         private static SqlConnection connection = null;
+        public static Status status = Status.None;
 
         public static SqlConnection Instance()
         {
@@ -27,12 +36,23 @@ namespace DatabaseEditorForUser
                 {
                     connection.Close();
                     connection.Dispose();
+                    status = Status.None;
                 }
             }
             finally
             {
                 connection = null;
             }
+        }
+
+        public static bool IsConnected()
+        {
+            return status == Status.Connected;
+        }
+
+        public static bool IsFailure() 
+        {
+            return status == Status.Failure;
         }
     }
 }
