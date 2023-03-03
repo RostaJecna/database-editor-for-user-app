@@ -101,7 +101,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\GameData.sql" />
+    <Content Include="Resources\Cloud.sql" />
     <Content Include="Resources\LoginForm\bgPicture.jpg" />
   </ItemGroup>
   <ItemGroup />
