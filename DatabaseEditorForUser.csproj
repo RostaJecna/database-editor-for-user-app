@@ -72,6 +72,12 @@
       <DependentUpon>ConnectForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DatabaseSingleton.cs" />
+    <Compile Include="DEFUForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DEFUForm.Designer.cs">
+      <DependentUpon>DEFUForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ConnectForm.resx">
@@ -102,7 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Cloud.sql" />
-    <Content Include="Resources\LoginForm\bgPicture.jpg" />
+    <Content Include="Resources\ConnectForm\bgPicture.jpg" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
