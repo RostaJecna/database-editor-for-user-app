@@ -83,6 +83,9 @@
     <EmbeddedResource Include="ConnectForm.resx">
       <DependentUpon>ConnectForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DEFUForm.resx">
+      <DependentUpon>DEFUForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -91,6 +94,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -109,6 +113,12 @@
   <ItemGroup>
     <Content Include="Resources\Cloud.sql" />
     <Content Include="Resources\ConnectForm\bgPicture.jpg" />
+    <Content Include="Resources\DEFUForm\Access.png" />
+    <Content Include="Resources\DEFUForm\Account.png" />
+    <Content Include="Resources\DEFUForm\AttachamentType.png" />
+    <Content Include="Resources\DEFUForm\Attachment.png" />
+    <Content Include="Resources\DEFUForm\Folder.png" />
+    <Content Include="Resources\DEFUForm\FolderColor.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
