@@ -46,7 +46,7 @@ namespace DatabaseEditorForUser
 
         private void BgPanel_Paint(object sender, PaintEventArgs e)
         {
-            Rectangle gradient_rectangle = new Rectangle(0, 0, Width, Height);
+            Rectangle gradient_rectangle = new Rectangle(0, 0, bgPanel.Width, bgPanel.Height);
             e.Graphics.FillRectangle(new LinearGradientBrush(gradient_rectangle,
                 Color.FromArgb(36, 63, 114), Color.FromArgb(3, 7, 12), 65f), gradient_rectangle);
         }
