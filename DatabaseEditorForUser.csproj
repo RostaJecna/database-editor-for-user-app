@@ -78,6 +78,7 @@
     <Compile Include="DEFUForm.Designer.cs">
       <DependentUpon>DEFUForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Graphics\Palettes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ConnectForm.resx">
@@ -106,6 +107,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\Graphics\palettes.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

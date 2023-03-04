@@ -81,6 +81,7 @@
             this.menuAttachmentBtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.menuAttachmentBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.menuAttachmentBtn.UseVisualStyleBackColor = true;
+            this.menuAttachmentBtn.Click += new System.EventHandler(this.ActivateButton);
             // 
             // menuTypeBtn
             // 
@@ -99,6 +100,7 @@
             this.menuTypeBtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.menuTypeBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.menuTypeBtn.UseVisualStyleBackColor = true;
+            this.menuTypeBtn.Click += new System.EventHandler(this.ActivateButton);
             // 
             // menuAccessBtn
             // 
@@ -117,6 +119,7 @@
             this.menuAccessBtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.menuAccessBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.menuAccessBtn.UseVisualStyleBackColor = true;
+            this.menuAccessBtn.Click += new System.EventHandler(this.ActivateButton);
             // 
             // menuFolderBtn
             // 
@@ -135,6 +138,7 @@
             this.menuFolderBtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.menuFolderBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.menuFolderBtn.UseVisualStyleBackColor = true;
+            this.menuFolderBtn.Click += new System.EventHandler(this.ActivateButton);
             // 
             // menuColorBtn
             // 
@@ -153,6 +157,7 @@
             this.menuColorBtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.menuColorBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.menuColorBtn.UseVisualStyleBackColor = true;
+            this.menuColorBtn.Click += new System.EventHandler(this.ActivateButton);
             // 
             // menuAccountBtn
             // 
@@ -171,6 +176,7 @@
             this.menuAccountBtn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.menuAccountBtn.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.menuAccountBtn.UseVisualStyleBackColor = true;
+            this.menuAccountBtn.Click += new System.EventHandler(this.ActivateButton);
             // 
             // DEFUForm
             // 
