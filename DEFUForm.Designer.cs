@@ -251,6 +251,7 @@
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.barPanel);
             this.Controls.Add(this.menuPanel);
+            this.DoubleBuffered = true;
             this.Name = "DEFUForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DEFU: Connected";
