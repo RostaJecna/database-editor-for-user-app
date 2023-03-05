@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,6 +22,8 @@ namespace DatabaseEditorForUser
         {
             InitializeComponent();
             SpaceBeforeButtons(menuPanel);
+
+            mainBigLogoPictureBox.Image = RemapImage(mainBigLogoPictureBox.Image, new Bitmap(@"../../Resources/DEFUForm/Logo_mask.png"), Color.Gainsboro);
 
             barTitleLabel.Text = barTitleLabel.Text.ToUpper();
 
@@ -110,6 +113,24 @@ namespace DatabaseEditorForUser
         private void MenuAttachmentBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, e);
+        }
+
+        private Bitmap RemapImage(Image image, Bitmap mask, Color color)
+        {
+            Bitmap output = image as Bitmap;
+
+            for(int y = 0; y < output.Height; y++)
+            {
+                for(int x = 0; x < output.Width; x++)
+                {
+                    if(mask.GetPixel(x, y) == Color.FromArgb(255,255,255))
+                    {
+                        output.SetPixel(x, y, color);
+                    }
+                }
+            }
+
+            return output;
         }
     }
 }
