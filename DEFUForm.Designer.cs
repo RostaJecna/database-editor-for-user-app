@@ -36,13 +36,17 @@
             this.menuColorBtn = new System.Windows.Forms.Button();
             this.menuAccountBtn = new System.Windows.Forms.Button();
             this.menuLogoPanel = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.menuLogoPictureBox = new System.Windows.Forms.PictureBox();
             this.barPanel = new System.Windows.Forms.Panel();
             this.barTitleLabel = new System.Windows.Forms.Label();
+            this.mainPanel = new System.Windows.Forms.Panel();
+            this.mainBigLogoPictureBox = new System.Windows.Forms.PictureBox();
             this.menuPanel.SuspendLayout();
             this.menuLogoPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.menuLogoPictureBox)).BeginInit();
             this.barPanel.SuspendLayout();
+            this.mainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainBigLogoPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // menuPanel
@@ -58,7 +62,7 @@
             this.menuPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.menuPanel.Location = new System.Drawing.Point(0, 0);
             this.menuPanel.Name = "menuPanel";
-            this.menuPanel.Size = new System.Drawing.Size(180, 478);
+            this.menuPanel.Size = new System.Drawing.Size(180, 547);
             this.menuPanel.TabIndex = 0;
             // 
             // menuAttachmentBtn
@@ -178,23 +182,23 @@
             // menuLogoPanel
             // 
             this.menuLogoPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(19)))), ((int)(((byte)(34)))), ((int)(((byte)(63)))));
-            this.menuLogoPanel.Controls.Add(this.pictureBox1);
+            this.menuLogoPanel.Controls.Add(this.menuLogoPictureBox);
             this.menuLogoPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.menuLogoPanel.Location = new System.Drawing.Point(0, 0);
             this.menuLogoPanel.Name = "menuLogoPanel";
             this.menuLogoPanel.Size = new System.Drawing.Size(180, 100);
             this.menuLogoPanel.TabIndex = 0;
             // 
-            // pictureBox1
+            // menuLogoPictureBox
             // 
-            this.pictureBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pictureBox1.Image = global::DatabaseEditorForUser.Properties.Resources.Logo;
-            this.pictureBox1.Location = new System.Drawing.Point(50, 18);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(80, 64);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.menuLogoPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.menuLogoPictureBox.Image = global::DatabaseEditorForUser.Properties.Resources.Logo;
+            this.menuLogoPictureBox.Location = new System.Drawing.Point(50, 18);
+            this.menuLogoPictureBox.Name = "menuLogoPictureBox";
+            this.menuLogoPictureBox.Size = new System.Drawing.Size(80, 64);
+            this.menuLogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.menuLogoPictureBox.TabIndex = 0;
+            this.menuLogoPictureBox.TabStop = false;
             // 
             // barPanel
             // 
@@ -203,7 +207,7 @@
             this.barPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.barPanel.Location = new System.Drawing.Point(180, 0);
             this.barPanel.Name = "barPanel";
-            this.barPanel.Size = new System.Drawing.Size(461, 100);
+            this.barPanel.Size = new System.Drawing.Size(898, 100);
             this.barPanel.TabIndex = 1;
             // 
             // barTitleLabel
@@ -212,17 +216,39 @@
             this.barTitleLabel.AutoSize = true;
             this.barTitleLabel.Font = new System.Drawing.Font("Consolas", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.barTitleLabel.ForeColor = System.Drawing.Color.White;
-            this.barTitleLabel.Location = new System.Drawing.Point(159, 38);
+            this.barTitleLabel.Location = new System.Drawing.Point(378, 38);
             this.barTitleLabel.Name = "barTitleLabel";
             this.barTitleLabel.Size = new System.Drawing.Size(142, 23);
             this.barTitleLabel.TabIndex = 0;
             this.barTitleLabel.Text = "Welcome page";
             // 
+            // mainPanel
+            // 
+            this.mainPanel.Controls.Add(this.mainBigLogoPictureBox);
+            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainPanel.Location = new System.Drawing.Point(180, 100);
+            this.mainPanel.Name = "mainPanel";
+            this.mainPanel.Size = new System.Drawing.Size(898, 447);
+            this.mainPanel.TabIndex = 2;
+            // 
+            // mainBigLogoPictureBox
+            // 
+            this.mainBigLogoPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.mainBigLogoPictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.mainBigLogoPictureBox.Image = global::DatabaseEditorForUser.Properties.Resources.Logo;
+            this.mainBigLogoPictureBox.Location = new System.Drawing.Point(347, 138);
+            this.mainBigLogoPictureBox.Name = "mainBigLogoPictureBox";
+            this.mainBigLogoPictureBox.Size = new System.Drawing.Size(204, 169);
+            this.mainBigLogoPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.mainBigLogoPictureBox.TabIndex = 3;
+            this.mainBigLogoPictureBox.TabStop = false;
+            // 
             // DEFUForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(641, 478);
+            this.ClientSize = new System.Drawing.Size(1078, 547);
+            this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.barPanel);
             this.Controls.Add(this.menuPanel);
             this.Name = "DEFUForm";
@@ -230,9 +256,11 @@
             this.Text = "DEFU: Connected";
             this.menuPanel.ResumeLayout(false);
             this.menuLogoPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.menuLogoPictureBox)).EndInit();
             this.barPanel.ResumeLayout(false);
             this.barPanel.PerformLayout();
+            this.mainPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.mainBigLogoPictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -249,6 +277,8 @@
         private System.Windows.Forms.Button menuTypeBtn;
         private System.Windows.Forms.Panel barPanel;
         private System.Windows.Forms.Label barTitleLabel;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox menuLogoPictureBox;
+        private System.Windows.Forms.Panel mainPanel;
+        private System.Windows.Forms.PictureBox mainBigLogoPictureBox;
     }
 }
