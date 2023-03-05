@@ -38,5 +38,20 @@ namespace DatabaseEditorForUser.Graphics
             lastColorIndex = colorIndex;
             return colors[colorIndex];
         }
+
+        public static Color GetLast()
+        {
+            return colors[lastColorIndex];
+        }
+
+        public static Color GetLastDarkness(int darkness)
+        {
+            Color color = colors[lastColorIndex];
+            return Color.FromArgb(
+                Math.Abs(color.R - darkness),
+                Math.Abs(color.G - darkness),
+                Math.Abs(color.B - darkness)
+                );
+        }
     }
 }
