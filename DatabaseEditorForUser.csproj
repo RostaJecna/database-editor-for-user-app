@@ -121,6 +121,7 @@
     <Content Include="Resources\DEFUForm\Attachment.png" />
     <Content Include="Resources\DEFUForm\Folder.png" />
     <Content Include="Resources\DEFUForm\FolderColor.png" />
+    <Content Include="Resources\DEFUForm\Logo.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
