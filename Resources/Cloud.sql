@@ -5,7 +5,7 @@ CREATE TABLE Account(
 	ID INT PRIMARY KEY IDENTITY(1,1),
 	FirstName VARCHAR(25) NOT NULL CHECK(LEN(FirstName) >= 3),
 	LastName VARCHAR(25) NOT NULL CHECK(LEN(LastName) >= 3),
-	Email VARCHAR(25) UNIQUE NOT NULL CHECK(Email LIKE '%@%'),
+	Email VARCHAR(35) UNIQUE NOT NULL CHECK(Email LIKE '%@%'),
 	HashedPassword VARCHAR(64) NOT NULL,
 	Registered DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd'))
 );
@@ -18,7 +18,7 @@ CREATE TABLE FolderColor(
 CREATE TABLE Folder(
 	ID INT PRIMARY KEY IDENTITY(1,1),
 	FolderName VARCHAR(45) NOT NULL CHECK(LEN(FolderName) > 0),
-	ColorID INT NOT NULL DEFAULT 0 FOREIGN KEY REFERENCES FolderColor(ID),
+	ColorID INT NOT NULL DEFAULT 1 FOREIGN KEY REFERENCES FolderColor(ID),
 	IsShared BIT NOT NULL DEFAULT 0,
 	CreatedAt DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd'))
 );
@@ -59,15 +59,14 @@ INSERT INTO FolderColor (ColorName)
 		('Red'),
 		('Puce'),
 		('Aquamarine'),
-		('Red'),
-		('Fuscia'),
-		('Puce');
+		('Fuscia');
+
 
 INSERT INTO Folder (FolderName, ColorID, IsShared, CreatedAt)
 	VALUES
-		('Financial Statements', 0, 1, '2016-01-05'),
-		('Project Plans', 3, 0, '2018-03-21'),
-		('Client Contracts', 1, 0, '2020-05-13');
+		('Financial Statements', 1, 1, '2016-01-05'),
+		('Project Plans', 3, 1, '2018-03-21'),
+		('Client Contracts', 2, 0, '2020-05-13');
 
 INSERT INTO Access (AccountID, FolderID)
 	VALUES
