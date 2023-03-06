@@ -202,7 +202,7 @@
             // 
             // barPanel
             // 
-            this.barPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(76)))), ((int)(((byte)(126)))), ((int)(((byte)(191)))));
+            this.barPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(54)))), ((int)(((byte)(101)))));
             this.barPanel.Controls.Add(this.barTitleLabel);
             this.barPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.barPanel.Location = new System.Drawing.Point(180, 0);
