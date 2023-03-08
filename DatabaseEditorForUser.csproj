@@ -71,6 +71,7 @@
     <Compile Include="ConnectForm.Designer.cs">
       <DependentUpon>ConnectForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DAOs\AccountDAO.cs" />
     <Compile Include="DatabaseSingleton.cs" />
     <Compile Include="DEFUForm.cs">
       <SubType>Form</SubType>
@@ -78,7 +79,10 @@
     <Compile Include="DEFUForm.Designer.cs">
       <DependentUpon>DEFUForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Account.cs" />
     <Compile Include="Graphics\Palettes.cs" />
+    <Compile Include="Interfaces\IBaseClass.cs" />
+    <Compile Include="Interfaces\IDAO.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Subforms\AccessForm.cs">
@@ -177,6 +181,9 @@
     <Content Include="Resources\DEFUForm\FolderColor.png" />
     <Content Include="Resources\DEFUForm\Logo.png" />
     <Content Include="Resources\DEFUForm\Logo_mask.png" />
+    <Content Include="Resources\Subforms\Back.png" />
+    <Content Include="Resources\Subforms\Refresh.png" />
+    <Content Include="Resources\Subforms\Save.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
