@@ -14,5 +14,6 @@ namespace DatabaseEditorForUser.Interfaces
         void Delete(int ID);
         T GetByID(int ID);
         bool HasReferences(int ID);
+        bool HasDuplicate(T element);
     }
 }
