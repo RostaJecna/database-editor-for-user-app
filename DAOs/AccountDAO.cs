@@ -41,6 +41,11 @@ namespace DatabaseEditorForUser.DAOs
 
         public void Add(Account element)
         {
+            if (HasDuplicate(element))
+            {
+                throw new Exception("Email must be unique.");
+            }
+
             string query = "INSERT INTO Account (FirstName, LastName, Email, HashedPassword) VALUES" +
                                 "(@FirstName, @LastName, @Email, @HashedPassword);";
 
@@ -58,6 +63,11 @@ namespace DatabaseEditorForUser.DAOs
 
         public void Edit(Account element)
         {
+            if(HasDuplicate(element))
+            {
+                throw new Exception("Duplicate email found. Please provide a unique email.");
+            }
+
             string query = "UPDATE Account SET FirstName = @FirstName, " +
                                               "LastName = @LastName," +
                                               "Email = @Email," +
@@ -131,6 +141,25 @@ namespace DatabaseEditorForUser.DAOs
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.HasRows;
+                }
+            }
+        }
+
+        public bool HasDuplicate(Account element)
+        {
+            string query = "SELECT ID FROM Account WHERE Email = @Email";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.Parameters.AddWithValue("@Email", element.Email);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if(reader.HasRows)
+                    {
+                        reader.Read();
+                        return element.ID != reader.GetInt32(0);
+                    }
+
+                    return false;
                 }
             }
         }
