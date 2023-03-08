@@ -64,6 +64,40 @@ namespace DatabaseEditorForUser.Subforms
             UserIsEditingRow = false;
         }
 
+        private void GetAllDataFromDatabase()
+        {
+            selectedRow = null;
+            accountGridView.DataSource = new BindingSource()
+            {
+                DataSource = accoundDao.GetAll()
+            };
+        }
+
+        // TODO: Create a global counter, because if you switch between tables, it gets reset.
+        private void SetRefreshCooldown()
+        {
+            refreshBtnTimer.Enabled = true;
+            refreshBtnTimer.Start();
+            refreshBtnTimerCounter = 0;
+            refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+            refreshTableBtn.Enabled = false;
+        }
+
+        private void ClearTextBoxes()
+        {
+            firstNameTextBox.Text = string.Empty;
+            lastNameTextBox.Text = string.Empty;
+            emailTextBox.Text = string.Empty;
+            passwordTextBox.Text = string.Empty;
+        }
+
+        private void FillTextBoxesWithData(Account account)
+        {
+            firstNameTextBox.Text = account.FirstName;
+            lastNameTextBox.Text = account.LastName;
+            emailTextBox.Text = account.Email;
+        }
+
         private void SwitchPanelTo(Panels panel)
         {
             switch (panel)
@@ -186,33 +220,6 @@ namespace DatabaseEditorForUser.Subforms
             }
         }
 
-        private void GetAllDataFromDatabase()
-        {
-            selectedRow = null;
-            accountGridView.DataSource = new BindingSource()
-            {
-                DataSource = accoundDao.GetAll()
-            };
-        }
-
-        // TODO: Create a global counter, because if you switch between tables, it gets reset.
-        private void SetRefreshCooldown()
-        {
-            refreshBtnTimer.Enabled = true;
-            refreshBtnTimer.Start();
-            refreshBtnTimerCounter = 0;
-            refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
-            refreshTableBtn.Enabled = false;
-        }
-
-        private void ClearTextBoxes()
-        {
-            firstNameTextBox.Text = string.Empty;
-            lastNameTextBox.Text = string.Empty;
-            emailTextBox.Text = string.Empty;
-            passwordTextBox.Text = string.Empty;
-        }
-
         private void EditBtn_Click(object sender, EventArgs e)
         {
             UserIsEditingRow = true;
@@ -231,19 +238,6 @@ namespace DatabaseEditorForUser.Subforms
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxesWithData(selectedAccount);
-        }
-
-        private void FillTextBoxesWithData(Account account)
-        {
-            firstNameTextBox.Text = account.FirstName;
-            lastNameTextBox.Text = account.LastName;
-            emailTextBox.Text = account.Email;
-        }
-
-        private void PasswordCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            passwordTextBox.Enabled = !passwordCheckBox.Checked;
-            passwordLabel.Enabled = !passwordCheckBox.Checked;
         }
 
         private void DeleteBtn_Click(object sender, EventArgs e)
@@ -271,6 +265,12 @@ namespace DatabaseEditorForUser.Subforms
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+        }
+
+        private void PasswordCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            passwordTextBox.Enabled = !passwordCheckBox.Checked;
+            passwordLabel.Enabled = !passwordCheckBox.Checked;
         }
     }
 }

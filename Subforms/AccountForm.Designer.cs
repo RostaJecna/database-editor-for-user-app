@@ -33,6 +33,10 @@
             this.gridPanel = new System.Windows.Forms.Panel();
             this.accountGridView = new System.Windows.Forms.DataGridView();
             this.rightSidePanel = new System.Windows.Forms.Panel();
+            this.navigationPanel = new System.Windows.Forms.Panel();
+            this.deleteBtn = new System.Windows.Forms.Button();
+            this.editBtn = new System.Windows.Forms.Button();
+            this.addRowBtn = new System.Windows.Forms.Button();
             this.dataManagerPanel = new System.Windows.Forms.Panel();
             this.passwordCheckBox = new System.Windows.Forms.CheckBox();
             this.dataEditorPanel = new System.Windows.Forms.Panel();
@@ -46,10 +50,6 @@
             this.firstNameLabel = new System.Windows.Forms.Label();
             this.saveRowBtn = new System.Windows.Forms.Button();
             this.backBtn = new System.Windows.Forms.Button();
-            this.navigationPanel = new System.Windows.Forms.Panel();
-            this.deleteBtn = new System.Windows.Forms.Button();
-            this.editBtn = new System.Windows.Forms.Button();
-            this.addRowBtn = new System.Windows.Forms.Button();
             this.searchBarPanel = new System.Windows.Forms.Panel();
             this.refreshTableBtn = new System.Windows.Forms.Button();
             this.refreshBtnTimer = new System.Windows.Forms.Timer(this.components);
@@ -57,9 +57,9 @@
             this.gridPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.accountGridView)).BeginInit();
             this.rightSidePanel.SuspendLayout();
+            this.navigationPanel.SuspendLayout();
             this.dataManagerPanel.SuspendLayout();
             this.dataEditorPanel.SuspendLayout();
-            this.navigationPanel.SuspendLayout();
             this.searchBarPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -115,6 +115,66 @@
             this.rightSidePanel.Size = new System.Drawing.Size(200, 488);
             this.rightSidePanel.TabIndex = 1;
             // 
+            // navigationPanel
+            // 
+            this.navigationPanel.Controls.Add(this.deleteBtn);
+            this.navigationPanel.Controls.Add(this.editBtn);
+            this.navigationPanel.Controls.Add(this.addRowBtn);
+            this.navigationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.navigationPanel.Location = new System.Drawing.Point(0, 0);
+            this.navigationPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.navigationPanel.Name = "navigationPanel";
+            this.navigationPanel.Size = new System.Drawing.Size(200, 488);
+            this.navigationPanel.TabIndex = 9;
+            // 
+            // deleteBtn
+            // 
+            this.deleteBtn.BackColor = System.Drawing.Color.Brown;
+            this.deleteBtn.FlatAppearance.BorderSize = 0;
+            this.deleteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.deleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.deleteBtn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.deleteBtn.Location = new System.Drawing.Point(0, 116);
+            this.deleteBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.deleteBtn.Name = "deleteBtn";
+            this.deleteBtn.Size = new System.Drawing.Size(171, 39);
+            this.deleteBtn.TabIndex = 8;
+            this.deleteBtn.Text = "Delete";
+            this.deleteBtn.UseVisualStyleBackColor = false;
+            this.deleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
+            // 
+            // editBtn
+            // 
+            this.editBtn.BackColor = System.Drawing.Color.DarkGray;
+            this.editBtn.FlatAppearance.BorderSize = 0;
+            this.editBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.editBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.editBtn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.editBtn.Location = new System.Drawing.Point(0, 71);
+            this.editBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.editBtn.Name = "editBtn";
+            this.editBtn.Size = new System.Drawing.Size(171, 39);
+            this.editBtn.TabIndex = 7;
+            this.editBtn.Text = "Edit";
+            this.editBtn.UseVisualStyleBackColor = false;
+            this.editBtn.Click += new System.EventHandler(this.EditBtn_Click);
+            // 
+            // addRowBtn
+            // 
+            this.addRowBtn.BackColor = System.Drawing.Color.DarkGray;
+            this.addRowBtn.FlatAppearance.BorderSize = 0;
+            this.addRowBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addRowBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addRowBtn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.addRowBtn.Location = new System.Drawing.Point(0, 27);
+            this.addRowBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.addRowBtn.Name = "addRowBtn";
+            this.addRowBtn.Size = new System.Drawing.Size(171, 39);
+            this.addRowBtn.TabIndex = 6;
+            this.addRowBtn.Text = "Add";
+            this.addRowBtn.UseVisualStyleBackColor = false;
+            this.addRowBtn.Click += new System.EventHandler(this.AddRowBtn_Click);
+            // 
             // dataManagerPanel
             // 
             this.dataManagerPanel.Controls.Add(this.passwordCheckBox);
@@ -123,7 +183,7 @@
             this.dataManagerPanel.Controls.Add(this.backBtn);
             this.dataManagerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataManagerPanel.Location = new System.Drawing.Point(0, 0);
-            this.dataManagerPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataManagerPanel.Margin = new System.Windows.Forms.Padding(4);
             this.dataManagerPanel.Name = "dataManagerPanel";
             this.dataManagerPanel.Size = new System.Drawing.Size(200, 488);
             this.dataManagerPanel.TabIndex = 10;
@@ -133,7 +193,7 @@
             this.passwordCheckBox.Checked = true;
             this.passwordCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.passwordCheckBox.Location = new System.Drawing.Point(24, 318);
-            this.passwordCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.passwordCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.passwordCheckBox.Name = "passwordCheckBox";
             this.passwordCheckBox.Size = new System.Drawing.Size(147, 38);
             this.passwordCheckBox.TabIndex = 10;
@@ -153,7 +213,7 @@
             this.dataEditorPanel.Controls.Add(this.firstNameTextBox);
             this.dataEditorPanel.Controls.Add(this.firstNameLabel);
             this.dataEditorPanel.Location = new System.Drawing.Point(0, 73);
-            this.dataEditorPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataEditorPanel.Margin = new System.Windows.Forms.Padding(4);
             this.dataEditorPanel.Name = "dataEditorPanel";
             this.dataEditorPanel.Size = new System.Drawing.Size(171, 193);
             this.dataEditorPanel.TabIndex = 9;
@@ -162,7 +222,7 @@
             // 
             this.passwordTextBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.passwordTextBox.Location = new System.Drawing.Point(0, 154);
-            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.Size = new System.Drawing.Size(171, 22);
             this.passwordTextBox.TabIndex = 7;
@@ -184,7 +244,7 @@
             // 
             this.emailTextBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.emailTextBox.Location = new System.Drawing.Point(0, 110);
-            this.emailTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.emailTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.emailTextBox.Name = "emailTextBox";
             this.emailTextBox.Size = new System.Drawing.Size(171, 22);
             this.emailTextBox.TabIndex = 5;
@@ -205,7 +265,7 @@
             // 
             this.lastNameTextBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.lastNameTextBox.Location = new System.Drawing.Point(0, 66);
-            this.lastNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lastNameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.lastNameTextBox.Name = "lastNameTextBox";
             this.lastNameTextBox.Size = new System.Drawing.Size(171, 22);
             this.lastNameTextBox.TabIndex = 3;
@@ -226,7 +286,7 @@
             // 
             this.firstNameTextBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.firstNameTextBox.Location = new System.Drawing.Point(0, 22);
-            this.firstNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.firstNameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.firstNameTextBox.Name = "firstNameTextBox";
             this.firstNameTextBox.Size = new System.Drawing.Size(171, 22);
             this.firstNameTextBox.TabIndex = 1;
@@ -281,66 +341,6 @@
             this.backBtn.UseVisualStyleBackColor = false;
             this.backBtn.Click += new System.EventHandler(this.BackBtn_Click);
             // 
-            // navigationPanel
-            // 
-            this.navigationPanel.Controls.Add(this.deleteBtn);
-            this.navigationPanel.Controls.Add(this.editBtn);
-            this.navigationPanel.Controls.Add(this.addRowBtn);
-            this.navigationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.navigationPanel.Location = new System.Drawing.Point(0, 0);
-            this.navigationPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.navigationPanel.Name = "navigationPanel";
-            this.navigationPanel.Size = new System.Drawing.Size(200, 488);
-            this.navigationPanel.TabIndex = 9;
-            // 
-            // deleteBtn
-            // 
-            this.deleteBtn.BackColor = System.Drawing.Color.Brown;
-            this.deleteBtn.FlatAppearance.BorderSize = 0;
-            this.deleteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.deleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.deleteBtn.ForeColor = System.Drawing.Color.Gainsboro;
-            this.deleteBtn.Location = new System.Drawing.Point(0, 116);
-            this.deleteBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.deleteBtn.Name = "deleteBtn";
-            this.deleteBtn.Size = new System.Drawing.Size(171, 39);
-            this.deleteBtn.TabIndex = 8;
-            this.deleteBtn.Text = "Delete";
-            this.deleteBtn.UseVisualStyleBackColor = false;
-            this.deleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
-            // 
-            // editBtn
-            // 
-            this.editBtn.BackColor = System.Drawing.Color.DarkGray;
-            this.editBtn.FlatAppearance.BorderSize = 0;
-            this.editBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.editBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.editBtn.ForeColor = System.Drawing.Color.Gainsboro;
-            this.editBtn.Location = new System.Drawing.Point(0, 71);
-            this.editBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.editBtn.Name = "editBtn";
-            this.editBtn.Size = new System.Drawing.Size(171, 39);
-            this.editBtn.TabIndex = 7;
-            this.editBtn.Text = "Edit";
-            this.editBtn.UseVisualStyleBackColor = false;
-            this.editBtn.Click += new System.EventHandler(this.EditBtn_Click);
-            // 
-            // addRowBtn
-            // 
-            this.addRowBtn.BackColor = System.Drawing.Color.DarkGray;
-            this.addRowBtn.FlatAppearance.BorderSize = 0;
-            this.addRowBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addRowBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addRowBtn.ForeColor = System.Drawing.Color.Gainsboro;
-            this.addRowBtn.Location = new System.Drawing.Point(0, 27);
-            this.addRowBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.addRowBtn.Name = "addRowBtn";
-            this.addRowBtn.Size = new System.Drawing.Size(171, 39);
-            this.addRowBtn.TabIndex = 6;
-            this.addRowBtn.Text = "Add";
-            this.addRowBtn.UseVisualStyleBackColor = false;
-            this.addRowBtn.Click += new System.EventHandler(this.AddRowBtn_Click);
-            // 
             // searchBarPanel
             // 
             this.searchBarPanel.Controls.Add(this.refreshTableBtn);
@@ -382,17 +382,17 @@
             this.ClientSize = new System.Drawing.Size(1067, 554);
             this.Controls.Add(this.mainPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "AccountForm";
             this.Text = "AccountForm";
             this.mainPanel.ResumeLayout(false);
             this.gridPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.accountGridView)).EndInit();
             this.rightSidePanel.ResumeLayout(false);
+            this.navigationPanel.ResumeLayout(false);
             this.dataManagerPanel.ResumeLayout(false);
             this.dataEditorPanel.ResumeLayout(false);
             this.dataEditorPanel.PerformLayout();
-            this.navigationPanel.ResumeLayout(false);
             this.searchBarPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 

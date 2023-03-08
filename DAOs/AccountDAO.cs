@@ -56,24 +56,6 @@ namespace DatabaseEditorForUser.DAOs
 
         }
 
-        public void Delete(int ID)
-        {
-
-            if(HasReferences(ID))
-            {
-                throw new InvalidOperationException("Cannot delete Account with references in Access table.");
-            }
-
-            string query = "DELETE FROM Account WHERE ID = @ID;";
-
-            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
-            {
-                command.Parameters.AddWithValue("@ID", ID);
-
-                command.ExecuteNonQuery();
-            }
-        }
-
         public void Edit(Account element)
         {
             string query = "UPDATE Account SET FirstName = @FirstName, " +
@@ -89,6 +71,24 @@ namespace DatabaseEditorForUser.DAOs
                 command.Parameters.AddWithValue("@LastName", element.LastName);
                 command.Parameters.AddWithValue("@Email", element.Email);
                 command.Parameters.AddWithValue("@HashedPassword", element.HashedPassword);
+
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Delete(int ID)
+        {
+
+            if(HasReferences(ID))
+            {
+                throw new InvalidOperationException("Cannot delete Account with references in Access table.");
+            }
+
+            string query = "DELETE FROM Account WHERE ID = @ID;";
+
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.Parameters.AddWithValue("@ID", ID);
 
                 command.ExecuteNonQuery();
             }
