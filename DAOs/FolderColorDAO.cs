@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace DatabaseEditorForUser.DAOs
 {
@@ -137,6 +138,25 @@ namespace DatabaseEditorForUser.DAOs
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.HasRows;
+                }
+            }
+        }
+
+        public static int GetIDByName(string name)
+        {
+            string query = "SELECT ID FROM FolderColor WHERE ColorName = @ColorName";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.Parameters.AddWithValue("@ColorName", name);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return reader.GetInt32(0);
+                    }
+
+                    throw new ArgumentException("Failed to get color ID in the database.", nameof(name));
                 }
             }
         }
