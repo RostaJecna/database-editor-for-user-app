@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="DAOs\AccountDAO.cs" />
     <Compile Include="DAOs\FolderColorDAO.cs" />
+    <Compile Include="DAOs\FolderDAO.cs" />
     <Compile Include="DatabaseSingleton.cs" />
     <Compile Include="DEFUForm.cs">
       <SubType>Form</SubType>
@@ -81,6 +82,7 @@
       <DependentUpon>DEFUForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Entities\Account.cs" />
+    <Compile Include="Entities\Folder.cs" />
     <Compile Include="Entities\FolderColor.cs" />
     <Compile Include="Graphics\Palettes.cs" />
     <Compile Include="Interfaces\IBaseClass.cs" />
