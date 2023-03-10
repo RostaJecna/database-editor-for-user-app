@@ -21,7 +21,7 @@ namespace DatabaseEditorForUser.Entities
             Name = name;
             ColorID = colorID;
             IsShared = isShared;
-            CreateAt = createdAt;
+            CreatedAt = createdAt;
         }
 
         public Folder(string name, int colorID, bool isShared)
@@ -62,7 +62,7 @@ namespace DatabaseEditorForUser.Entities
             set { isShared = value; }
         }
 
-        public DateTime CreateAt
+        public DateTime CreatedAt
         {
             get { return createdAt; }
             set { createdAt = value; }

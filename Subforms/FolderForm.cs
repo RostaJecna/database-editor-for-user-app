@@ -18,7 +18,7 @@ namespace DatabaseEditorForUser.Subforms
         internal enum Panels
         {
             Navigation,
-            DataManager,
+            DataManager
         }
 
         private int refreshBtnTimerCounter;
@@ -202,7 +202,7 @@ namespace DatabaseEditorForUser.Subforms
                         folderNameTextBox.Text,
                         FolderColorDAO.GetIDByName((string)colorNameComboBox.SelectedItem),
                         isSharedCheckBox.Checked,
-                        selectedFolder.CreateAt
+                        selectedFolder.CreatedAt
                     ));
 
                     SwitchPanelTo(Panels.Navigation);
