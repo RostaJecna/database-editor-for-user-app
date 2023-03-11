@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="DAOs\AccessDAO.cs" />
     <Compile Include="DAOs\AccountDAO.cs" />
+    <Compile Include="DAOs\AttachmentTypeDAO.cs" />
     <Compile Include="DAOs\FolderColorDAO.cs" />
     <Compile Include="DAOs\FolderDAO.cs" />
     <Compile Include="DatabaseSingleton.cs" />
@@ -84,6 +85,7 @@
     </Compile>
     <Compile Include="Entities\Access.cs" />
     <Compile Include="Entities\Account.cs" />
+    <Compile Include="Entities\AttachmentType.cs" />
     <Compile Include="Entities\Folder.cs" />
     <Compile Include="Entities\FolderColor.cs" />
     <Compile Include="Graphics\Palettes.cs" />
