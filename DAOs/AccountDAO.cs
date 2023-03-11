@@ -163,5 +163,20 @@ namespace DatabaseEditorForUser.DAOs
                 }
             }
         }
+
+        public static bool Exist(int ID)
+        {
+            string query = "SELECT 1 FROM Account WHERE ID = @ID";
+
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.Parameters.AddWithValue("@ID", ID);
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    return reader.HasRows;
+                }
+            }
+        }
     }
 }
