@@ -112,19 +112,13 @@ namespace DatabaseEditorForUser.DAOs
 
         public bool HasDuplicate(FolderColor element)
         {
-            string query = "SELECT ID FROM FolderColor WHERE ColorName = @ColorName";
+            string query = "SELECT 1 FROM FolderColor WHERE ColorName = @ColorName";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.Parameters.AddWithValue("@ColorName", element.Name);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
-                        return element.ID != reader.GetInt32(0);
-                    }
-
-                    return false;
+                    return reader.HasRows;
                 }
             }
         }
