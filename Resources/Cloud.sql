@@ -41,7 +41,7 @@ CREATE TABLE Attachment(
 	AttachmentName VARCHAR(20) NOT NULL CHECK(LEN(AttachmentName) > 0),
 	SizeMB FLOAT NOT NULL,
 	CreatedAt DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd')),
-	UpdatedAt DATE,
+	UpdatedAt DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd')),
 );
 
 INSERT INTO Account (FirstName, LastName, Email, HashedPassword, Registered)
@@ -87,12 +87,12 @@ INSERT INTO AttachmentType (TypeName)
 		('C# Source File'),
 		('Microsoft Edge PDF Document');
 
-INSERT INTO Attachment (FolderID, TypeID, AttachmentName, SizeMB, CreatedAt)
+INSERT INTO Attachment (FolderID, TypeID, AttachmentName, SizeMB, CreatedAt, UpdatedAt)
 	VALUES
-		(1, 1, 'github.txt', 2.5, '2012-03-03'),
-		(1, 2, 'web.html', 1.2, '2018-03-03'),
-		(2, 3, 'votes.png', 3.7, '2014-03-03'),
-		(2, 4, 'cloud.sql', 5.1, '2013-03-03'),
-		(3, 5, 'PlayerController.cs', 0.3, '2018-03-03'),
-		(3, 6, 'game.pdf', 2.8, '2020-03-03'),
-		(1, 1, 'node.txt', 1.5, '2021-03-03');
+		(1, 1, 'github', 2.5, '2012-03-03', '2012-03-03'),
+		(1, 2, 'web', 1.2, '2018-03-03', '2018-03-03'),
+		(2, 3, 'votes', 3.7, '2014-03-03', '2014-03-03'),
+		(2, 4, 'cloud', 5.1, '2013-03-03', '2013-03-03'),
+		(3, 5, 'PlayerController', 0.3, '2018-03-03', '2018-03-03'),
+		(3, 6, 'game', 2.8, '2020-03-03', '2020-03-03'),
+		(1, 1, 'node', 1.5, '2021-03-03', '2021-03-03');
