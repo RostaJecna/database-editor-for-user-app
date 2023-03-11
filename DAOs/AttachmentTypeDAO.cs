@@ -134,5 +134,24 @@ namespace DatabaseEditorForUser.DAOs
                 }
             }
         }
+
+        public static int GetIDByName(string name)
+        {
+            string query = "SELECT ID FROM AttachmentType WHERE TypeName = @TypeName";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.Parameters.AddWithValue("@TypeName", name);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        return reader.GetInt32(0);
+                    }
+
+                    throw new ArgumentException("Failed to get type ID in the database.", nameof(name));
+                }
+            }
+        }
     }
 }
