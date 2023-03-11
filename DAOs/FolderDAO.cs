@@ -30,7 +30,7 @@ namespace DatabaseEditorForUser.DAOs
         {
             if (HasReferences(ID))
             {
-                throw new InvalidOperationException("Can't delete Folder with references in Access table.");
+                throw new InvalidOperationException("Can't delete Folder with references in Access or Attachment table.");
             }
 
             string query = "DELETE FROM Folder WHERE ID = @ID;";
@@ -123,6 +123,35 @@ namespace DatabaseEditorForUser.DAOs
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.Parameters.AddWithValue("@ID", ID);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if(reader.HasRows)
+                    {
+                        return true;
+                    }
+                    
+                }
+            }
+
+            query = "SELECT 1 FROM Attachment WHERE FolderID = @ID";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.Parameters.AddWithValue("@ID", ID);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    return reader.HasRows;
+                }
+            }
+        }
+
+        public static bool Exist(int ID)
+        {
+            string query = "SELECT 1 FROM Folder WHERE ID = @ID";
+
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.Parameters.AddWithValue("@ID", ID);
+
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.HasRows;
