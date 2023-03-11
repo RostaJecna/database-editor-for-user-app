@@ -71,6 +71,7 @@
     <Compile Include="ConnectForm.Designer.cs">
       <DependentUpon>ConnectForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DAOs\AccessDAO.cs" />
     <Compile Include="DAOs\AccountDAO.cs" />
     <Compile Include="DAOs\FolderColorDAO.cs" />
     <Compile Include="DAOs\FolderDAO.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="DEFUForm.Designer.cs">
       <DependentUpon>DEFUForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Access.cs" />
     <Compile Include="Entities\Account.cs" />
     <Compile Include="Entities\Folder.cs" />
     <Compile Include="Entities\FolderColor.cs" />
