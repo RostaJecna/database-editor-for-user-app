@@ -5,7 +5,7 @@ CREATE TABLE Account(
 	ID INT PRIMARY KEY IDENTITY(1,1),
 	FirstName VARCHAR(25) NOT NULL CHECK(LEN(FirstName) >= 3),
 	LastName VARCHAR(25) NOT NULL CHECK(LEN(LastName) >= 3),
-	Email VARCHAR(25) UNIQUE NOT NULL CHECK(Email LIKE '%@%'),
+	Email VARCHAR(35) UNIQUE NOT NULL CHECK(Email LIKE '%@%'),
 	HashedPassword VARCHAR(64) NOT NULL,
 	Registered DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd'))
 );
@@ -18,7 +18,7 @@ CREATE TABLE FolderColor(
 CREATE TABLE Folder(
 	ID INT PRIMARY KEY IDENTITY(1,1),
 	FolderName VARCHAR(45) NOT NULL CHECK(LEN(FolderName) > 0),
-	ColorID INT NOT NULL DEFAULT 0 FOREIGN KEY REFERENCES FolderColor(ID),
+	ColorID INT NOT NULL DEFAULT 1 FOREIGN KEY REFERENCES FolderColor(ID),
 	IsShared BIT NOT NULL DEFAULT 0,
 	CreatedAt DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd'))
 );
@@ -41,7 +41,7 @@ CREATE TABLE Attachment(
 	AttachmentName VARCHAR(20) NOT NULL CHECK(LEN(AttachmentName) > 0),
 	SizeMB FLOAT NOT NULL,
 	CreatedAt DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd')),
-	UpdatedAt DATE,
+	UpdatedAt DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd')),
 );
 
 INSERT INTO Account (FirstName, LastName, Email, HashedPassword, Registered)
@@ -59,15 +59,14 @@ INSERT INTO FolderColor (ColorName)
 		('Red'),
 		('Puce'),
 		('Aquamarine'),
-		('Red'),
-		('Fuscia'),
-		('Puce');
+		('Fuscia');
+
 
 INSERT INTO Folder (FolderName, ColorID, IsShared, CreatedAt)
 	VALUES
-		('Financial Statements', 0, 1, '2016-01-05'),
-		('Project Plans', 3, 0, '2018-03-21'),
-		('Client Contracts', 1, 0, '2020-05-13');
+		('Financial Statements', 1, 1, '2016-01-05'),
+		('Project Plans', 3, 1, '2018-03-21'),
+		('Client Contracts', 2, 0, '2020-05-13');
 
 INSERT INTO Access (AccountID, FolderID)
 	VALUES
@@ -88,12 +87,12 @@ INSERT INTO AttachmentType (TypeName)
 		('C# Source File'),
 		('Microsoft Edge PDF Document');
 
-INSERT INTO Attachment (FolderID, TypeID, AttachmentName, SizeMB, CreatedAt)
+INSERT INTO Attachment (FolderID, TypeID, AttachmentName, SizeMB, CreatedAt, UpdatedAt)
 	VALUES
-		(1, 1, 'github.txt', 2.5, '2012-03-03'),
-		(1, 2, 'web.html', 1.2, '2018-03-03'),
-		(2, 3, 'votes.png', 3.7, '2014-03-03'),
-		(2, 4, 'cloud.sql', 5.1, '2013-03-03'),
-		(3, 5, 'PlayerController.cs', 0.3, '2018-03-03'),
-		(3, 6, 'game.pdf', 2.8, '2020-03-03'),
-		(1, 1, 'node.txt', 1.5, '2021-03-03');
+		(1, 1, 'github', 2.5, '2012-03-03', '2012-03-03'),
+		(1, 2, 'web', 1.2, '2018-03-03', '2018-03-03'),
+		(2, 3, 'votes', 3.7, '2014-03-03', '2014-03-03'),
+		(2, 4, 'cloud', 5.1, '2013-03-03', '2013-03-03'),
+		(3, 5, 'PlayerController', 0.3, '2018-03-03', '2018-03-03'),
+		(3, 6, 'game', 2.8, '2020-03-03', '2020-03-03'),
+		(1, 1, 'node', 1.5, '2021-03-03', '2021-03-03');

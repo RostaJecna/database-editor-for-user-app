@@ -17,6 +17,11 @@ namespace DatabaseEditorForUser
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new ConnectForm());
+
+            if(DatabaseSingleton.status == DatabaseSingleton.Status.Success)
+            {
+                Application.Run(new DEFUForm());
+            }
         }
     }
 }

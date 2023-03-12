@@ -14,14 +14,14 @@ namespace DatabaseEditorForUser
     {
         internal enum Status
         {
-            None,
+            Null,
             Success,
             Connected,
             Failure
         }
 
         private static SqlConnection connection = null;
-        public static Status status = Status.None;
+        public static Status status = Status.Null;
 
         public static SqlConnection Instance()
         {
@@ -36,7 +36,7 @@ namespace DatabaseEditorForUser
                 {
                     connection.Close();
                     connection.Dispose();
-                    status = Status.None;
+                    status = Status.Null;
                 }
             }
             finally
