@@ -73,6 +73,7 @@ namespace DatabaseEditorForUser
         private void WelcomeConnectBtn_Click(object sender, EventArgs e)
         {
             SwitchPanelTo(Panels.Connection);
+            configurationBtn.Enabled = false;
             connectionTimer.Enabled = true;
             connectionTimer.Start();
 
@@ -107,6 +108,7 @@ namespace DatabaseEditorForUser
                 connectionTimer.Stop();
                 connectionTimerCounter = 0;
                 welcomeConnectBtn.Text = "Re-connect To Database";
+                configurationBtn.Enabled = true;
                 DatabaseSingleton.CloseAndDispose();
             }
 
@@ -131,6 +133,11 @@ namespace DatabaseEditorForUser
                     connectionTimerCounter++;
                     break;
             }
+        }
+
+        private void СonfigurationBtn_Click(object sender, EventArgs e)
+        {
+            new ConfigurationForm().ShowDialog();
         }
     }
 }
