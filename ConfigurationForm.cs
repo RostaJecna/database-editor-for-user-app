@@ -23,6 +23,7 @@ namespace DatabaseEditorForUser
 
                 if (!DatabaseSingleton.databaseConfiguration.IntegratedSecurity)
                 {
+                    authenticationCheckBox.Checked = true;
                     userNameTextBox.Text = DatabaseSingleton.databaseConfiguration.UserName;
                     passwordTextBox.Text = DatabaseSingleton.databaseConfiguration.Password;
                 }
