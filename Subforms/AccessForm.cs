@@ -23,7 +23,6 @@ namespace DatabaseEditorForUser.Subforms
 
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
-        private readonly AccessDAO accessDao;
         private DataGridViewRow selectedRow;
         private bool UserIsEditingRow;
         private Access selectedAccess;
@@ -32,8 +31,6 @@ namespace DatabaseEditorForUser.Subforms
         {
             InitializeComponent();
             ChangeDefaultComponent();
-
-            accessDao = new AccessDAO();
             GetAllDataFromDatabase();
 
             refreshBtnTimerMaxCooldown = 5;
@@ -60,8 +57,12 @@ namespace DatabaseEditorForUser.Subforms
             selectedRow = null;
             accessGridView.DataSource = new BindingSource()
             {
-                DataSource = accessDao.GetAll()
+                DataSource = DAOContainer.access.GetAll()
             };
+
+            bool hasRows = accessGridView.Rows.Count > 0;
+            deleteBtn.Visible = hasRows;
+            editBtn.Visible = hasRows;
         }
 
         private void SetRefreshCooldown()
@@ -102,12 +103,9 @@ namespace DatabaseEditorForUser.Subforms
             }
         }
 
-        private void AccountGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void AccessGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                selectedRow = accessGridView.Rows[e.RowIndex];
-            }
+            selectedRow = e.RowIndex >= 0 ? selectedRow = accessGridView.Rows[e.RowIndex] : null;
         }
 
         private void AddRowBtn_Click(object sender, EventArgs e)
@@ -157,7 +155,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    accessDao.Add(new Access(
+                    DAOContainer.access.Add(new Access(
                         Convert.ToInt32(accountIDTextBox.Text),
                         Convert.ToInt32(folderIDTextBox.Text)
                     ));
@@ -176,7 +174,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    accessDao.Edit(new Access(
+                    DAOContainer.access.Edit(new Access(
                         selectedAccess.ID,
                         Convert.ToInt32(accountIDTextBox.Text),
                         Convert.ToInt32(folderIDTextBox.Text)
@@ -205,7 +203,7 @@ namespace DatabaseEditorForUser.Subforms
             }
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedAccess = accessDao.GetByID(id);
+            this.selectedAccess = DAOContainer.access.GetByID(id);
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxesWithData(selectedAccess);
@@ -213,7 +211,7 @@ namespace DatabaseEditorForUser.Subforms
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete this account?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this access?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
@@ -226,7 +224,7 @@ namespace DatabaseEditorForUser.Subforms
 
                 try
                 {
-                    accessDao.Delete(id);
+                    DAOContainer.access.Delete(id);
 
                     GetAllDataFromDatabase();
                     SetRefreshCooldown();

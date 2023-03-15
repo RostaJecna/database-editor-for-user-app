@@ -23,8 +23,6 @@ namespace DatabaseEditorForUser.Subforms
 
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
-        private readonly AttachmentDAO attachmentDao;
-        private readonly AttachmentTypeDAO attachmentTypeDAO;
         private DataGridViewRow selectedRow;
         private bool UserIsEditingRow;
         private Attachment selectedAttachment;
@@ -33,15 +31,12 @@ namespace DatabaseEditorForUser.Subforms
         {
             InitializeComponent();
             ChangeDefaultComponent();
-
-            attachmentDao = new AttachmentDAO();
             GetAllDataFromDatabase();
 
             refreshBtnTimerMaxCooldown = 5;
 
             SwitchPanelTo(Panels.Navigation);
-            attachmentTypeDAO = new AttachmentTypeDAO();
-            FillComboBox(attachmentTypeDAO);
+            FillComboBox(DAOContainer.attachmentType);
         }
 
         private void ChangeDefaultComponent()
@@ -71,10 +66,14 @@ namespace DatabaseEditorForUser.Subforms
         private void GetAllDataFromDatabase()
         {
             selectedRow = null;
-            folderGridView.DataSource = new BindingSource()
+            attachmentGridView.DataSource = new BindingSource()
             {
-                DataSource = attachmentDao.GetAll()
+                DataSource = DAOContainer.attachment.GetAll()
             };
+
+            bool hasRows = attachmentGridView.Rows.Count > 0;
+            deleteBtn.Visible = hasRows;
+            editBtn.Visible = hasRows;
         }
 
         private void SetRefreshCooldown()
@@ -98,7 +97,7 @@ namespace DatabaseEditorForUser.Subforms
             folderIDTextBox.Text = attachment.FolderID.ToString();
             attachmentNameTextBox.Text = attachment.AttachmentName;
             sizeMBTextBox.Text = attachment.SizeMB.ToString();
-            typeNameComboBox.SelectedItem = attachmentTypeDAO.GetByID(attachment.TypeID).TypeName;
+            typeNameComboBox.SelectedItem = DAOContainer.attachmentType.GetByID(attachment.TypeID).TypeName;
         }
 
         private void SwitchPanelTo(Panels panel)
@@ -118,12 +117,9 @@ namespace DatabaseEditorForUser.Subforms
             }
         }
 
-        private void FolderColorGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void AttachmentColorGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                selectedRow = folderGridView.Rows[e.RowIndex];
-            }
+            selectedRow = e.RowIndex >= 0 ? attachmentGridView.Rows[e.RowIndex] : null;
         }
 
         private void AddRowBtn_Click(object sender, EventArgs e)
@@ -181,7 +177,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    attachmentDao.Add(new Attachment(
+                    DAOContainer.attachment.Add(new Attachment(
                         Convert.ToInt32(folderIDTextBox.Text),
                         AttachmentTypeDAO.GetIDByName((string)typeNameComboBox.SelectedItem),
                         attachmentNameTextBox.Text,
@@ -202,7 +198,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    attachmentDao.Edit(new Attachment(
+                    DAOContainer.attachment.Edit(new Attachment(
                         selectedAttachment.ID,
                         Convert.ToInt32(folderIDTextBox.Text),
                         AttachmentTypeDAO.GetIDByName((string)typeNameComboBox.SelectedItem),
@@ -230,11 +226,11 @@ namespace DatabaseEditorForUser.Subforms
 
             if (selectedRow is null)
             {
-                selectedRow = folderGridView.Rows[0];
+                selectedRow = attachmentGridView.Rows[0];
             }
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedAttachment = attachmentDao.GetByID(id);
+            this.selectedAttachment = DAOContainer.attachment.GetByID(id);
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxWithData(selectedAttachment);
@@ -242,20 +238,20 @@ namespace DatabaseEditorForUser.Subforms
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete this color?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this attachment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
                 if (selectedRow is null)
                 {
-                    selectedRow = folderGridView.Rows[0];
+                    selectedRow = attachmentGridView.Rows[0];
                 }
 
                 int id = (int)selectedRow.Cells[0].Value;
 
                 try
                 {
-                    attachmentDao.Delete(id);
+                    DAOContainer.attachment.Delete(id);
 
                     GetAllDataFromDatabase();
                     SetRefreshCooldown();

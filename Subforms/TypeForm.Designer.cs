@@ -43,7 +43,7 @@
             this.editBtn = new System.Windows.Forms.Button();
             this.addRowBtn = new System.Windows.Forms.Button();
             this.gridPanel = new System.Windows.Forms.Panel();
-            this.folderColorGridView = new System.Windows.Forms.DataGridView();
+            this.attachmentTypeGridView = new System.Windows.Forms.DataGridView();
             this.refreshBtnTimer = new System.Windows.Forms.Timer(this.components);
             this.searchBarPanel.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -51,7 +51,7 @@
             this.dataEditorPanel.SuspendLayout();
             this.navigationPanel.SuspendLayout();
             this.gridPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.folderColorGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.attachmentTypeGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // searchBarPanel
@@ -85,8 +85,8 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.dataManagerPanel);
             this.panel2.Controls.Add(this.navigationPanel);
+            this.panel2.Controls.Add(this.dataManagerPanel);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(650, 54);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
@@ -235,7 +235,7 @@
             // 
             // gridPanel
             // 
-            this.gridPanel.Controls.Add(this.folderColorGridView);
+            this.gridPanel.Controls.Add(this.attachmentTypeGridView);
             this.gridPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridPanel.Location = new System.Drawing.Point(0, 54);
             this.gridPanel.Margin = new System.Windows.Forms.Padding(2);
@@ -243,26 +243,26 @@
             this.gridPanel.Size = new System.Drawing.Size(650, 396);
             this.gridPanel.TabIndex = 2;
             // 
-            // folderColorGridView
+            // attachmentTypeGridView
             // 
-            this.folderColorGridView.AllowUserToAddRows = false;
-            this.folderColorGridView.AllowUserToDeleteRows = false;
-            this.folderColorGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.attachmentTypeGridView.AllowUserToAddRows = false;
+            this.attachmentTypeGridView.AllowUserToDeleteRows = false;
+            this.attachmentTypeGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.folderColorGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.folderColorGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.folderColorGridView.Location = new System.Drawing.Point(22, 22);
-            this.folderColorGridView.Margin = new System.Windows.Forms.Padding(2);
-            this.folderColorGridView.MultiSelect = false;
-            this.folderColorGridView.Name = "folderColorGridView";
-            this.folderColorGridView.ReadOnly = true;
-            this.folderColorGridView.RowHeadersWidth = 51;
-            this.folderColorGridView.RowTemplate.Height = 24;
-            this.folderColorGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.folderColorGridView.Size = new System.Drawing.Size(606, 353);
-            this.folderColorGridView.TabIndex = 1;
-            this.folderColorGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FolderColorGridView_CellClick);
+            this.attachmentTypeGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.attachmentTypeGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.attachmentTypeGridView.Location = new System.Drawing.Point(22, 22);
+            this.attachmentTypeGridView.Margin = new System.Windows.Forms.Padding(2);
+            this.attachmentTypeGridView.MultiSelect = false;
+            this.attachmentTypeGridView.Name = "attachmentTypeGridView";
+            this.attachmentTypeGridView.ReadOnly = true;
+            this.attachmentTypeGridView.RowHeadersWidth = 51;
+            this.attachmentTypeGridView.RowTemplate.Height = 24;
+            this.attachmentTypeGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.attachmentTypeGridView.Size = new System.Drawing.Size(606, 353);
+            this.attachmentTypeGridView.TabIndex = 1;
+            this.attachmentTypeGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachmentTypeGridView_CellClick);
             // 
             // refreshBtnTimer
             // 
@@ -287,7 +287,7 @@
             this.dataEditorPanel.PerformLayout();
             this.navigationPanel.ResumeLayout(false);
             this.gridPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.folderColorGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.attachmentTypeGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -297,7 +297,7 @@
         private System.Windows.Forms.Panel searchBarPanel;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel gridPanel;
-        private System.Windows.Forms.DataGridView folderColorGridView;
+        private System.Windows.Forms.DataGridView attachmentTypeGridView;
         private System.Windows.Forms.Button refreshTableBtn;
         private System.Windows.Forms.Panel dataManagerPanel;
         private System.Windows.Forms.Panel navigationPanel;

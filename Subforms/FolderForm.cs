@@ -23,8 +23,6 @@ namespace DatabaseEditorForUser.Subforms
 
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
-        private readonly FolderDAO folderDao;
-        private readonly FolderColorDAO folderColorDAO;
         private DataGridViewRow selectedRow;
         private bool UserIsEditingRow;
         private Folder selectedFolder;
@@ -33,15 +31,12 @@ namespace DatabaseEditorForUser.Subforms
         {
             InitializeComponent();
             ChangeDefaultComponent();
-
-            folderDao = new FolderDAO();
             GetAllDataFromDatabase();
 
             refreshBtnTimerMaxCooldown = 5;
 
             SwitchPanelTo(Panels.Navigation);
-            folderColorDAO = new FolderColorDAO();
-            FillComboBox(folderColorDAO);
+            FillComboBox(DAOContainer.folderColor);
         }
 
         private void ChangeDefaultComponent()
@@ -73,8 +68,12 @@ namespace DatabaseEditorForUser.Subforms
             selectedRow = null;
             folderGridView.DataSource = new BindingSource()
             {
-                DataSource = folderDao.GetAll()
+                DataSource = DAOContainer.folder.GetAll()
             };
+
+            bool hasRows = folderGridView.Rows.Count > 0;
+            deleteBtn.Visible = hasRows;
+            editBtn.Visible = hasRows;
         }
 
         private void SetRefreshCooldown()
@@ -94,7 +93,7 @@ namespace DatabaseEditorForUser.Subforms
         private void FillTextBoxWithData(Folder folder)
         {
             folderNameTextBox.Text = folder.Name;
-            colorNameComboBox.SelectedItem = folderColorDAO.GetByID(folder.ColorID).Name;
+            colorNameComboBox.SelectedItem = DAOContainer.folderColor.GetByID(folder.ColorID).Name;
             isSharedCheckBox.Checked = folder.IsShared;
         }
 
@@ -115,12 +114,9 @@ namespace DatabaseEditorForUser.Subforms
             }
         }
 
-        private void FolderColorGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void FolderGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                selectedRow = folderGridView.Rows[e.RowIndex];
-            }
+            selectedRow = e.RowIndex >= 0 ? selectedRow = folderGridView.Rows[e.RowIndex] : null;
         }
 
         private void AddRowBtn_Click(object sender, EventArgs e)
@@ -177,7 +173,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    folderDao.Add(new Folder(
+                    DAOContainer.folder.Add(new Folder(
                         folderNameTextBox.Text,
                         FolderColorDAO.GetIDByName((string)colorNameComboBox.SelectedItem),
                         isSharedCheckBox.Checked
@@ -197,7 +193,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    folderDao.Edit(new Folder(
+                    DAOContainer.folder.Edit(new Folder(
                         selectedFolder.ID,
                         folderNameTextBox.Text,
                         FolderColorDAO.GetIDByName((string)colorNameComboBox.SelectedItem),
@@ -228,7 +224,7 @@ namespace DatabaseEditorForUser.Subforms
             }
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedFolder = folderDao.GetByID(id);
+            this.selectedFolder = DAOContainer.folder.GetByID(id);
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxWithData(selectedFolder);
@@ -236,7 +232,7 @@ namespace DatabaseEditorForUser.Subforms
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete this color?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this folder?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
@@ -249,7 +245,7 @@ namespace DatabaseEditorForUser.Subforms
 
                 try
                 {
-                    folderDao.Delete(id);
+                    DAOContainer.folder.Delete(id);
 
                     GetAllDataFromDatabase();
                     SetRefreshCooldown();

@@ -88,8 +88,8 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.dataManagerPanel);
             this.panel2.Controls.Add(this.navigationPanel);
+            this.panel2.Controls.Add(this.dataManagerPanel);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(650, 54);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
@@ -296,7 +296,7 @@
             this.folderGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.folderGridView.Size = new System.Drawing.Size(606, 353);
             this.folderGridView.TabIndex = 1;
-            this.folderGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FolderColorGridView_CellClick);
+            this.folderGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FolderGridView_CellClick);
             // 
             // refreshBtnTimer
             // 
