@@ -158,14 +158,12 @@
             // 
             // welcomeTitleLabel
             // 
-            this.welcomeTitleLabel.BackColor = System.Drawing.Color.Transparent;
-            this.welcomeTitleLabel.Font = new System.Drawing.Font("Sans Serif Collection", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.welcomeTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.welcomeTitleLabel.ForeColor = System.Drawing.Color.White;
-            this.welcomeTitleLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.welcomeTitleLabel.Location = new System.Drawing.Point(56, 24);
+            this.welcomeTitleLabel.Location = new System.Drawing.Point(51, 24);
             this.welcomeTitleLabel.Name = "welcomeTitleLabel";
-            this.welcomeTitleLabel.Size = new System.Drawing.Size(189, 69);
-            this.welcomeTitleLabel.TabIndex = 0;
+            this.welcomeTitleLabel.Size = new System.Drawing.Size(198, 69);
+            this.welcomeTitleLabel.TabIndex = 10;
             this.welcomeTitleLabel.Text = "Database Editor For User";
             this.welcomeTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
