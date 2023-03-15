@@ -1,5 +1,5 @@
 
-# Data Base Editor For User [DEFU]
+# Database Editor For User [DEFU]
 
  - My work on a school project. The goal was to create a simple possibility for the user to manage his database.
 
