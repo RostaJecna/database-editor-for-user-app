@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -71,6 +74,7 @@
     <Compile Include="ConnectForm.Designer.cs">
       <DependentUpon>ConnectForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="DAOContainer.cs" />
     <Compile Include="DAOs\AccessDAO.cs" />
     <Compile Include="DAOs\AccountDAO.cs" />
     <Compile Include="DAOs\AttachmentDAO.cs" />
@@ -90,7 +94,9 @@
     <Compile Include="Entities\AttachmentType.cs" />
     <Compile Include="Entities\Folder.cs" />
     <Compile Include="Entities\FolderColor.cs" />
+    <Compile Include="Exporter.cs" />
     <Compile Include="Graphics\Palettes.cs" />
+    <Compile Include="Importer.cs" />
     <Compile Include="Interfaces\IBaseClass.cs" />
     <Compile Include="Interfaces\IDAO.cs" />
     <Compile Include="Program.cs" />
@@ -133,6 +139,7 @@
     </Compile>
     <EmbeddedResource Include="ConnectForm.resx">
       <DependentUpon>ConnectForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DEFUForm.resx">
       <DependentUpon>DEFUForm.cs</DependentUpon>
@@ -175,20 +182,29 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\Database\Export\cloud.json" />
+    <None Include="Resources\Database\Imports\cloud_1.json" />
+    <None Include="Resources\Database\Imports\cloud_2.json" />
     <None Include="Resources\Graphics\palettes.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Cloud.sql" />
+    <Content Include="Resources\ConnectForm\Icon.ico" />
+    <Content Include="Resources\Database\Cloud.sql" />
     <Content Include="Resources\ConnectForm\bgPicture.jpg" />
     <Content Include="Resources\DEFUForm\Access.png" />
     <Content Include="Resources\DEFUForm\Account.png" />
     <Content Include="Resources\DEFUForm\AttachamentType.png" />
     <Content Include="Resources\DEFUForm\Attachment.png" />
+    <Content Include="Resources\DEFUForm\Cancel.png" />
+    <Content Include="Resources\DEFUForm\DEFU.png" />
+    <Content Include="Resources\DEFUForm\Export.png" />
     <Content Include="Resources\DEFUForm\Folder.png" />
     <Content Include="Resources\DEFUForm\FolderColor.png" />
+    <Content Include="Resources\DEFUForm\Icon.ico" />
+    <Content Include="Resources\DEFUForm\Import.png" />
     <Content Include="Resources\DEFUForm\Logo.png" />
     <Content Include="Resources\DEFUForm\Logo_mask.png" />
     <Content Include="Resources\Subforms\Back.png" />
