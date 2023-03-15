@@ -203,7 +203,6 @@
   <ItemGroup>
     <Content Include="Resources\ConnectForm\configuration.png" />
     <Content Include="Resources\ConnectForm\Icon.ico" />
-    <Content Include="Resources\ConnectForm\icons8-настройки-20.png" />
     <Content Include="Resources\Database\Cloud.sql" />
     <Content Include="Resources\ConnectForm\bgPicture.jpg" />
     <Content Include="Resources\DEFUForm\Access.png" />
