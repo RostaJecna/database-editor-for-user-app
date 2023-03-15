@@ -158,5 +158,47 @@ namespace DatabaseEditorForUser.DAOs
                 }
             }
         }
+
+        public void ImportAll(IEnumerable<Folder> rows)
+        {
+
+            string query = "SET IDENTITY_INSERT Folder ON;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+
+            query = "INSERT INTO Folder (ID, FolderName, ColorID, IsShared, CreatedAt) VALUES" +
+                                "(@ID, @FolderName, @ColorID, @IsShared, @CreatedAt);";
+
+            foreach (Folder element in rows)
+            {
+                using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+                {
+                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@FolderName", element.Name);
+                    command.Parameters.AddWithValue("@ColorID", element.ColorID);
+                    command.Parameters.AddWithValue("@IsShared", element.IsShared ? 1 : 0);
+                    command.Parameters.AddWithValue("@CreatedAt", element.CreatedAt);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            query = "SET IDENTITY_INSERT Folder OFF;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void ClearTable()
+        {
+            string query = "DELETE FROM Folder;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

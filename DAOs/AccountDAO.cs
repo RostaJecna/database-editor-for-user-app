@@ -178,5 +178,49 @@ namespace DatabaseEditorForUser.DAOs
                 }
             }
         }
+
+        public void ImportAll(IEnumerable<Account> rows)
+        {
+
+            string query = "SET IDENTITY_INSERT Account ON;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+
+            query = "INSERT INTO Account (ID, FirstName, LastName, Email, HashedPassword, Registered) VALUES" +
+                                "(@ID, @FirstName, @LastName, @Email, @HashedPassword, @Registered);";
+
+            foreach(Account element in rows)
+            {
+                using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+                {
+                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@FirstName", element.FirstName);
+                    command.Parameters.AddWithValue("@LastName", element.LastName);
+                    command.Parameters.AddWithValue("@Email", element.Email);
+                    command.Parameters.AddWithValue("@HashedPassword", element.HashedPassword);
+                    command.Parameters.AddWithValue("@Registered", element.Registered);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            query = "SET IDENTITY_INSERT Account OFF;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void ClearTable()
+        {
+            string query = "DELETE FROM Account;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }
+

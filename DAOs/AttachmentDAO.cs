@@ -32,6 +32,15 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        public void ClearTable()
+        {
+            string query = "DELETE FROM Attachment;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
         public void Delete(int ID)
         {
             string query = "DELETE FROM Attachment WHERE ID = @ID;";
@@ -134,6 +143,41 @@ namespace DatabaseEditorForUser.DAOs
         public bool HasReferences(int ID)
         {
             throw new NotImplementedException();
+        }
+
+        public void ImportAll(IEnumerable<Attachment> rows)
+        {
+            string query = "SET IDENTITY_INSERT Attachment ON;";
+
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+
+            query = "INSERT INTO Attachment (ID, FolderID, TypeID, AttachmentName, SizeMB, CreatedAt, UpdatedAt) VALUES" +
+                                "(@ID, @FolderID, @TypeID, @AttachmentName, @SizeMB, @CreatedAt, @UpdatedAt);";
+
+            foreach (Attachment element in rows)
+            {
+                using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+                {
+                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@FolderID", element.FolderID);
+                    command.Parameters.AddWithValue("@TypeID", element.TypeID);
+                    command.Parameters.AddWithValue("@AttachmentName", element.AttachmentName);
+                    command.Parameters.AddWithValue("@SizeMB", Math.Round(element.SizeMB, 2));
+                    command.Parameters.AddWithValue("@CreatedAt", element.CreatedAt);
+                    command.Parameters.AddWithValue("@UpdatedAt", element.UpdatedAt);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            query = "SET IDENTITY_INSERT Attachment OFF;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
         }
     }
 }
