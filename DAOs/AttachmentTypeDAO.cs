@@ -153,5 +153,44 @@ namespace DatabaseEditorForUser.DAOs
                 }
             }
         }
+
+        public void ImportAll(IEnumerable<AttachmentType> rows)
+        {
+
+            string query = "SET IDENTITY_INSERT AttachmentType ON;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+
+            query = "INSERT INTO AttachmentType (ID, TypeName) VALUES" +
+                                "(@ID, @TypeName);";
+
+            foreach (AttachmentType element in rows)
+            {
+                using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+                {
+                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@TypeName", element.TypeName);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            query = "SET IDENTITY_INSERT AttachmentType OFF;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void ClearTable()
+        {
+            string query = "DELETE FROM AttachmentType;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

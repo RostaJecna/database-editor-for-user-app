@@ -15,5 +15,7 @@ namespace DatabaseEditorForUser.Interfaces
         T GetByID(int ID);
         bool HasReferences(int ID);
         bool HasDuplicate(T element);
+        void ImportAll(IEnumerable<T> rows);
+        void ClearTable();
     }
 }

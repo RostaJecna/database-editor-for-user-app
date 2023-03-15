@@ -99,13 +99,19 @@ namespace DatabaseEditorForUser.Entities
             {
                 throw new ArgumentException("Password cannot be empty.", nameof(password));
             }
+
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(password + "cloud");
+
             SHA256 sha256 = SHA256.Create();
 
-            byte[] bytes = sha256.ComputeHash(Encoding.Unicode.GetBytes(password + "cloud"));
-            byte[] hashedBytes = sha256.ComputeHash(bytes);
-            string hashedPassword = Convert.ToBase64String(hashedBytes);
+            byte[] hashBytes = sha256.ComputeHash(passwordBytes);
 
-            return hashedPassword;
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hashBytes)
+            {
+                sb.Append(b.ToString("x2"));
+            }
+            return sb.ToString();
         }
 
         public override string ToString()

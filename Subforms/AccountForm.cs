@@ -24,7 +24,6 @@ namespace DatabaseEditorForUser.Subforms
 
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
-        private readonly AccountDAO accoundDao;
         private DataGridViewRow selectedRow;
         private bool UserIsEditingRow;
         private Account selectedAccount;
@@ -33,8 +32,6 @@ namespace DatabaseEditorForUser.Subforms
         {
             InitializeComponent();
             ChangeDefaultComponent();
-
-            accoundDao = new AccountDAO();
             GetAllDataFromDatabase();
 
             refreshBtnTimerMaxCooldown = 5;
@@ -69,11 +66,14 @@ namespace DatabaseEditorForUser.Subforms
             selectedRow = null;
             accountGridView.DataSource = new BindingSource()
             {
-                DataSource = accoundDao.GetAll()
+                DataSource = DAOContainer.account.GetAll()
             };
+
+            bool hasRows = accountGridView.Rows.Count > 0;
+            deleteBtn.Visible = hasRows;
+            editBtn.Visible = hasRows;
         }
 
-        // TODO: Create a global counter, because if you switch between tables, it gets reset.
         private void SetRefreshCooldown()
         {
             refreshBtnTimer.Enabled = true;
@@ -117,10 +117,7 @@ namespace DatabaseEditorForUser.Subforms
 
         private void AccountGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-               selectedRow = accountGridView.Rows[e.RowIndex];
-            }
+            selectedRow = e.RowIndex >= 0 ? selectedRow = accountGridView.Rows[e.RowIndex] : null;
         }
 
         private void AddRowBtn_Click(object sender, EventArgs e)
@@ -176,7 +173,7 @@ namespace DatabaseEditorForUser.Subforms
 
                 try
                 {
-                    accoundDao.Add(new Account(
+                    DAOContainer.account.Add(new Account(
                         firstNameTextBox.Text,
                         lastNameTextBox.Text,
                         emailTextBox.Text,
@@ -198,7 +195,7 @@ namespace DatabaseEditorForUser.Subforms
                 try
                 {
                     string hashedPassword = passwordCheckBox.Checked ? selectedAccount.HashedPassword : Account.GetHashedPassword(passwordTextBox.Text);
-                    accoundDao.Edit(new Account(
+                    DAOContainer.account.Edit(new Account(
                         selectedAccount.ID,
                         firstNameTextBox.Text,
                         lastNameTextBox.Text,
@@ -230,7 +227,7 @@ namespace DatabaseEditorForUser.Subforms
             }
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedAccount = accoundDao.GetByID(id);
+            this.selectedAccount = DAOContainer.account.GetByID(id);
 
             passwordCheckBox.Visible = true;
             passwordTextBox.Enabled = false;
@@ -255,7 +252,7 @@ namespace DatabaseEditorForUser.Subforms
 
                 try
                 {
-                    accoundDao.Delete(id);
+                    DAOContainer.account.Delete(id);
 
                     GetAllDataFromDatabase();
                     SetRefreshCooldown();

@@ -97,12 +97,12 @@
             this.accessGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.accessGridView.Size = new System.Drawing.Size(606, 353);
             this.accessGridView.TabIndex = 0;
-            this.accessGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AccountGridView_CellClick);
+            this.accessGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AccessGridView_CellClick);
             // 
             // rightSidePanel
             // 
-            this.rightSidePanel.Controls.Add(this.dataManagerPanel);
             this.rightSidePanel.Controls.Add(this.navigationPanel);
+            this.rightSidePanel.Controls.Add(this.dataManagerPanel);
             this.rightSidePanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.rightSidePanel.Location = new System.Drawing.Point(650, 54);
             this.rightSidePanel.Margin = new System.Windows.Forms.Padding(2);

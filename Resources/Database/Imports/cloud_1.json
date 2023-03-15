@@ -1,0 +1,312 @@
+{
+  "Account": [
+    {
+      "ID": 1,
+      "FirstName": "Pippy",
+      "LastName": "Gietz",
+      "Email": "pgietz0@nymag.com",
+      "HashedPassword": "53f3c1528ae3efea1a8ed2203edb504162c91ad9c30ff5c82cc430700a0b437c",
+      "Registered": "2012-02-28"
+    },
+    {
+      "ID": 2,
+      "FirstName": "Clarke",
+      "LastName": "Polak",
+      "Email": "cpolak1@telegraph.co.uk",
+      "HashedPassword": "2adb3163084bf4eab1a3568661430c17bff53f1c58161b63ba8b8b26b7a77548",
+      "Registered": "2022-12-31"
+    },
+    {
+      "ID": 3,
+      "FirstName": "Kitty",
+      "LastName": "Hinrich",
+      "Email": "khinrich2@mediafire.com",
+      "HashedPassword": "ccb6eb2be3286dd33360f33f4c1550ba7afbef6558ad74209a279a9273e10b0d",
+      "Registered": "2017-06-25"
+    },
+    {
+      "ID": 4,
+      "FirstName": "Blane",
+      "LastName": "Kacheller",
+      "Email": "bkacheller3@yale.edu",
+      "HashedPassword": "f9f0ab52102c832f32bfa4f308dc0738f465d02e56cf5faea9638163e2c6aa58",
+      "Registered": "2017-03-29"
+    },
+    {
+      "ID": 5,
+      "FirstName": "Sterling",
+      "LastName": "Foakes",
+      "Email": "sfoakes4@networkadvertising.org",
+      "HashedPassword": "9d31cd9e119799f5f726c420503a19d8e067fd0058f44bafa1d955ea625a6a29",
+      "Registered": "2013-02-16"
+    },
+    {
+      "ID": 6,
+      "FirstName": "Gerardo",
+      "LastName": "Ramsell\t",
+      "Email": "gramsell5@army.mil",
+      "HashedPassword": "609b14bfe81d3949ce0da6d4498e7886ff933dbd69a234403ec0ea901bd1dc8c",
+      "Registered": "2008-04-14"
+    },
+    {
+      "ID": 7,
+      "FirstName": "Gregory",
+      "LastName": "Preuvost",
+      "Email": "gpreuvost6@ed.gov",
+      "HashedPassword": "a18aebac110bc67011b46317cb0b3877d3cac595454808f246298cbe462eaf4e",
+      "Registered": "2006-07-16"
+    },
+    {
+      "ID": 8,
+      "FirstName": "Janeta",
+      "LastName": "Gawkes",
+      "Email": "jgawkes7@businesswire.com",
+      "HashedPassword": "b134372e06e56024510aeb4c9fc1361dd86f7459fa86f2c9cc8f20132d4fb637",
+      "Registered": "2005-04-20"
+    },
+    {
+      "ID": 9,
+      "FirstName": "Karrah",
+      "LastName": "McVee",
+      "Email": "kmcvee8@shop-pro.jp",
+      "HashedPassword": "a614087e010517405ed743901ba3e554f3af7fd248ea14e5a6e073b547d827b3",
+      "Registered": "2014-02-19"
+    },
+    {
+      "ID": 10,
+      "FirstName": "Jilli",
+      "LastName": "Gellert",
+      "Email": "jgellert9@studiopress.com",
+      "HashedPassword": "b6f557a534108e367f7ca3a4c6676a5fcc2908f67f501a932f0684594cb6d0c0",
+      "Registered": "2012-04-01"
+    },
+    {
+      "ID": 11,
+      "FirstName": "Aila",
+      "LastName": "Kulver",
+      "Email": "akulvera@reuters.com\t",
+      "HashedPassword": "ed3d7e556dcc5b9c098b8d955c4bc06274c32b1159b3ad76ed15c19c76cdee02",
+      "Registered": "2017-09-17"
+    },
+    {
+      "ID": 12,
+      "FirstName": "Dee dee",
+      "LastName": "Poyle",
+      "Email": "dpoyleb@chronoengine.com\t",
+      "HashedPassword": "83098dd6f55ccacfdcc4d895a40f80bf08df0373d75da5ea4de4f57f08253b37",
+      "Registered": "2013-04-06"
+    }
+  ],
+  "FolderColor": [
+    {
+      "ID": 6,
+      "Name": "Crimson"
+    },
+    {
+      "ID": 2,
+      "Name": "Goldenrod"
+    },
+    {
+      "ID": 5,
+      "Name": "Green"
+    },
+    {
+      "ID": 3,
+      "Name": "Puce"
+    },
+    {
+      "ID": 4,
+      "Name": "Teal"
+    },
+    {
+      "ID": 1,
+      "Name": "Violet"
+    }
+  ],
+  "Folder": [
+    {
+      "ID": 1,
+      "Name": "Personal Documents",
+      "ColorID": 6,
+      "IsShared": false,
+      "CreatedAt": "2019-08-12"
+    },
+    {
+      "ID": 2,
+      "Name": "Project Ideas",
+      "ColorID": 5,
+      "IsShared": true,
+      "CreatedAt": "2014-07-08"
+    },
+    {
+      "ID": 3,
+      "Name": "Travel Photos",
+      "ColorID": 1,
+      "IsShared": false,
+      "CreatedAt": "2003-09-13"
+    },
+    {
+      "ID": 4,
+      "Name": "Financial Reports",
+      "ColorID": 2,
+      "IsShared": true,
+      "CreatedAt": "2004-10-05"
+    },
+    {
+      "ID": 5,
+      "Name": "Creative Writing",
+      "ColorID": 3,
+      "IsShared": false,
+      "CreatedAt": "2021-05-09"
+    }
+  ],
+  "Access": [
+    {
+      "ID": 1,
+      "AccountID": 1,
+      "FolderID": 1
+    },
+    {
+      "ID": 2,
+      "AccountID": 2,
+      "FolderID": 2
+    },
+    {
+      "ID": 3,
+      "AccountID": 3,
+      "FolderID": 2
+    },
+    {
+      "ID": 4,
+      "AccountID": 4,
+      "FolderID": 2
+    },
+    {
+      "ID": 5,
+      "AccountID": 5,
+      "FolderID": 2
+    },
+    {
+      "ID": 6,
+      "AccountID": 6,
+      "FolderID": 3
+    },
+    {
+      "ID": 7,
+      "AccountID": 7,
+      "FolderID": 4
+    },
+    {
+      "ID": 8,
+      "AccountID": 8,
+      "FolderID": 4
+    },
+    {
+      "ID": 9,
+      "AccountID": 9,
+      "FolderID": 4
+    },
+    {
+      "ID": 10,
+      "AccountID": 10,
+      "FolderID": 4
+    },
+    {
+      "ID": 11,
+      "AccountID": 11,
+      "FolderID": 4
+    },
+    {
+      "ID": 12,
+      "AccountID": 12,
+      "FolderID": 5
+    }
+  ],
+  "AttachmentType": [
+    {
+      "ID": 2,
+      "TypeName": "Apple QuickTime Movie"
+    },
+    {
+      "ID": 3,
+      "TypeName": "Audio Video Interleave"
+    },
+    {
+      "ID": 1,
+      "TypeName": "MPEG-2 Audio Layer III"
+    },
+    {
+      "ID": 4,
+      "TypeName": "Office Open XML"
+    },
+    {
+      "ID": 5,
+      "TypeName": "Portable Network Graphics"
+    }
+  ],
+  "Attachment": [
+    {
+      "ID": 1,
+      "FolderID": 1,
+      "TypeID": 1,
+      "AttachmentName": "MolestieNibh",
+      "SizeMB": 1.2,
+      "CreatedAt": "2003-10-17",
+      "UpdatedAt": "2009-02-08"
+    },
+    {
+      "ID": 2,
+      "FolderID": 1,
+      "TypeID": 2,
+      "AttachmentName": "MorbiSem",
+      "SizeMB": 25.6,
+      "CreatedAt": "2003-12-03",
+      "UpdatedAt": "2019-09-28"
+    },
+    {
+      "ID": 3,
+      "FolderID": 2,
+      "TypeID": 4,
+      "AttachmentName": "HabitassePlatea",
+      "SizeMB": 0.3,
+      "CreatedAt": "2015-02-28",
+      "UpdatedAt": "2023-01-12"
+    },
+    {
+      "ID": 5,
+      "FolderID": 3,
+      "TypeID": 5,
+      "AttachmentName": "AugueQuam",
+      "SizeMB": 1.2,
+      "CreatedAt": "2003-02-09",
+      "UpdatedAt": "2022-07-08"
+    },
+    {
+      "ID": 6,
+      "FolderID": 3,
+      "TypeID": 5,
+      "AttachmentName": "SapienIn",
+      "SizeMB": 2.2,
+      "CreatedAt": "2021-01-16",
+      "UpdatedAt": "2023-03-14"
+    },
+    {
+      "ID": 7,
+      "FolderID": 4,
+      "TypeID": 4,
+      "AttachmentName": "NullamVariusNulla",
+      "SizeMB": 0.5,
+      "CreatedAt": "2005-01-18",
+      "UpdatedAt": "2007-06-27"
+    },
+    {
+      "ID": 9,
+      "FolderID": 5,
+      "TypeID": 4,
+      "AttachmentName": "MaecenasTincidunt",
+      "SizeMB": 2.0,
+      "CreatedAt": "2010-12-20",
+      "UpdatedAt": "2018-12-30"
+    }
+  ]
+}

@@ -49,7 +49,7 @@
             this.editBtn = new System.Windows.Forms.Button();
             this.addRowBtn = new System.Windows.Forms.Button();
             this.gridPanel = new System.Windows.Forms.Panel();
-            this.folderGridView = new System.Windows.Forms.DataGridView();
+            this.attachmentGridView = new System.Windows.Forms.DataGridView();
             this.refreshBtnTimer = new System.Windows.Forms.Timer(this.components);
             this.searchBarPanel.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -57,7 +57,7 @@
             this.dataEditorPanel.SuspendLayout();
             this.navigationPanel.SuspendLayout();
             this.gridPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.folderGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.attachmentGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // searchBarPanel
@@ -91,8 +91,8 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.dataManagerPanel);
             this.panel2.Controls.Add(this.navigationPanel);
+            this.panel2.Controls.Add(this.dataManagerPanel);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(650, 54);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);
@@ -304,7 +304,7 @@
             // 
             // gridPanel
             // 
-            this.gridPanel.Controls.Add(this.folderGridView);
+            this.gridPanel.Controls.Add(this.attachmentGridView);
             this.gridPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridPanel.Location = new System.Drawing.Point(0, 54);
             this.gridPanel.Margin = new System.Windows.Forms.Padding(2);
@@ -312,26 +312,26 @@
             this.gridPanel.Size = new System.Drawing.Size(650, 396);
             this.gridPanel.TabIndex = 2;
             // 
-            // folderGridView
+            // attachmentGridView
             // 
-            this.folderGridView.AllowUserToAddRows = false;
-            this.folderGridView.AllowUserToDeleteRows = false;
-            this.folderGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.attachmentGridView.AllowUserToAddRows = false;
+            this.attachmentGridView.AllowUserToDeleteRows = false;
+            this.attachmentGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.folderGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.folderGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.folderGridView.Location = new System.Drawing.Point(22, 22);
-            this.folderGridView.Margin = new System.Windows.Forms.Padding(2);
-            this.folderGridView.MultiSelect = false;
-            this.folderGridView.Name = "folderGridView";
-            this.folderGridView.ReadOnly = true;
-            this.folderGridView.RowHeadersWidth = 51;
-            this.folderGridView.RowTemplate.Height = 24;
-            this.folderGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.folderGridView.Size = new System.Drawing.Size(606, 353);
-            this.folderGridView.TabIndex = 1;
-            this.folderGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.FolderColorGridView_CellClick);
+            this.attachmentGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.attachmentGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.attachmentGridView.Location = new System.Drawing.Point(22, 22);
+            this.attachmentGridView.Margin = new System.Windows.Forms.Padding(2);
+            this.attachmentGridView.MultiSelect = false;
+            this.attachmentGridView.Name = "attachmentGridView";
+            this.attachmentGridView.ReadOnly = true;
+            this.attachmentGridView.RowHeadersWidth = 51;
+            this.attachmentGridView.RowTemplate.Height = 24;
+            this.attachmentGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.attachmentGridView.Size = new System.Drawing.Size(606, 353);
+            this.attachmentGridView.TabIndex = 1;
+            this.attachmentGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.AttachmentColorGridView_CellClick);
             // 
             // refreshBtnTimer
             // 
@@ -356,7 +356,7 @@
             this.dataEditorPanel.PerformLayout();
             this.navigationPanel.ResumeLayout(false);
             this.gridPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.folderGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.attachmentGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -366,7 +366,7 @@
         private System.Windows.Forms.Panel searchBarPanel;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel gridPanel;
-        private System.Windows.Forms.DataGridView folderGridView;
+        private System.Windows.Forms.DataGridView attachmentGridView;
         private System.Windows.Forms.Button refreshTableBtn;
         private System.Windows.Forms.Panel dataManagerPanel;
         private System.Windows.Forms.Panel navigationPanel;

@@ -154,5 +154,44 @@ namespace DatabaseEditorForUser.DAOs
                 }
             }
         }
+
+        public void ImportAll(IEnumerable<FolderColor> rows)
+        {
+
+            string query = "SET IDENTITY_INSERT FolderColor ON;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+
+            query = "INSERT INTO FolderColor (ID, ColorName) VALUES" +
+                                "(@ID, @ColorName);";
+
+            foreach (FolderColor element in rows)
+            {
+                using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+                {
+                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@ColorName", element.Name);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            query = "SET IDENTITY_INSERT FolderColor OFF;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void ClearTable()
+        {
+            string query = "DELETE FROM FolderColor;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
     }
 }

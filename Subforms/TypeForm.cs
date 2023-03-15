@@ -23,7 +23,6 @@ namespace DatabaseEditorForUser.Subforms
 
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
-        private readonly AttachmentTypeDAO attachmentTypeDao;
         private DataGridViewRow selectedRow;
         private bool UserIsEditingRow;
         private AttachmentType selectedAttachmentType;
@@ -32,8 +31,6 @@ namespace DatabaseEditorForUser.Subforms
         {
             InitializeComponent();
             ChangeDefaultComponent();
-
-            attachmentTypeDao = new AttachmentTypeDAO();
             GetAllDataFromDatabase();
 
             refreshBtnTimerMaxCooldown = 5;
@@ -57,10 +54,14 @@ namespace DatabaseEditorForUser.Subforms
         private void GetAllDataFromDatabase()
         {
             selectedRow = null;
-            folderColorGridView.DataSource = new BindingSource()
+            attachmentTypeGridView.DataSource = new BindingSource()
             {
-                DataSource = attachmentTypeDao.GetAll()
+                DataSource = DAOContainer.attachmentType.GetAll()
             };
+
+            bool hasRows = attachmentTypeGridView.Rows.Count > 0;
+            deleteBtn.Visible = hasRows;
+            editBtn.Visible = hasRows;
         }
 
         private void SetRefreshCooldown()
@@ -99,12 +100,9 @@ namespace DatabaseEditorForUser.Subforms
             }
         }
 
-        private void FolderColorGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void AttachmentTypeGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                selectedRow = folderColorGridView.Rows[e.RowIndex];
-            }
+            selectedRow = e.RowIndex >= 0 ? selectedRow = attachmentTypeGridView.Rows[e.RowIndex] : null;
         }
 
         private void AddRowBtn_Click(object sender, EventArgs e)
@@ -154,7 +152,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    attachmentTypeDao.Add(new AttachmentType(
+                    DAOContainer.attachmentType.Add(new AttachmentType(
                         typeNameTextBox.Text
                     ));
 
@@ -172,7 +170,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    attachmentTypeDao.Edit(new AttachmentType(
+                    DAOContainer.attachmentType.Edit(new AttachmentType(
                         selectedAttachmentType.ID,
                         typeNameTextBox.Text
                     ));
@@ -196,11 +194,11 @@ namespace DatabaseEditorForUser.Subforms
 
             if (selectedRow is null)
             {
-                selectedRow = folderColorGridView.Rows[0];
+                selectedRow = attachmentTypeGridView.Rows[0];
             }
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedAttachmentType = attachmentTypeDao.GetByID(id);
+            this.selectedAttachmentType = DAOContainer.attachmentType.GetByID(id);
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxWithData(selectedAttachmentType);
@@ -208,20 +206,20 @@ namespace DatabaseEditorForUser.Subforms
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete this color?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this type?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
                 if (selectedRow is null)
                 {
-                    selectedRow = folderColorGridView.Rows[0];
+                    selectedRow = attachmentTypeGridView.Rows[0];
                 }
 
                 int id = (int)selectedRow.Cells[0].Value;
 
                 try
                 {
-                    attachmentTypeDao.Delete(id);
+                    DAOContainer.attachmentType.Delete(id);
 
                     GetAllDataFromDatabase();
                     SetRefreshCooldown();

@@ -85,8 +85,8 @@
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.dataManagerPanel);
             this.panel2.Controls.Add(this.navigationPanel);
+            this.panel2.Controls.Add(this.dataManagerPanel);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel2.Location = new System.Drawing.Point(650, 54);
             this.panel2.Margin = new System.Windows.Forms.Padding(2);

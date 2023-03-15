@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace DatabaseEditorForUser.DAOs
 {
@@ -147,6 +148,46 @@ namespace DatabaseEditorForUser.DAOs
         public bool HasReferences(int ID)
         {
             throw new NotImplementedException();
+        }
+
+        public void ImportAll(IEnumerable<Access> rows)
+        {
+
+            string query = "SET IDENTITY_INSERT Access ON;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+
+            query = "INSERT INTO Access (ID, AccountID, FolderID) VALUES" +
+                                "(@ID, @AccountID, @FolderID);";
+
+            foreach (Access element in rows)
+            {
+                using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+                {
+                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@AccountID", element.AccountID);
+                    command.Parameters.AddWithValue("@FolderID", element.FolderID);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            query = "SET IDENTITY_INSERT Access OFF;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void ClearTable()
+        {
+            string query = "DELETE FROM Access;";
+            using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
+            {
+                command.ExecuteNonQuery();
+            }
         }
     }
 }

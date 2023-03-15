@@ -23,7 +23,6 @@ namespace DatabaseEditorForUser.Subforms
 
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
-        private readonly FolderColorDAO folderColorDao;
         private DataGridViewRow selectedRow;
         private bool UserIsEditingRow;
         private FolderColor selectedFolderColor;
@@ -32,8 +31,6 @@ namespace DatabaseEditorForUser.Subforms
         {
             InitializeComponent();
             ChangeDefaultComponent();
-
-            folderColorDao = new FolderColorDAO();
             GetAllDataFromDatabase();
 
             refreshBtnTimerMaxCooldown = 5;
@@ -59,8 +56,12 @@ namespace DatabaseEditorForUser.Subforms
             selectedRow = null;
             folderColorGridView.DataSource = new BindingSource()
             {
-                DataSource = folderColorDao.GetAll()
+                DataSource = DAOContainer.folderColor.GetAll()
             };
+
+            bool hasRows = folderColorGridView.Rows.Count > 0;
+            deleteBtn.Visible = hasRows;
+            editBtn.Visible = hasRows;
         }
 
         private void SetRefreshCooldown()
@@ -101,10 +102,7 @@ namespace DatabaseEditorForUser.Subforms
 
         private void FolderColorGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
-            {
-                selectedRow = folderColorGridView.Rows[e.RowIndex];
-            }
+            selectedRow = e.RowIndex >= 0 ? selectedRow = folderColorGridView.Rows[e.RowIndex] : null;
         }
 
         private void AddRowBtn_Click(object sender, EventArgs e)
@@ -154,7 +152,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    folderColorDao.Add(new FolderColor(
+                    DAOContainer.folderColor.Add(new FolderColor(
                         colorNameTextBox.Text
                     ));
 
@@ -172,7 +170,7 @@ namespace DatabaseEditorForUser.Subforms
             {
                 try
                 {
-                    folderColorDao.Edit(new FolderColor(
+                    DAOContainer.folderColor.Edit(new FolderColor(
                         selectedFolderColor.ID,
                         colorNameTextBox.Text
                     ));
@@ -200,7 +198,7 @@ namespace DatabaseEditorForUser.Subforms
             }
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedFolderColor = folderColorDao.GetByID(id);
+            this.selectedFolderColor = DAOContainer.folderColor.GetByID(id);
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxWithData(selectedFolderColor);
@@ -221,7 +219,7 @@ namespace DatabaseEditorForUser.Subforms
 
                 try
                 {
-                    folderColorDao.Delete(id);
+                    DAOContainer.folderColor.Delete(id);
 
                     GetAllDataFromDatabase();
                     SetRefreshCooldown();
