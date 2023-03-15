@@ -23,9 +23,15 @@ namespace DatabaseEditorForUser
 
         private readonly Random rnd;
 
+        private readonly Color primaryColor;
+        private readonly Color secondaryColor;
+
         public DEFUForm()
         {
             InitializeComponent();
+            primaryColor = barPanel.BackColor;
+            secondaryColor = menuLogoPanel.BackColor;
+
             ChangeDefaultComponent();
             AddSpaceBeforeButtons(menuPanel);
             rnd = new Random();
@@ -139,6 +145,9 @@ namespace DatabaseEditorForUser
             subform.Dock = DockStyle.Fill;
             subform.BringToFront();
             subform.Show();
+
+            dataManagerPanel.Visible = false;
+            closeSubformBtn.Visible = true;
         }
 
         private void MenuAccountBtn_Click(object sender, EventArgs e)
@@ -175,6 +184,68 @@ namespace DatabaseEditorForUser
         {
             ActivateButton(sender, e);
             OpenSubform(new AttachmentForm());
+        }
+
+        private void CloseSubformBtn_Click(object sender, EventArgs e)
+        {
+            activeForm?.Close();
+            closeSubformBtn.Visible = false;
+            dataManagerPanel.Visible = true;
+            activeBtn.BackColor = primaryColor;
+            activeBtn.Font = new Font(activeBtn.Font.FontFamily, 8.25F, activeBtn.Font.Style, activeBtn.Font.Unit, 0);
+            activeBtn = null;
+            activeForm = null;
+
+            barPanel.BackColor = primaryColor;
+            menuLogoPanel.BackColor = secondaryColor;
+            barTitleLabel.Text = "Homepage".ToUpper();
+            barTitleLabel.Location = CentreLabelByPanel(barTitleLabel, barPanel);
+        }
+
+        private void ImportBtn_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Importing the database will completely erase the existing database. " +
+                "Are you sure you really want to import a new one?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                OpenFileDialog ofd = new OpenFileDialog
+                {
+                    Title = "Select the json file to import",
+                    Filter = "JSON files (*.json)|*.json"
+                };
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        Importer.Import(ofd.FileName);
+                        MessageBox.Show($"The data were inserted into tables.", "Imported", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void ExportButton_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Do you want to export this database in json format?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    Exporter.Export();
+                    MessageBox.Show($"The database is exported and saved to the project.\nPath: {Exporter.DEFAULT_PATH}", "Exported", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }
