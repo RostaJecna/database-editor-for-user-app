@@ -22,10 +22,36 @@ namespace DatabaseEditorForUser
 
         private static SqlConnection connection = null;
         public static Status status = Status.Null;
+        public static DatabaseConfiguration databaseConfiguration = null;
 
         public static SqlConnection Instance()
         {
-            return connection ?? (connection = new SqlConnection(ConfigurationManager.AppSettings["connectionString"]));
+            if (connection == null)
+            {
+                SqlConnectionStringBuilder scsb = new SqlConnectionStringBuilder
+                {
+                    InitialCatalog = ReadSetting("InitialCatalog"),
+                    IntegratedSecurity = bool.Parse(ReadSetting("IntegratedSecurity")),
+                    DataSource = ReadSetting("DataSource"),
+                    UserID = ReadSetting("UserID"),
+                    Password = ReadSetting("Password"),
+                    ConnectTimeout = 8
+                };
+                if (databaseConfiguration != null)
+                {
+                    scsb.InitialCatalog = databaseConfiguration.DatabaseName;
+                    scsb.DataSource = databaseConfiguration.ServerName;
+                    scsb.IntegratedSecurity = databaseConfiguration.IntegratedSecurity;
+
+                    if (!databaseConfiguration.IntegratedSecurity)
+                    {
+                        scsb.UserID = databaseConfiguration.UserName;
+                        scsb.Password = databaseConfiguration.Password;
+                    }
+                }
+                connection = new SqlConnection(scsb.ConnectionString);
+            }
+            return connection;
         }
 
         public static void CloseAndDispose()
@@ -43,6 +69,13 @@ namespace DatabaseEditorForUser
             {
                 connection = null;
             }
+        }
+
+        private static string ReadSetting(string key)
+        {
+            var appSettings = ConfigurationManager.AppSettings;
+            string result = appSettings[key] ?? "Not Found";
+            return result;
         }
 
         public static bool IsConnected()

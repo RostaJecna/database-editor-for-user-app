@@ -42,6 +42,7 @@
             this.connectionPanel = new System.Windows.Forms.Panel();
             this.connectionStatusLabel = new System.Windows.Forms.Label();
             this.connectionTimer = new System.Windows.Forms.Timer(this.components);
+            this.configurationBtn = new System.Windows.Forms.Button();
             this.bgPicture = new System.Windows.Forms.PictureBox();
             this.bgPanel.SuspendLayout();
             this.dragPanel.SuspendLayout();
@@ -78,6 +79,7 @@
             // dragPanel
             // 
             this.dragPanel.BackColor = System.Drawing.Color.Transparent;
+            this.dragPanel.Controls.Add(this.configurationBtn);
             this.dragPanel.Controls.Add(this.formCloseBtn);
             this.dragPanel.Location = new System.Drawing.Point(0, 0);
             this.dragPanel.Name = "dragPanel";
@@ -125,7 +127,7 @@
             this.welcomeConnectBtn.ForeColor = System.Drawing.Color.White;
             this.welcomeConnectBtn.Location = new System.Drawing.Point(77, 193);
             this.welcomeConnectBtn.Name = "welcomeConnectBtn";
-            this.welcomeConnectBtn.Padding = new System.Windows.Forms.Padding(15, 15, 15, 15);
+            this.welcomeConnectBtn.Padding = new System.Windows.Forms.Padding(15);
             this.welcomeConnectBtn.Size = new System.Drawing.Size(147, 82);
             this.welcomeConnectBtn.TabIndex = 9;
             this.welcomeConnectBtn.Text = "Connect To Database";
@@ -158,14 +160,12 @@
             // 
             // welcomeTitleLabel
             // 
-            this.welcomeTitleLabel.BackColor = System.Drawing.Color.Transparent;
-            this.welcomeTitleLabel.Font = new System.Drawing.Font("Sans Serif Collection", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.welcomeTitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.welcomeTitleLabel.ForeColor = System.Drawing.Color.White;
-            this.welcomeTitleLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.welcomeTitleLabel.Location = new System.Drawing.Point(56, 24);
+            this.welcomeTitleLabel.Location = new System.Drawing.Point(51, 24);
             this.welcomeTitleLabel.Name = "welcomeTitleLabel";
-            this.welcomeTitleLabel.Size = new System.Drawing.Size(189, 69);
-            this.welcomeTitleLabel.TabIndex = 0;
+            this.welcomeTitleLabel.Size = new System.Drawing.Size(198, 69);
+            this.welcomeTitleLabel.TabIndex = 10;
             this.welcomeTitleLabel.Text = "Database Editor For User";
             this.welcomeTitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -194,6 +194,22 @@
             // 
             this.connectionTimer.Interval = 10;
             this.connectionTimer.Tick += new System.EventHandler(this.ConnectionTimer_Tick);
+            // 
+            // configurationBtn
+            // 
+            this.configurationBtn.BackColor = System.Drawing.Color.Transparent;
+            this.configurationBtn.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.configurationBtn.FlatAppearance.MouseDownBackColor = System.Drawing.Color.DarkGoldenrod;
+            this.configurationBtn.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Goldenrod;
+            this.configurationBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.configurationBtn.ForeColor = System.Drawing.Color.White;
+            this.configurationBtn.Image = ((System.Drawing.Image)(resources.GetObject("configurationBtn.Image")));
+            this.configurationBtn.Location = new System.Drawing.Point(215, 12);
+            this.configurationBtn.Name = "configurationBtn";
+            this.configurationBtn.Size = new System.Drawing.Size(34, 34);
+            this.configurationBtn.TabIndex = 1;
+            this.configurationBtn.UseVisualStyleBackColor = true;
+            this.configurationBtn.Click += new System.EventHandler(this.СonfigurationBtn_Click);
             // 
             // bgPicture
             // 
@@ -241,6 +257,7 @@
         private System.Windows.Forms.Panel connectionPanel;
         private System.Windows.Forms.Timer connectionTimer;
         private System.Windows.Forms.Label connectionStatusLabel;
+        private System.Windows.Forms.Button configurationBtn;
     }
 }
 
