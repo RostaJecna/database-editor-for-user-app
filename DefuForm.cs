@@ -6,18 +6,30 @@ using DatabaseEditorForUser.Subforms;
 
 namespace DatabaseEditorForUser
 {
+    /// <summary>
+    ///     Represents the main form of the application.
+    /// </summary>
     public partial class DefuForm : Form
     {
+        // Constants
+
         private const string LogoMaskPath = @"../../Resources/DEFUForm/Logo_mask.png";
+
+        // Static fields
 
         private static Button _activeBtn;
         private static Form _activeForm;
+
+        // Instance fields
 
         private readonly Random rnd;
 
         private readonly Color primaryColor;
         private readonly Color secondaryColor;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="DefuForm" /> class.
+        /// </summary>
         public DefuForm()
         {
             InitializeComponent();
@@ -125,49 +137,92 @@ namespace DatabaseEditorForUser
             closeSubformBtn.Visible = true;
         }
 
+        /// <summary>
+        ///     Handles the click event of the account menu button.
+        ///     Activates the button and opens the account subform.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void MenuAccountBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, e);
             OpenSubform(new AccountForm());
         }
 
+        /// <summary>
+        ///     Handles the click event of the color menu button.
+        ///     Activates the button and opens the color subform.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void MenuColorBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, e);
             OpenSubform(new ColorForm());
         }
 
+        /// <summary>
+        ///     Handles the click event of the folder menu button.
+        ///     Activates the button and opens the folder subform.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void MenuFolderBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, e);
             OpenSubform(new FolderForm());
         }
 
+        /// <summary>
+        ///     Handles the click event of the access menu button.
+        ///     Activates the button and opens the access subform.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void MenuAccessBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, e);
             OpenSubform(new AccessForm());
         }
 
+        /// <summary>
+        ///     Handles the click event of the type menu button.
+        ///     Activates the button and opens the type subform.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void MenuTypeBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, e);
             OpenSubform(new TypeForm());
         }
 
+        /// <summary>
+        ///     Handles the click event of the attachment menu button.
+        ///     Activates the button and opens the attachment subform.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void MenuAttachmentBtn_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, e);
             OpenSubform(new AttachmentForm());
         }
 
+        /// <summary>
+        ///     Handles the click event of the close subform button.
+        ///     Closes the active subform and resets the UI to its initial state.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void CloseSubformBtn_Click(object sender, EventArgs e)
         {
             _activeForm?.Close();
             closeSubformBtn.Visible = false;
             dataManagerPanel.Visible = true;
             _activeBtn.BackColor = primaryColor;
-            _activeBtn.Font = new Font(_activeBtn.Font.FontFamily, 8.25F, _activeBtn.Font.Style, _activeBtn.Font.Unit, 0);
+            _activeBtn.Font = new Font(_activeBtn.Font.FontFamily, 8.25F, _activeBtn.Font.Style, _activeBtn.Font.Unit,
+                0);
             _activeBtn = null;
             _activeForm = null;
 
@@ -177,6 +232,12 @@ namespace DatabaseEditorForUser
             barTitleLabel.Location = CentreLabelByPanel(barTitleLabel, barPanel);
         }
 
+        /// <summary>
+        ///     Handles the click event of the import button.
+        ///     Asks for confirmation before importing a JSON file to the database.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void ImportBtn_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(
@@ -204,6 +265,13 @@ namespace DatabaseEditorForUser
             }
         }
 
+
+        /// <summary>
+        ///     Handles the click event of the export button.
+        ///     Asks for confirmation before exporting the database to a JSON file.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void ExportButton_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(@"Do you want to export this database in json format?",
