@@ -1,20 +1,12 @@
 ﻿using DatabaseEditorForUser.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DatabaseEditorForUser.Entities
 {
     internal class AttachmentType : IBaseClass
     {
-        private int id;
-        private string typeName;
-
         public AttachmentType(int id, string typeName)
         {
-            ID = id;
+            Id = id;
             TypeName = typeName;
         }
 
@@ -23,26 +15,13 @@ namespace DatabaseEditorForUser.Entities
             TypeName = typeName;
         }
 
-        public int ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        public int Id { get; set; }
 
-        public string TypeName
-        {
-            get { return typeName; }
-            set { typeName = value; }
-        }
+        public string TypeName { get; set; }
 
         public override string ToString()
         {
-            if(ID == default)
-            {
-                return $"{TypeName}";
-            }
-
-            return $"{ID}: {TypeName}";
+            return Id == default ? $"{TypeName}" : $"{Id}: {TypeName}";
         }
     }
 }

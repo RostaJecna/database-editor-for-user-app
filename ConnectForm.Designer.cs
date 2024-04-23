@@ -209,7 +209,7 @@
             this.configurationBtn.Size = new System.Drawing.Size(34, 34);
             this.configurationBtn.TabIndex = 1;
             this.configurationBtn.UseVisualStyleBackColor = true;
-            this.configurationBtn.Click += new System.EventHandler(this.СonfigurationBtn_Click);
+            this.configurationBtn.Click += new System.EventHandler(this.ConfigurationBtn_Click);
             // 
             // bgPicture
             // 

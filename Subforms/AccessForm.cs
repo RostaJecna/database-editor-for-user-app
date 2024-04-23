@@ -1,15 +1,7 @@
-﻿using DatabaseEditorForUser.DAOs;
+﻿using System;
+using System.Windows.Forms;
 using DatabaseEditorForUser.Entities;
 using DatabaseEditorForUser.Graphics;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DatabaseEditorForUser.Subforms
 {
@@ -18,13 +10,13 @@ namespace DatabaseEditorForUser.Subforms
         internal enum Panels
         {
             Navigation,
-            DataManager,
+            DataManager
         }
 
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
         private DataGridViewRow selectedRow;
-        private bool UserIsEditingRow;
+        private bool userIsEditingRow;
         private Access selectedAccess;
 
         public AccessForm()
@@ -49,15 +41,15 @@ namespace DatabaseEditorForUser.Subforms
 
         private void ResetComponentToDefault()
         {
-            UserIsEditingRow = false;
+            userIsEditingRow = false;
         }
 
         private void GetAllDataFromDatabase()
         {
             selectedRow = null;
-            accessGridView.DataSource = new BindingSource()
+            accessGridView.DataSource = new BindingSource
             {
-                DataSource = DAOContainer.access.GetAll()
+                DataSource = DaoContainer.Access.GetAll()
             };
 
             bool hasRows = accessGridView.Rows.Count > 0;
@@ -70,7 +62,7 @@ namespace DatabaseEditorForUser.Subforms
             refreshBtnTimer.Enabled = true;
             refreshBtnTimer.Start();
             refreshBtnTimerCounter = 0;
-            refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+            refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             refreshTableBtn.Enabled = false;
         }
 
@@ -82,8 +74,8 @@ namespace DatabaseEditorForUser.Subforms
 
         private void FillTextBoxesWithData(Access access)
         {
-            accountIDTextBox.Text = access.AccountID.ToString();
-            folderIDTextBox.Text = access.FolderID.ToString();
+            accountIDTextBox.Text = access.AccountId.ToString();
+            folderIDTextBox.Text = access.FolderId.ToString();
         }
 
         private void SwitchPanelTo(Panels panel)
@@ -134,12 +126,12 @@ namespace DatabaseEditorForUser.Subforms
                 refreshBtnTimer.Stop();
                 refreshBtnTimerCounter = 0;
                 refreshTableBtn.Enabled = true;
-                refreshTableBtn.Text = "Refresh";
+                refreshTableBtn.Text = @"Refresh";
             }
             else
             {
                 refreshBtnTimerCounter++;
-                refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+                refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             }
         }
 
@@ -147,15 +139,14 @@ namespace DatabaseEditorForUser.Subforms
         {
             if (accountIDTextBox.Text == string.Empty || folderIDTextBox.Text == string.Empty)
             {
-                MessageBox.Show("Complete all the fields.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"Complete all the fields.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!UserIsEditingRow)
-            {
+            if (!userIsEditingRow)
                 try
                 {
-                    DAOContainer.access.Add(new Access(
+                    DaoContainer.Access.Add(new Access(
                         Convert.ToInt32(accountIDTextBox.Text),
                         Convert.ToInt32(folderIDTextBox.Text)
                     ));
@@ -167,15 +158,13 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
             else
-            {
                 try
                 {
-                    DAOContainer.access.Edit(new Access(
-                        selectedAccess.ID,
+                    DaoContainer.Access.Edit(new Access(
+                        selectedAccess.Id,
                         Convert.ToInt32(accountIDTextBox.Text),
                         Convert.ToInt32(folderIDTextBox.Text)
                     ));
@@ -188,22 +177,18 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
         }
 
         private void EditBtn_Click(object sender, EventArgs e)
         {
-            UserIsEditingRow = true;
+            userIsEditingRow = true;
 
-            if (selectedRow is null)
-            {
-                selectedRow = accessGridView.Rows[0];
-            }
+            if (selectedRow is null) selectedRow = accessGridView.Rows[0];
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedAccess = DAOContainer.access.GetByID(id);
+            selectedAccess = DaoContainer.Access.GetById(id);
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxesWithData(selectedAccess);
@@ -211,37 +196,32 @@ namespace DatabaseEditorForUser.Subforms
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete this access?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show(@"Are you sure you want to delete this access?", @"Confirmation",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
-                if (selectedRow is null)
-                {
-                    selectedRow = accessGridView.Rows[0];
-                }
+                if (selectedRow is null) selectedRow = accessGridView.Rows[0];
 
                 int id = (int)selectedRow.Cells[0].Value;
 
                 try
                 {
-                    DAOContainer.access.Delete(id);
+                    DaoContainer.Access.Delete(id);
 
                     GetAllDataFromDatabase();
                     SetRefreshCooldown();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private void CheckIntegerInput(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar)) e.Handled = true;
         }
     }
 }

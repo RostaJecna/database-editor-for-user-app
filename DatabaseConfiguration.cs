@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DatabaseEditorForUser
+﻿namespace DatabaseEditorForUser
 {
     internal class DatabaseConfiguration
     {
@@ -32,10 +26,10 @@ namespace DatabaseEditorForUser
 
         public override string ToString()
         {
-            return IntegratedSecurity ? 
-                $"DataSource = {ServerName}, InitialCatalog = {DatabaseName}" : 
-                $"DataSource = {ServerName}, InitialCatalog = {DatabaseName}, IntegratedSecurity = {IntegratedSecurity}" +
-                $"UserID = {UserName}, Password = {Password}";
+            return IntegratedSecurity
+                ? $"DataSource = {ServerName}, InitialCatalog = {DatabaseName}"
+                : $"DataSource = {ServerName}, InitialCatalog = {DatabaseName}, IntegratedSecurity = {IntegratedSecurity}" +
+                  $"UserID = {UserName}, Password = {Password}";
         }
     }
 }

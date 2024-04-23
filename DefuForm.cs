@@ -1,32 +1,24 @@
-﻿using DatabaseEditorForUser.Graphics;
-using DatabaseEditorForUser.Subforms;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System;
 using System.Drawing;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using DatabaseEditorForUser.Graphics;
+using DatabaseEditorForUser.Subforms;
 
 namespace DatabaseEditorForUser
 {
-    public partial class DEFUForm : Form
+    public partial class DefuForm : Form
     {
-        private const string LOGO_MASK_PATH = @"../../Resources/DEFUForm/Logo_mask.png";
+        private const string LogoMaskPath = @"../../Resources/DEFUForm/Logo_mask.png";
 
-        private static Button activeBtn;
-        private static Form activeForm;
+        private static Button _activeBtn;
+        private static Form _activeForm;
 
         private readonly Random rnd;
 
         private readonly Color primaryColor;
         private readonly Color secondaryColor;
 
-        public DEFUForm()
+        public DefuForm()
         {
             InitializeComponent();
             primaryColor = barPanel.BackColor;
@@ -37,25 +29,15 @@ namespace DatabaseEditorForUser
             rnd = new Random();
         }
 
-        private Image RemapImage(Image image, Bitmap mask, Color color)
+        private static Image RemapImage(Image image, Bitmap mask, Color color)
         {
-            Bitmap output = image as Bitmap;
-
-            if (image.Size != mask.Size)
-            {
-                throw new ArgumentException("Image and mask must be the same size.");
-            }
+            if (!(image is Bitmap output)) throw new OperationCanceledException();
+            if (image.Size != mask.Size) throw new ArgumentException("Image and mask must be the same size.");
 
             for (int y = 0; y < output.Height; y++)
-            {
-                for (int x = 0; x < output.Width; x++)
-                {
-                    if (mask.GetPixel(x, y) == Color.FromArgb(255, 255, 255))
-                    {
-                        output.SetPixel(x, y, color);
-                    }
-                }
-            }
+            for (int x = 0; x < output.Width; x++)
+                if (mask.GetPixel(x, y) == Color.FromArgb(255, 255, 255))
+                    output.SetPixel(x, y, color);
 
             return output;
         }
@@ -65,24 +47,20 @@ namespace DatabaseEditorForUser
             barTitleLabel.Text = barTitleLabel.Text.ToUpper();
             mainBigLogoPictureBox.Image = RemapImage(
                 mainBigLogoPictureBox.Image,
-                new Bitmap(LOGO_MASK_PATH),
+                new Bitmap(LogoMaskPath),
                 Color.Gainsboro
-                );
+            );
         }
 
-        private void AddSpaceBeforeButtons(Panel panel)
+        private static void AddSpaceBeforeButtons(Control panel)
         {
             string threeSpaces = new string('\x20', 3);
             foreach (Control control in panel.Controls)
-            {
                 if (control.GetType() == typeof(Button))
-                {
-                    control.Text = $"{threeSpaces}{control.Text}";
-                }
-            }
+                    control.Text = $@"{threeSpaces}{control.Text}";
         }
 
-        private Point CentreLabelByPanel(System.Windows.Forms.Label label, Panel panel)
+        private static Point CentreLabelByPanel(Control label, Control panel)
         {
             int centrePanelX = panel.Size.Width / 2;
             int centrePanelY = panel.Size.Height / 2;
@@ -93,7 +71,7 @@ namespace DatabaseEditorForUser
             return new Point(centrePanelX - centreLabelX, centrePanelY - centreLabelY);
         }
 
-        private void DesignPanels(Color barPanelColor, Color menuLogoPanelColor, Button selectedBtn)
+        private void DesignPanels(Color barPanelColor, Color menuLogoPanelColor, Control selectedBtn)
         {
             barPanel.BackColor = barPanelColor;
             menuLogoPanel.BackColor = menuLogoPanelColor;
@@ -102,44 +80,41 @@ namespace DatabaseEditorForUser
             barTitleLabel.Location = CentreLabelByPanel(barTitleLabel, barPanel);
         }
 
-        private void ActivateButton(object sender, EventArgs e)
+        private void ActivateButton(object sender, EventArgs _)
         {
             Button selectedBtn = (Button)sender;
 
-            if (activeBtn != null && activeBtn != selectedBtn)
+            if (_activeBtn != null && _activeBtn != selectedBtn)
             {
-                activeBtn.BackColor = selectedBtn.BackColor;
-                activeBtn.ForeColor = selectedBtn.ForeColor;
-                activeBtn.Font = selectedBtn.Font;
+                _activeBtn.BackColor = selectedBtn.BackColor;
+                _activeBtn.ForeColor = selectedBtn.ForeColor;
+                _activeBtn.Font = selectedBtn.Font;
             }
-            else if (activeBtn == selectedBtn)
+            else if (_activeBtn == selectedBtn)
             {
                 return;
             }
 
-            activeBtn = selectedBtn;
+            _activeBtn = selectedBtn;
             selectedBtn.BackColor = Palettes.GetNextRandom(rnd);
             selectedBtn.ForeColor = Color.White;
-            selectedBtn.Font = new Font(selectedBtn.Font.FontFamily, 10.5F, selectedBtn.Font.Style, selectedBtn.Font.Unit, 0);
+            selectedBtn.Font = new Font(selectedBtn.Font.FontFamily, 10.5F, selectedBtn.Font.Style,
+                selectedBtn.Font.Unit, 0);
 
             DesignPanels(Palettes.GetLast(), Palettes.GetLastDarkness(15), selectedBtn);
         }
 
         private void OpenSubform(Form subform)
         {
-            if(activeForm != null)
+            if (_activeForm != null)
             {
-                if(activeForm.GetType() != subform.GetType())
-                {
-                    activeForm.Close();
-                }
+                if (_activeForm.GetType() != subform.GetType())
+                    _activeForm.Close();
                 else
-                {
                     return;
-                }
             }
 
-            activeForm = subform;
+            _activeForm = subform;
             subform.TopLevel = false;
             mainPanel.Controls.Add(subform);
             subform.Dock = DockStyle.Fill;
@@ -188,64 +163,63 @@ namespace DatabaseEditorForUser
 
         private void CloseSubformBtn_Click(object sender, EventArgs e)
         {
-            activeForm?.Close();
+            _activeForm?.Close();
             closeSubformBtn.Visible = false;
             dataManagerPanel.Visible = true;
-            activeBtn.BackColor = primaryColor;
-            activeBtn.Font = new Font(activeBtn.Font.FontFamily, 8.25F, activeBtn.Font.Style, activeBtn.Font.Unit, 0);
-            activeBtn = null;
-            activeForm = null;
+            _activeBtn.BackColor = primaryColor;
+            _activeBtn.Font = new Font(_activeBtn.Font.FontFamily, 8.25F, _activeBtn.Font.Style, _activeBtn.Font.Unit, 0);
+            _activeBtn = null;
+            _activeForm = null;
 
             barPanel.BackColor = primaryColor;
             menuLogoPanel.BackColor = secondaryColor;
-            barTitleLabel.Text = "Homepage".ToUpper();
+            barTitleLabel.Text = @"Homepage".ToUpper();
             barTitleLabel.Location = CentreLabelByPanel(barTitleLabel, barPanel);
         }
 
         private void ImportBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Importing the database will completely erase the existing database. " +
-                "Are you sure you really want to import a new one?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            DialogResult result = MessageBox.Show(
+                @"Importing the database will completely erase the existing database. " +
+                @"Are you sure you really want to import a new one?", @"Confirmation", MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
 
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes) return;
+            OpenFileDialog ofd = new OpenFileDialog
             {
-                OpenFileDialog ofd = new OpenFileDialog
-                {
-                    Title = "Select the json file to import",
-                    Filter = "JSON files (*.json)|*.json"
-                };
+                Title = @"Select the json file to import",
+                Filter = @"JSON files (*.json)|*.json"
+            };
 
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    try
-                    {
-                        Importer.Import(ofd.FileName);
-                        MessageBox.Show($"The data were inserted into tables.", "Imported", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+            if (ofd.ShowDialog() != DialogResult.OK) return;
+            try
+            {
+                Importer.Import(ofd.FileName);
+                MessageBox.Show(@"The data were inserted into tables.", @"Imported", MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void ExportButton_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Do you want to export this database in json format?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show(@"Do you want to export this database in json format?",
+                @"Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
-            {
                 try
                 {
                     Exporter.Export();
-                    MessageBox.Show($"The database is exported and saved to the project.\nPath: {Exporter.DEFAULT_PATH}", "Exported", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show($@"The database is exported and saved to the project.
+Path: {Exporter.DefaultPath}", @"Exported", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
         }
     }
 }

@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DatabaseEditorForUser
@@ -16,37 +9,38 @@ namespace DatabaseEditorForUser
         {
             InitializeComponent();
 
-            if (DatabaseSingleton.databaseConfiguration != null)
-            {
-                serverNameTextBox.Text = DatabaseSingleton.databaseConfiguration.ServerName;
-                databaseNameTextBox.Text = DatabaseSingleton.databaseConfiguration.DatabaseName;
+            if (DatabaseSingleton.DatabaseConfiguration == null) return;
+            serverNameTextBox.Text = DatabaseSingleton.DatabaseConfiguration.ServerName;
+            databaseNameTextBox.Text = DatabaseSingleton.DatabaseConfiguration.DatabaseName;
 
-                if (!DatabaseSingleton.databaseConfiguration.IntegratedSecurity)
-                {
-                    authenticationCheckBox.Checked = true;
-                    userNameTextBox.Text = DatabaseSingleton.databaseConfiguration.UserName;
-                    passwordTextBox.Text = DatabaseSingleton.databaseConfiguration.Password;
-                }
+            if (!DatabaseSingleton.DatabaseConfiguration.IntegratedSecurity)
+            {
+                authenticationCheckBox.Checked = true;
+                userNameTextBox.Text = DatabaseSingleton.DatabaseConfiguration.UserName;
+                passwordTextBox.Text = DatabaseSingleton.DatabaseConfiguration.Password;
             }
         }
 
         private void SaveBtn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(serverNameTextBox.Text) || string.IsNullOrWhiteSpace(databaseNameTextBox.Text))
+            if (string.IsNullOrWhiteSpace(serverNameTextBox.Text) ||
+                string.IsNullOrWhiteSpace(databaseNameTextBox.Text))
             {
-                MessageBox.Show("Complete all the fields.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"Complete all the fields.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (authenticationCheckBox.Checked && (string.IsNullOrWhiteSpace(userNameTextBox.Text) || string.IsNullOrWhiteSpace(passwordTextBox.Text)))
+            if (authenticationCheckBox.Checked && (string.IsNullOrWhiteSpace(userNameTextBox.Text) ||
+                                                   string.IsNullOrWhiteSpace(passwordTextBox.Text)))
             {
-                MessageBox.Show("Complete all the fields.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"Complete all the fields.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            DatabaseSingleton.databaseConfiguration = authenticationCheckBox.Checked ?
-                new DatabaseConfiguration(serverNameTextBox.Text, databaseNameTextBox.Text, userNameTextBox.Text, passwordTextBox.Text) :
-                new DatabaseConfiguration(serverNameTextBox.Text, databaseNameTextBox.Text);
+            DatabaseSingleton.DatabaseConfiguration = authenticationCheckBox.Checked
+                ? new DatabaseConfiguration(serverNameTextBox.Text, databaseNameTextBox.Text, userNameTextBox.Text,
+                    passwordTextBox.Text)
+                : new DatabaseConfiguration(serverNameTextBox.Text, databaseNameTextBox.Text);
 
             Close();
         }

@@ -1,15 +1,8 @@
-﻿using DatabaseEditorForUser.DAOs;
+﻿using System;
+using System.Windows.Forms;
+using DatabaseEditorForUser.DAOs;
 using DatabaseEditorForUser.Entities;
 using DatabaseEditorForUser.Graphics;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DatabaseEditorForUser.Subforms
 {
@@ -24,7 +17,7 @@ namespace DatabaseEditorForUser.Subforms
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
         private DataGridViewRow selectedRow;
-        private bool UserIsEditingRow;
+        private bool userIsEditingRow;
         private Folder selectedFolder;
 
         public FolderForm()
@@ -36,7 +29,7 @@ namespace DatabaseEditorForUser.Subforms
             refreshBtnTimerMaxCooldown = 5;
 
             SwitchPanelTo(Panels.Navigation);
-            FillComboBox(DAOContainer.folderColor);
+            FillComboBox(DaoContainer.FolderColor);
         }
 
         private void ChangeDefaultComponent()
@@ -49,26 +42,23 @@ namespace DatabaseEditorForUser.Subforms
             isSharedCheckBox.ForeColor = Palettes.GetLastDarkness(15);
         }
 
-        private void FillComboBox(FolderColorDAO folderColorDAO)
+        private void FillComboBox(FolderColorDao folderColorDao)
         {
-            foreach (FolderColor folderColor in folderColorDAO.GetAll())
-            {
-                colorNameComboBox.Items.Add(folderColor.Name);
-            }
+            foreach (FolderColor folderColor in folderColorDao.GetAll()) colorNameComboBox.Items.Add(folderColor.Name);
         }
 
         private void ResetComponentToDefault()
         {
-            UserIsEditingRow = false;
+            userIsEditingRow = false;
             isSharedCheckBox.Checked = false;
         }
 
         private void GetAllDataFromDatabase()
         {
             selectedRow = null;
-            folderGridView.DataSource = new BindingSource()
+            folderGridView.DataSource = new BindingSource
             {
-                DataSource = DAOContainer.folder.GetAll()
+                DataSource = DaoContainer.Folder.GetAll()
             };
 
             bool hasRows = folderGridView.Rows.Count > 0;
@@ -81,7 +71,7 @@ namespace DatabaseEditorForUser.Subforms
             refreshBtnTimer.Enabled = true;
             refreshBtnTimer.Start();
             refreshBtnTimerCounter = 0;
-            refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+            refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             refreshTableBtn.Enabled = false;
         }
 
@@ -93,7 +83,7 @@ namespace DatabaseEditorForUser.Subforms
         private void FillTextBoxWithData(Folder folder)
         {
             folderNameTextBox.Text = folder.Name;
-            colorNameComboBox.SelectedItem = DAOContainer.folderColor.GetByID(folder.ColorID).Name;
+            colorNameComboBox.SelectedItem = DaoContainer.FolderColor.GetById(folder.ColorId).Name;
             isSharedCheckBox.Checked = folder.IsShared;
         }
 
@@ -122,7 +112,6 @@ namespace DatabaseEditorForUser.Subforms
         private void AddRowBtn_Click(object sender, EventArgs e)
         {
             SwitchPanelTo(Panels.DataManager);
-            colorNameComboBox.SelectedIndex = 0;
         }
 
         private void BackBtn_Click(object sender, EventArgs e)
@@ -146,12 +135,12 @@ namespace DatabaseEditorForUser.Subforms
                 refreshBtnTimer.Stop();
                 refreshBtnTimerCounter = 0;
                 refreshTableBtn.Enabled = true;
-                refreshTableBtn.Text = "Refresh";
+                refreshTableBtn.Text = @"Refresh";
             }
             else
             {
                 refreshBtnTimerCounter++;
-                refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+                refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             }
         }
 
@@ -159,23 +148,23 @@ namespace DatabaseEditorForUser.Subforms
         {
             if (folderNameTextBox.Text == string.Empty)
             {
-                MessageBox.Show("Entry folder name.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"Entry folder name.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if(colorNameComboBox.SelectedIndex == -1)
+            if (colorNameComboBox.SelectedIndex == -1)
             {
-                MessageBox.Show("Color name doesn't exist in database.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"Color name doesn't exist in database.", @"Warning", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!UserIsEditingRow)
-            {
+            if (!userIsEditingRow)
                 try
                 {
-                    DAOContainer.folder.Add(new Folder(
+                    DaoContainer.Folder.Add(new Folder(
                         folderNameTextBox.Text,
-                        FolderColorDAO.GetIDByName((string)colorNameComboBox.SelectedItem),
+                        FolderColorDao.GetIdByName((string)colorNameComboBox.SelectedItem),
                         isSharedCheckBox.Checked
                     ));
 
@@ -186,17 +175,15 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
             else
-            {
                 try
                 {
-                    DAOContainer.folder.Edit(new Folder(
-                        selectedFolder.ID,
+                    DaoContainer.Folder.Edit(new Folder(
+                        selectedFolder.Id,
                         folderNameTextBox.Text,
-                        FolderColorDAO.GetIDByName((string)colorNameComboBox.SelectedItem),
+                        FolderColorDao.GetIdByName((string)colorNameComboBox.SelectedItem),
                         isSharedCheckBox.Checked,
                         selectedFolder.CreatedAt
                     ));
@@ -209,22 +196,18 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
         }
 
         private void EditBtn_Click(object sender, EventArgs e)
         {
-            UserIsEditingRow = true;
+            userIsEditingRow = true;
 
-            if (selectedRow is null)
-            {
-                selectedRow = folderGridView.Rows[0];
-            }
+            if (selectedRow is null) selectedRow = folderGridView.Rows[0];
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedFolder = DAOContainer.folder.GetByID(id);
+            selectedFolder = DaoContainer.Folder.GetById(id);
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxWithData(selectedFolder);
@@ -232,28 +215,24 @@ namespace DatabaseEditorForUser.Subforms
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete this folder?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show(@"Are you sure you want to delete this folder?", @"Confirmation",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes) return;
+            if (selectedRow is null) selectedRow = folderGridView.Rows[0];
+
+            int id = (int)selectedRow.Cells[0].Value;
+
+            try
             {
-                if (selectedRow is null)
-                {
-                    selectedRow = folderGridView.Rows[0];
-                }
+                DaoContainer.Folder.Delete(id);
 
-                int id = (int)selectedRow.Cells[0].Value;
-
-                try
-                {
-                    DAOContainer.folder.Delete(id);
-
-                    GetAllDataFromDatabase();
-                    SetRefreshCooldown();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                GetAllDataFromDatabase();
+                SetRefreshCooldown();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

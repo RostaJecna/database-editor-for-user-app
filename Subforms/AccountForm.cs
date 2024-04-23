@@ -1,16 +1,7 @@
-﻿using DatabaseEditorForUser.DAOs;
+﻿using System;
+using System.Windows.Forms;
 using DatabaseEditorForUser.Entities;
 using DatabaseEditorForUser.Graphics;
-using DatabaseEditorForUser.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DatabaseEditorForUser.Subforms
 {
@@ -19,13 +10,13 @@ namespace DatabaseEditorForUser.Subforms
         internal enum Panels
         {
             Navigation,
-            DataManager,
+            DataManager
         }
 
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
         private DataGridViewRow selectedRow;
-        private bool UserIsEditingRow;
+        private bool userIsEditingRow;
         private Account selectedAccount;
 
         public AccountForm()
@@ -58,15 +49,15 @@ namespace DatabaseEditorForUser.Subforms
             passwordCheckBox.Visible = false;
             passwordLabel.Enabled = true;
             passwordTextBox.Enabled = true;
-            UserIsEditingRow = false;
+            userIsEditingRow = false;
         }
 
         private void GetAllDataFromDatabase()
         {
             selectedRow = null;
-            accountGridView.DataSource = new BindingSource()
+            accountGridView.DataSource = new BindingSource
             {
-                DataSource = DAOContainer.account.GetAll()
+                DataSource = DaoContainer.Account.GetAll()
             };
 
             bool hasRows = accountGridView.Rows.Count > 0;
@@ -79,7 +70,7 @@ namespace DatabaseEditorForUser.Subforms
             refreshBtnTimer.Enabled = true;
             refreshBtnTimer.Start();
             refreshBtnTimerCounter = 0;
-            refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+            refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             refreshTableBtn.Enabled = false;
         }
 
@@ -146,34 +137,35 @@ namespace DatabaseEditorForUser.Subforms
                 refreshBtnTimer.Stop();
                 refreshBtnTimerCounter = 0;
                 refreshTableBtn.Enabled = true;
-                refreshTableBtn.Text = "Refresh";
+                refreshTableBtn.Text = @"Refresh";
             }
             else
             {
                 refreshBtnTimerCounter++;
-                refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+                refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             }
         }
 
         private void SaveRowBtn_Click(object sender, EventArgs e)
         {
-            if (firstNameTextBox.Text == string.Empty || lastNameTextBox.Text == string.Empty || emailTextBox.Text == string.Empty)
+            if (firstNameTextBox.Text == string.Empty || lastNameTextBox.Text == string.Empty ||
+                emailTextBox.Text == string.Empty)
             {
-                MessageBox.Show("Complete all the fields.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"Complete all the fields.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!UserIsEditingRow)
+            if (!userIsEditingRow)
             {
                 if (passwordTextBox.Text == string.Empty)
                 {
-                    MessageBox.Show("Enter a password.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(@"Enter a password.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 try
                 {
-                    DAOContainer.account.Add(new Account(
+                    DaoContainer.Account.Add(new Account(
                         firstNameTextBox.Text,
                         lastNameTextBox.Text,
                         emailTextBox.Text,
@@ -187,16 +179,18 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
                 try
                 {
-                    string hashedPassword = passwordCheckBox.Checked ? selectedAccount.HashedPassword : Account.GetHashedPassword(passwordTextBox.Text);
-                    DAOContainer.account.Edit(new Account(
-                        selectedAccount.ID,
+                    string hashedPassword = passwordCheckBox.Checked
+                        ? selectedAccount.HashedPassword
+                        : Account.GetHashedPassword(passwordTextBox.Text);
+                    DaoContainer.Account.Edit(new Account(
+                        selectedAccount.Id,
                         firstNameTextBox.Text,
                         lastNameTextBox.Text,
                         emailTextBox.Text,
@@ -212,22 +206,19 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private void EditBtn_Click(object sender, EventArgs e)
         {
-            UserIsEditingRow = true;
+            userIsEditingRow = true;
 
-            if (selectedRow is null)
-            {
-                selectedRow = accountGridView.Rows[0];
-            }
+            if (selectedRow is null) selectedRow = accountGridView.Rows[0];
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedAccount = DAOContainer.account.GetByID(id);
+            selectedAccount = DaoContainer.Account.GetById(id);
 
             passwordCheckBox.Visible = true;
             passwordTextBox.Enabled = false;
@@ -239,27 +230,25 @@ namespace DatabaseEditorForUser.Subforms
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete this account?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show(@"Are you sure you want to delete this account?", @"Confirmation",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
             if (result == DialogResult.Yes)
             {
-                if (selectedRow is null)
-                {
-                    selectedRow = accountGridView.Rows[0];
-                }
+                if (selectedRow is null) selectedRow = accountGridView.Rows[0];
 
                 int id = (int)selectedRow.Cells[0].Value;
 
                 try
                 {
-                    DAOContainer.account.Delete(id);
+                    DaoContainer.Account.Delete(id);
 
                     GetAllDataFromDatabase();
                     SetRefreshCooldown();
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }

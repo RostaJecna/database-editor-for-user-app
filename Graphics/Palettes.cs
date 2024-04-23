@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DatabaseEditorForUser.Graphics
 {
     internal static class Palettes
     {
-        private const string PATH = @"../../Resources/Graphics/palettes.csv";
-        private static readonly List<Color> colors = ReadFrom(PATH);
-        private static int lastColorIndex;
+        private const string Path = @"../../Resources/Graphics/palettes.csv";
+        private static readonly List<Color> Colors = ReadFrom(Path);
+        private static int _lastColorIndex;
 
         private static List<Color> ReadFrom(string path)
         {
@@ -21,10 +18,7 @@ namespace DatabaseEditorForUser.Graphics
             using (StreamReader sr = new StreamReader(path))
             {
                 sr.ReadLine();
-                while (!sr.EndOfStream)
-                {
-                    temp.Add(ColorTranslator.FromHtml(sr.ReadLine()));
-                }
+                while (!sr.EndOfStream) temp.Add(ColorTranslator.FromHtml(sr.ReadLine()));
             }
 
             return temp;
@@ -32,26 +26,26 @@ namespace DatabaseEditorForUser.Graphics
 
         public static Color GetNextRandom(Random rnd)
         {
-            int colorIndex = rnd.Next(colors.Count);
-            while (lastColorIndex == colorIndex)
-                colorIndex = rnd.Next(colors.Count);
-            lastColorIndex = colorIndex;
-            return colors[colorIndex];
+            int colorIndex = rnd.Next(Colors.Count);
+            while (_lastColorIndex == colorIndex)
+                colorIndex = rnd.Next(Colors.Count);
+            _lastColorIndex = colorIndex;
+            return Colors[colorIndex];
         }
 
         public static Color GetLast()
         {
-            return colors[lastColorIndex];
+            return Colors[_lastColorIndex];
         }
 
         public static Color GetLastDarkness(int darkness)
         {
-            Color color = colors[lastColorIndex];
+            Color color = Colors[_lastColorIndex];
             return Color.FromArgb(
                 Math.Abs(color.R - darkness),
                 Math.Abs(color.G - darkness),
                 Math.Abs(color.B - darkness)
-                );
+            );
         }
     }
 }

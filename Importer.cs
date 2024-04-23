@@ -1,13 +1,9 @@
-﻿using DatabaseEditorForUser.DAOs;
-using DatabaseEditorForUser.Entities;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DatabaseEditorForUser.Entities;
+using Newtonsoft.Json.Linq;
 
 namespace DatabaseEditorForUser
 {
@@ -17,73 +13,89 @@ namespace DatabaseEditorForUser
         {
             JObject jsonObject = JObject.Parse(File.ReadAllText(path));
 
-            DAOContainer.access.ClearTable();
-            DAOContainer.account.ClearTable();
-            DAOContainer.attachment.ClearTable();
-            DAOContainer.attachmentType.ClearTable();
-            DAOContainer.folder.ClearTable();
-            DAOContainer.folderColor.ClearTable();
+            DaoContainer.Access.ClearTable();
+            DaoContainer.Account.ClearTable();
+            DaoContainer.Attachment.ClearTable();
+            DaoContainer.AttachmentType.ClearTable();
+            DaoContainer.Folder.ClearTable();
+            DaoContainer.FolderColor.ClearTable();
 
             // Accounts
             JArray jArray = (JArray)jsonObject["Account"];
-            List<Account> accounts = jArray.Select(jo => new Account
-            (
-                (int)jo["ID"],
-                jo["FirstName"].ToString(),
-                jo["LastName"].ToString(),
-                jo["Email"].ToString(),
-                jo["HashedPassword"].ToString(),
-                (DateTime)jo["Registered"]
-            )).ToList();
+            if (jArray != null)
+            {
+                List<Account> accounts = jArray.Select(jo => new Account
+                (
+                    (int)jo["ID"],
+                    jo["FirstName"].ToString(),
+                    jo["LastName"].ToString(),
+                    jo["Email"].ToString(),
+                    jo["HashedPassword"].ToString(),
+                    (DateTime)jo["Registered"]
+                )).ToList();
 
-            DAOContainer.account.ImportAll(accounts);
+                DaoContainer.Account.ImportAll(accounts);
+            }
 
             // Folder colors
             jArray = (JArray)jsonObject["FolderColor"];
-            List<FolderColor> folderColors = jArray.Select(jo => new FolderColor
-            (
-                (int)jo["ID"],
-                jo["Name"].ToString()
-            )).ToList();
+            if (jArray != null)
+            {
+                List<FolderColor> folderColors = jArray.Select(jo => new FolderColor
+                (
+                    (int)jo["ID"],
+                    jo["Name"].ToString()
+                )).ToList();
 
-            DAOContainer.folderColor.ImportAll(folderColors);
+                DaoContainer.FolderColor.ImportAll(folderColors);
+            }
 
             // Folders
             jArray = (JArray)jsonObject["Folder"];
-            List<Folder> folders = jArray.Select(jo => new Folder
-            (
-                (int)jo["ID"],
-                jo["Name"].ToString(),
-                (int)jo["ColorID"],
-                (bool)jo["IsShared"],
-                (DateTime)jo["CreatedAt"]
-            )).ToList();
+            if (jArray != null)
+            {
+                List<Folder> folders = jArray.Select(jo => new Folder
+                (
+                    (int)jo["ID"],
+                    jo["Name"].ToString(),
+                    (int)jo["ColorID"],
+                    (bool)jo["IsShared"],
+                    (DateTime)jo["CreatedAt"]
+                )).ToList();
 
-            DAOContainer.folder.ImportAll(folders);
+                DaoContainer.Folder.ImportAll(folders);
+            }
 
             // Accesses
             jArray = (JArray)jsonObject["Access"];
-            List<Access> accesses = jArray.Select(jo => new Access
-            (
-                (int)jo["ID"],
-                (int)jo["AccountID"],
-                (int)jo["FolderID"]
-            )).ToList();
+            if (jArray != null)
+            {
+                List<Access> accesses = jArray.Select(jo => new Access
+                (
+                    (int)jo["ID"],
+                    (int)jo["AccountID"],
+                    (int)jo["FolderID"]
+                )).ToList();
 
-            DAOContainer.access.ImportAll(accesses);
+                DaoContainer.Access.ImportAll(accesses);
+            }
 
             // Attachment types
             jArray = (JArray)jsonObject["AttachmentType"];
-            List<AttachmentType> attachmentTypes = jArray.Select(jo => new AttachmentType
-            (
-                (int)jo["ID"],
-                jo["TypeName"].ToString()
-            )).ToList();
+            if (jArray != null)
+            {
+                List<AttachmentType> attachmentTypes = jArray.Select(jo => new AttachmentType
+                (
+                    (int)jo["ID"],
+                    jo["TypeName"].ToString()
+                )).ToList();
 
-            DAOContainer.attachmentType.ImportAll(attachmentTypes);
+                DaoContainer.AttachmentType.ImportAll(attachmentTypes);
+            }
 
             // Attachment
             jArray = (JArray)jsonObject["Attachment"];
+            if (jArray == null) return;
             List<Attachment> attachments = jArray.Select(jo => new Attachment
             (
                 (int)jo["ID"],
@@ -95,7 +107,7 @@ namespace DatabaseEditorForUser
                 (DateTime)jo["UpdatedAt"]
             )).ToList();
 
-            DAOContainer.attachment.ImportAll(attachments);
+            DaoContainer.Attachment.ImportAll(attachments);
         }
     }
 }

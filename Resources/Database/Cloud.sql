@@ -60,5 +60,3 @@ CREATE TABLE Attachment(
 	CreatedAt DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd')),
 	UpdatedAt DATE NOT NULL DEFAULT (FORMAT (GETDATE(), 'yyyy-MM-dd')),
 );
-GO
-

@@ -1,26 +1,19 @@
-﻿using DatabaseEditorForUser.Interfaces;
-using DatabaseEditorForUser.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
-using System.Xml.Linq;
+using DatabaseEditorForUser.Entities;
+using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.DAOs
 {
-    internal class FolderColorDAO : IDAO<FolderColor>
+    internal class FolderColorDao : IDao<FolderColor>
     {
         public void Add(FolderColor element)
         {
-            if (HasDuplicate(element))
-            {
-                throw new Exception("Color must be unique.");
-            }
+            if (HasDuplicate(element)) throw new Exception("Color must be unique.");
 
-            string query = "INSERT INTO FolderColor (ColorName) VALUES" +
-                                "(@ColorName);";
+            const string query = "INSERT INTO FolderColor (ColorName) VALUES" +
+                                 "(@ColorName);";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -30,18 +23,16 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public void Delete(int ID)
+        public void Delete(int id)
         {
-            if (HasReferences(ID))
-            {
+            if (HasReferences(id))
                 throw new InvalidOperationException("Can't delete Color with references in Folder table.");
-            }
 
-            string query = "DELETE FROM FolderColor WHERE ID = @ID;";
+            const string query = "DELETE FROM FolderColor WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 command.ExecuteNonQuery();
             }
@@ -50,15 +41,13 @@ namespace DatabaseEditorForUser.DAOs
         public void Edit(FolderColor element)
         {
             if (HasDuplicate(element))
-            {
                 throw new Exception("Duplicate color found. Please provide a unique color name.");
-            }
 
-            string query = "UPDATE FolderColor SET ColorName = @ColorName WHERE ID = @ID;";
+            const string query = "UPDATE FolderColor SET ColorName = @ColorName WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", element.ID);
+                command.Parameters.AddWithValue("@ID", element.Id);
                 command.Parameters.AddWithValue("@ColorName", element.Name);
 
                 command.ExecuteNonQuery();
@@ -67,7 +56,7 @@ namespace DatabaseEditorForUser.DAOs
 
         public IEnumerable<FolderColor> GetAll()
         {
-            string query = "SELECT * FROM FolderColor";
+            const string query = "SELECT * FROM FolderColor";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -86,33 +75,31 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public FolderColor GetByID(int ID)
+        public FolderColor GetById(int id)
         {
-            string query = "SELECT * FROM FolderColor WHERE ID = @ID";
+            const string query = "SELECT * FROM FolderColor WHERE ID = @ID";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
+                    if (!reader.HasRows) throw new Exception("No rows found in database.");
+                    reader.Read();
 
-                        return new FolderColor(
-                            reader.GetInt32(0),
-                            reader.GetString(1)
-                        );
-                    }
-                    throw new Exception("No rows found in database.");
+                    return new FolderColor(
+                        reader.GetInt32(0),
+                        reader.GetString(1)
+                    );
+
                 }
             }
         }
 
         public bool HasDuplicate(FolderColor element)
         {
-            string query = "SELECT 1 FROM FolderColor WHERE ColorName = @ColorName";
+            const string query = "SELECT 1 FROM FolderColor WHERE ColorName = @ColorName";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.Parameters.AddWithValue("@ColorName", element.Name);
@@ -123,12 +110,12 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public bool HasReferences(int ID)
+        public bool HasReferences(int id)
         {
-            string query = "SELECT 1 FROM Folder WHERE ColorID = @ID";
+            const string query = "SELECT 1 FROM Folder WHERE ColorID = @ID";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.HasRows;
@@ -136,28 +123,25 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public static int GetIDByName(string name)
+        public static int GetIdByName(string name)
         {
-            string query = "SELECT ID FROM FolderColor WHERE ColorName = @ColorName";
+            const string query = "SELECT ID FROM FolderColor WHERE ColorName = @ColorName";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.Parameters.AddWithValue("@ColorName", name);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
-                        return reader.GetInt32(0);
-                    }
+                    if (!reader.HasRows)
+                        throw new ArgumentException("Failed to get color ID in the database.", nameof(name));
+                    reader.Read();
+                    return reader.GetInt32(0);
 
-                    throw new ArgumentException("Failed to get color ID in the database.", nameof(name));
                 }
             }
         }
 
         public void ImportAll(IEnumerable<FolderColor> rows)
         {
-
             string query = "SET IDENTITY_INSERT FolderColor ON;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -165,18 +149,16 @@ namespace DatabaseEditorForUser.DAOs
             }
 
             query = "INSERT INTO FolderColor (ID, ColorName) VALUES" +
-                                "(@ID, @ColorName);";
+                    "(@ID, @ColorName);";
 
             foreach (FolderColor element in rows)
-            {
                 using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
                 {
-                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@ID", element.Id);
                     command.Parameters.AddWithValue("@ColorName", element.Name);
 
                     command.ExecuteNonQuery();
                 }
-            }
 
             query = "SET IDENTITY_INSERT FolderColor OFF;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
@@ -187,7 +169,7 @@ namespace DatabaseEditorForUser.DAOs
 
         public void ClearTable()
         {
-            string query = "DELETE FROM FolderColor;";
+            const string query = "DELETE FROM FolderColor;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.ExecuteNonQuery();

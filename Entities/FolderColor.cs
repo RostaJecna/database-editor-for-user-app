@@ -1,20 +1,15 @@
-﻿using DatabaseEditorForUser.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.Entities
 {
     internal class FolderColor : IBaseClass
     {
-        private int id;
         private string name;
 
         public FolderColor(int id, string name)
         {
-            ID = id;
+            Id = id;
             Name = name;
         }
 
@@ -23,31 +18,17 @@ namespace DatabaseEditorForUser.Entities
             Name = name;
         }
 
-        public int ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        public int Id { get; set; }
 
         public string Name
         {
-            get { return name; }
-            set
-            {
-                if(value is null) {
-                    throw new ArgumentException("Name can't be null.");
-                }
-                name = value;
-            }
+            get => name;
+            private set => name = value ?? throw new ArgumentException("Name can't be null.");
         }
 
         public override string ToString()
         {
-            if (ID == default)
-            {
-                return $"{Name}";
-            }
-            return $"{ID}, {Name}";
+            return Id == default ? $"{Name}" : $"{Id}, {Name}";
         }
     }
 }

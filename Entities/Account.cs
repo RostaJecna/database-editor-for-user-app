@@ -1,26 +1,21 @@
-﻿using DatabaseEditorForUser.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.Entities
 {
     internal class Account : IBaseClass
     {
-        private int id;
         private string firstName;
         private string lastName;
         private string email;
-        private string hashedPassword;
-        private DateTime registered;
 
-        public Account(int id, string firstName, string lastName, string email, string hashedPassword, DateTime registered)
+        public Account(int id, string firstName, string lastName, string email, string hashedPassword,
+            DateTime registered)
         {
-            ID = id;
+            Id = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
@@ -36,69 +31,49 @@ namespace DatabaseEditorForUser.Entities
             HashedPassword = GetHashedPassword(password);
         }
 
-        public int ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        public int Id { get; set; }
 
         public string FirstName
         {
-            get { return firstName; }
+            get => firstName;
             set
             {
-                if(value.Length < 3)
-                {
-                    throw new ArgumentException("The first name must be at least 3 characters long.", nameof(FirstName));
-                }
+                if (value.Length < 3)
+                    throw new ArgumentException("The first name must be at least 3 characters long.",
+                        nameof(FirstName));
                 firstName = value;
             }
         }
 
         public string LastName
         {
-            get { return lastName; }
+            get => lastName;
             set
             {
                 if (value.Length < 3)
-                {
                     throw new ArgumentException("The last name must be at least 3 characters long.", nameof(LastName));
-                }
                 lastName = value;
             }
         }
 
         public string Email
         {
-            get { return email; }
+            get => email;
             set
             {
-                if(!Regex.IsMatch(value, @"@"))
-                {
+                if (!Regex.IsMatch(value, @"@"))
                     throw new ArgumentException("The email must contain the '@' character.", nameof(Email));
-                }
                 email = value;
             }
         }
 
-        public string HashedPassword
-        {
-            get { return hashedPassword; }
-            set { hashedPassword = value; }
-        }
+        public string HashedPassword { get; set; }
 
-        public DateTime Registered
-        {
-            get { return registered; }
-            set { registered = value; }
-        }
+        public DateTime Registered { get; set; }
 
         public static string GetHashedPassword(string password)
         {
-            if(password == string.Empty)
-            {
-                throw new ArgumentException("Password cannot be empty.", nameof(password));
-            }
+            if (password == string.Empty) throw new ArgumentException("Password cannot be empty.", nameof(password));
 
             byte[] passwordBytes = Encoding.UTF8.GetBytes(password + "cloud");
 
@@ -107,21 +82,13 @@ namespace DatabaseEditorForUser.Entities
             byte[] hashBytes = sha256.ComputeHash(passwordBytes);
 
             StringBuilder sb = new StringBuilder();
-            foreach (byte b in hashBytes)
-            {
-                sb.Append(b.ToString("x2"));
-            }
+            foreach (byte b in hashBytes) sb.Append(b.ToString("x2"));
             return sb.ToString();
         }
 
         public override string ToString()
         {
-            if(ID == default)
-            {
-                return $"{FirstName}, {LastName}, {Email}, pass*";
-            }
-
-            return $"{ID}: {FirstName}, {LastName}, {Email}, pass*";
+            return Id == default ? $"{FirstName}, {LastName}, {Email}, pass*" : $"{Id}: {FirstName}, {LastName}, {Email}, pass*";
         }
     }
 }

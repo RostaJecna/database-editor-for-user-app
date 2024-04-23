@@ -33,6 +33,10 @@
             this.gridPanel = new System.Windows.Forms.Panel();
             this.accessGridView = new System.Windows.Forms.DataGridView();
             this.rightSidePanel = new System.Windows.Forms.Panel();
+            this.navigationPanel = new System.Windows.Forms.Panel();
+            this.deleteBtn = new System.Windows.Forms.Button();
+            this.editBtn = new System.Windows.Forms.Button();
+            this.addRowBtn = new System.Windows.Forms.Button();
             this.dataManagerPanel = new System.Windows.Forms.Panel();
             this.dataEditorPanel = new System.Windows.Forms.Panel();
             this.folderIDTextBox = new System.Windows.Forms.TextBox();
@@ -41,10 +45,6 @@
             this.accountIDLabel = new System.Windows.Forms.Label();
             this.saveRowBtn = new System.Windows.Forms.Button();
             this.backBtn = new System.Windows.Forms.Button();
-            this.navigationPanel = new System.Windows.Forms.Panel();
-            this.deleteBtn = new System.Windows.Forms.Button();
-            this.editBtn = new System.Windows.Forms.Button();
-            this.addRowBtn = new System.Windows.Forms.Button();
             this.searchBarPanel = new System.Windows.Forms.Panel();
             this.refreshTableBtn = new System.Windows.Forms.Button();
             this.refreshBtnTimer = new System.Windows.Forms.Timer(this.components);
@@ -52,9 +52,9 @@
             this.gridPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.accessGridView)).BeginInit();
             this.rightSidePanel.SuspendLayout();
+            this.navigationPanel.SuspendLayout();
             this.dataManagerPanel.SuspendLayout();
             this.dataEditorPanel.SuspendLayout();
-            this.navigationPanel.SuspendLayout();
             this.searchBarPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -82,9 +82,7 @@
             // 
             // accessGridView
             // 
-            this.accessGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.accessGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.accessGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.accessGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.accessGridView.Location = new System.Drawing.Point(22, 22);
@@ -109,6 +107,65 @@
             this.rightSidePanel.Name = "rightSidePanel";
             this.rightSidePanel.Size = new System.Drawing.Size(150, 396);
             this.rightSidePanel.TabIndex = 1;
+            // 
+            // navigationPanel
+            // 
+            this.navigationPanel.Controls.Add(this.deleteBtn);
+            this.navigationPanel.Controls.Add(this.editBtn);
+            this.navigationPanel.Controls.Add(this.addRowBtn);
+            this.navigationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.navigationPanel.Location = new System.Drawing.Point(0, 0);
+            this.navigationPanel.Name = "navigationPanel";
+            this.navigationPanel.Size = new System.Drawing.Size(150, 396);
+            this.navigationPanel.TabIndex = 9;
+            // 
+            // deleteBtn
+            // 
+            this.deleteBtn.BackColor = System.Drawing.Color.Brown;
+            this.deleteBtn.FlatAppearance.BorderSize = 0;
+            this.deleteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.deleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.deleteBtn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.deleteBtn.Location = new System.Drawing.Point(0, 94);
+            this.deleteBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.deleteBtn.Name = "deleteBtn";
+            this.deleteBtn.Size = new System.Drawing.Size(128, 32);
+            this.deleteBtn.TabIndex = 8;
+            this.deleteBtn.Text = "Delete";
+            this.deleteBtn.UseVisualStyleBackColor = false;
+            this.deleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
+            // 
+            // editBtn
+            // 
+            this.editBtn.BackColor = System.Drawing.Color.DarkGray;
+            this.editBtn.FlatAppearance.BorderSize = 0;
+            this.editBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.editBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.editBtn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.editBtn.Location = new System.Drawing.Point(0, 58);
+            this.editBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.editBtn.Name = "editBtn";
+            this.editBtn.Size = new System.Drawing.Size(128, 32);
+            this.editBtn.TabIndex = 7;
+            this.editBtn.Text = "Edit";
+            this.editBtn.UseVisualStyleBackColor = false;
+            this.editBtn.Click += new System.EventHandler(this.EditBtn_Click);
+            // 
+            // addRowBtn
+            // 
+            this.addRowBtn.BackColor = System.Drawing.Color.DarkGray;
+            this.addRowBtn.FlatAppearance.BorderSize = 0;
+            this.addRowBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.addRowBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addRowBtn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.addRowBtn.Location = new System.Drawing.Point(0, 22);
+            this.addRowBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.addRowBtn.Name = "addRowBtn";
+            this.addRowBtn.Size = new System.Drawing.Size(128, 32);
+            this.addRowBtn.TabIndex = 6;
+            this.addRowBtn.Text = "Add";
+            this.addRowBtn.UseVisualStyleBackColor = false;
+            this.addRowBtn.Click += new System.EventHandler(this.AddRowBtn_Click);
             // 
             // dataManagerPanel
             // 
@@ -210,65 +267,6 @@
             this.backBtn.UseVisualStyleBackColor = false;
             this.backBtn.Click += new System.EventHandler(this.BackBtn_Click);
             // 
-            // navigationPanel
-            // 
-            this.navigationPanel.Controls.Add(this.deleteBtn);
-            this.navigationPanel.Controls.Add(this.editBtn);
-            this.navigationPanel.Controls.Add(this.addRowBtn);
-            this.navigationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.navigationPanel.Location = new System.Drawing.Point(0, 0);
-            this.navigationPanel.Name = "navigationPanel";
-            this.navigationPanel.Size = new System.Drawing.Size(150, 396);
-            this.navigationPanel.TabIndex = 9;
-            // 
-            // deleteBtn
-            // 
-            this.deleteBtn.BackColor = System.Drawing.Color.Brown;
-            this.deleteBtn.FlatAppearance.BorderSize = 0;
-            this.deleteBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.deleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.deleteBtn.ForeColor = System.Drawing.Color.Gainsboro;
-            this.deleteBtn.Location = new System.Drawing.Point(0, 94);
-            this.deleteBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.deleteBtn.Name = "deleteBtn";
-            this.deleteBtn.Size = new System.Drawing.Size(128, 32);
-            this.deleteBtn.TabIndex = 8;
-            this.deleteBtn.Text = "Delete";
-            this.deleteBtn.UseVisualStyleBackColor = false;
-            this.deleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
-            // 
-            // editBtn
-            // 
-            this.editBtn.BackColor = System.Drawing.Color.DarkGray;
-            this.editBtn.FlatAppearance.BorderSize = 0;
-            this.editBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.editBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.editBtn.ForeColor = System.Drawing.Color.Gainsboro;
-            this.editBtn.Location = new System.Drawing.Point(0, 58);
-            this.editBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.editBtn.Name = "editBtn";
-            this.editBtn.Size = new System.Drawing.Size(128, 32);
-            this.editBtn.TabIndex = 7;
-            this.editBtn.Text = "Edit";
-            this.editBtn.UseVisualStyleBackColor = false;
-            this.editBtn.Click += new System.EventHandler(this.EditBtn_Click);
-            // 
-            // addRowBtn
-            // 
-            this.addRowBtn.BackColor = System.Drawing.Color.DarkGray;
-            this.addRowBtn.FlatAppearance.BorderSize = 0;
-            this.addRowBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.addRowBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addRowBtn.ForeColor = System.Drawing.Color.Gainsboro;
-            this.addRowBtn.Location = new System.Drawing.Point(0, 22);
-            this.addRowBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.addRowBtn.Name = "addRowBtn";
-            this.addRowBtn.Size = new System.Drawing.Size(128, 32);
-            this.addRowBtn.TabIndex = 6;
-            this.addRowBtn.Text = "Add";
-            this.addRowBtn.UseVisualStyleBackColor = false;
-            this.addRowBtn.Click += new System.EventHandler(this.AddRowBtn_Click);
-            // 
             // searchBarPanel
             // 
             this.searchBarPanel.Controls.Add(this.refreshTableBtn);
@@ -316,13 +314,12 @@
             this.gridPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.accessGridView)).EndInit();
             this.rightSidePanel.ResumeLayout(false);
+            this.navigationPanel.ResumeLayout(false);
             this.dataManagerPanel.ResumeLayout(false);
             this.dataEditorPanel.ResumeLayout(false);
             this.dataEditorPanel.PerformLayout();
-            this.navigationPanel.ResumeLayout(false);
             this.searchBarPanel.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
 
         #endregion

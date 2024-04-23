@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Specialized;
 using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DatabaseEditorForUser
 {
@@ -20,72 +14,70 @@ namespace DatabaseEditorForUser
             Failure
         }
 
-        private static SqlConnection connection = null;
-        public static Status status = Status.Null;
-        public static DatabaseConfiguration databaseConfiguration = null;
+        private static SqlConnection _connection;
+        public static Status DbStatus = Status.Null;
+        public static DatabaseConfiguration DatabaseConfiguration = null;
 
         public static SqlConnection Instance()
         {
-            if (connection == null)
+            if (_connection != null) return _connection;
+            SqlConnectionStringBuilder sqlConnectionStringBuilder = new SqlConnectionStringBuilder
             {
-                SqlConnectionStringBuilder scsb = new SqlConnectionStringBuilder
-                {
-                    InitialCatalog = ReadSetting("InitialCatalog"),
-                    IntegratedSecurity = bool.Parse(ReadSetting("IntegratedSecurity")),
-                    DataSource = ReadSetting("DataSource"),
-                    UserID = ReadSetting("UserID"),
-                    Password = ReadSetting("Password"),
-                    ConnectTimeout = 8
-                };
-                if (databaseConfiguration != null)
-                {
-                    scsb.InitialCatalog = databaseConfiguration.DatabaseName;
-                    scsb.DataSource = databaseConfiguration.ServerName;
-                    scsb.IntegratedSecurity = databaseConfiguration.IntegratedSecurity;
+                InitialCatalog = ReadSetting("InitialCatalog"),
+                IntegratedSecurity = bool.Parse(ReadSetting("IntegratedSecurity")),
+                DataSource = ReadSetting("DataSource"),
+                UserID = ReadSetting("UserID"),
+                Password = ReadSetting("Password"),
+                ConnectTimeout = 8
+            };
+            if (DatabaseConfiguration != null)
+            {
+                sqlConnectionStringBuilder.InitialCatalog = DatabaseConfiguration.DatabaseName;
+                sqlConnectionStringBuilder.DataSource = DatabaseConfiguration.ServerName;
+                sqlConnectionStringBuilder.IntegratedSecurity = DatabaseConfiguration.IntegratedSecurity;
 
-                    if (!databaseConfiguration.IntegratedSecurity)
-                    {
-                        scsb.UserID = databaseConfiguration.UserName;
-                        scsb.Password = databaseConfiguration.Password;
-                    }
+                if (!DatabaseConfiguration.IntegratedSecurity)
+                {
+                    sqlConnectionStringBuilder.UserID = DatabaseConfiguration.UserName;
+                    sqlConnectionStringBuilder.Password = DatabaseConfiguration.Password;
                 }
-                connection = new SqlConnection(scsb.ConnectionString);
             }
-            return connection;
+
+            _connection = new SqlConnection(sqlConnectionStringBuilder.ConnectionString);
+
+            return _connection;
         }
 
         public static void CloseAndDispose()
         {
             try
             {
-                if (connection != null)
-                {
-                    connection.Close();
-                    connection.Dispose();
-                    status = Status.Null;
-                }
+                if (_connection == null) return;
+                _connection.Close();
+                _connection.Dispose();
+                DbStatus = Status.Null;
             }
             finally
             {
-                connection = null;
+                _connection = null;
             }
         }
 
         private static string ReadSetting(string key)
         {
-            var appSettings = ConfigurationManager.AppSettings;
+            NameValueCollection appSettings = ConfigurationManager.AppSettings;
             string result = appSettings[key] ?? "Not Found";
             return result;
         }
 
         public static bool IsConnected()
         {
-            return status == Status.Connected;
+            return DbStatus == Status.Connected;
         }
 
-        public static bool IsFailure() 
+        public static bool IsFailure()
         {
-            return status == Status.Failure;
+            return DbStatus == Status.Failure;
         }
     }
 }

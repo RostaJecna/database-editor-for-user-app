@@ -1,15 +1,7 @@
-﻿using DatabaseEditorForUser.DAOs;
+﻿using System;
+using System.Windows.Forms;
 using DatabaseEditorForUser.Entities;
 using DatabaseEditorForUser.Graphics;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DatabaseEditorForUser.Subforms
 {
@@ -18,13 +10,13 @@ namespace DatabaseEditorForUser.Subforms
         internal enum Panels
         {
             Navigation,
-            DataManager,
+            DataManager
         }
 
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
         private DataGridViewRow selectedRow;
-        private bool UserIsEditingRow;
+        private bool userIsEditingRow;
         private FolderColor selectedFolderColor;
 
         public ColorForm()
@@ -48,15 +40,15 @@ namespace DatabaseEditorForUser.Subforms
 
         private void ResetComponentToDefault()
         {
-            UserIsEditingRow = false;
+            userIsEditingRow = false;
         }
 
         private void GetAllDataFromDatabase()
         {
             selectedRow = null;
-            folderColorGridView.DataSource = new BindingSource()
+            folderColorGridView.DataSource = new BindingSource
             {
-                DataSource = DAOContainer.folderColor.GetAll()
+                DataSource = DaoContainer.FolderColor.GetAll()
             };
 
             bool hasRows = folderColorGridView.Rows.Count > 0;
@@ -69,7 +61,7 @@ namespace DatabaseEditorForUser.Subforms
             refreshBtnTimer.Enabled = true;
             refreshBtnTimer.Start();
             refreshBtnTimerCounter = 0;
-            refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+            refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             refreshTableBtn.Enabled = false;
         }
 
@@ -131,12 +123,12 @@ namespace DatabaseEditorForUser.Subforms
                 refreshBtnTimer.Stop();
                 refreshBtnTimerCounter = 0;
                 refreshTableBtn.Enabled = true;
-                refreshTableBtn.Text = "Refresh";
+                refreshTableBtn.Text = @"Refresh";
             }
             else
             {
                 refreshBtnTimerCounter++;
-                refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+                refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             }
         }
 
@@ -144,15 +136,14 @@ namespace DatabaseEditorForUser.Subforms
         {
             if (colorNameTextBox.Text == string.Empty)
             {
-                MessageBox.Show("Entry color name.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"Entry color name.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!UserIsEditingRow)
-            {
+            if (!userIsEditingRow)
                 try
                 {
-                    DAOContainer.folderColor.Add(new FolderColor(
+                    DaoContainer.FolderColor.Add(new FolderColor(
                         colorNameTextBox.Text
                     ));
 
@@ -163,15 +154,13 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
             else
-            {
                 try
                 {
-                    DAOContainer.folderColor.Edit(new FolderColor(
-                        selectedFolderColor.ID,
+                    DaoContainer.FolderColor.Edit(new FolderColor(
+                        selectedFolderColor.Id,
                         colorNameTextBox.Text
                     ));
 
@@ -183,22 +172,18 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
         }
 
         private void EditBtn_Click(object sender, EventArgs e)
         {
-            UserIsEditingRow = true;
+            userIsEditingRow = true;
 
-            if (selectedRow is null)
-            {
-                selectedRow = folderColorGridView.Rows[0];
-            }
+            if (selectedRow is null) selectedRow = folderColorGridView.Rows[0];
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedFolderColor = DAOContainer.folderColor.GetByID(id);
+            selectedFolderColor = DaoContainer.FolderColor.GetById(id);
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxWithData(selectedFolderColor);
@@ -206,28 +191,24 @@ namespace DatabaseEditorForUser.Subforms
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete this color?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show(@"Are you sure you want to delete this color?", @"Confirmation",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes) return;
+            if (selectedRow is null) selectedRow = folderColorGridView.Rows[0];
+
+            int id = (int)selectedRow.Cells[0].Value;
+
+            try
             {
-                if (selectedRow is null)
-                {
-                    selectedRow = folderColorGridView.Rows[0];
-                }
+                DaoContainer.FolderColor.Delete(id);
 
-                int id = (int)selectedRow.Cells[0].Value;
-
-                try
-                {
-                    DAOContainer.folderColor.Delete(id);
-
-                    GetAllDataFromDatabase();
-                    SetRefreshCooldown();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                GetAllDataFromDatabase();
+                SetRefreshCooldown();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -1,43 +1,39 @@
-﻿using DatabaseEditorForUser.Entities;
-using DatabaseEditorForUser.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DatabaseEditorForUser.Entities;
+using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.DAOs
 {
-    internal class FolderDAO : IDAO<Folder>
+    internal class FolderDao : IDao<Folder>
     {
         public void Add(Folder element)
         {
-            string query = "INSERT INTO Folder (FolderName, ColorID, IsShared) VALUES" +
-                                "(@FolderName, @ColorID, @IsShared);";
+            const string query = "INSERT INTO Folder (FolderName, ColorID, IsShared) VALUES" +
+                                 "(@FolderName, @ColorID, @IsShared);";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.Parameters.AddWithValue("@FolderName", element.Name);
-                command.Parameters.AddWithValue("@ColorID", element.ColorID);
+                command.Parameters.AddWithValue("@ColorID", element.ColorId);
                 command.Parameters.AddWithValue("@IsShared", element.IsShared ? 1 : 0);
 
                 command.ExecuteNonQuery();
             }
         }
 
-        public void Delete(int ID)
+        public void Delete(int id)
         {
-            if (HasReferences(ID))
-            {
-                throw new InvalidOperationException("Can't delete Folder with references in Access or Attachment table.");
-            }
+            if (HasReferences(id))
+                throw new InvalidOperationException(
+                    "Can't delete Folder with references in Access or Attachment table.");
 
-            string query = "DELETE FROM Folder WHERE ID = @ID;";
+            const string query = "DELETE FROM Folder WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 command.ExecuteNonQuery();
             }
@@ -45,16 +41,16 @@ namespace DatabaseEditorForUser.DAOs
 
         public void Edit(Folder element)
         {
-            string query = "UPDATE Folder SET FolderName = @FolderName, " +
-                                              "ColorID = @ColorID," +
-                                              "IsShared = @IsShared" +
-                                          " WHERE ID = @ID;";
+            const string query = "UPDATE Folder SET FolderName = @FolderName, " +
+                                 "ColorID = @ColorID," +
+                                 "IsShared = @IsShared" +
+                                 " WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", element.ID);
+                command.Parameters.AddWithValue("@ID", element.Id);
                 command.Parameters.AddWithValue("@FolderName", element.Name);
-                command.Parameters.AddWithValue("@ColorID", element.ColorID);
+                command.Parameters.AddWithValue("@ColorID", element.ColorId);
                 command.Parameters.AddWithValue("@IsShared", element.IsShared ? 1 : 0);
 
                 command.ExecuteNonQuery();
@@ -63,7 +59,7 @@ namespace DatabaseEditorForUser.DAOs
 
         public IEnumerable<Folder> GetAll()
         {
-            string query = "SELECT * FROM Folder";
+            const string query = "SELECT * FROM Folder";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -85,29 +81,27 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public Folder GetByID(int ID)
+        public Folder GetById(int id)
         {
-            string query = "SELECT * FROM Folder WHERE ID = @ID";
+            const string query = "SELECT * FROM Folder WHERE ID = @ID";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
+                    if (!reader.HasRows) throw new Exception("No rows found in database.");
+                    reader.Read();
 
-                        return new Folder(
-                            reader.GetInt32(0),
-                            reader.GetString(1),
-                            reader.GetInt32(2),
-                            reader.GetBoolean(3),
-                            reader.GetDateTime(4)
-                        );
-                    }
-                    throw new Exception("No rows found in database.");
+                    return new Folder(
+                        reader.GetInt32(0),
+                        reader.GetString(1),
+                        reader.GetInt32(2),
+                        reader.GetBoolean(3),
+                        reader.GetDateTime(4)
+                    );
+
                 }
             }
         }
@@ -117,26 +111,22 @@ namespace DatabaseEditorForUser.DAOs
             throw new NotImplementedException();
         }
 
-        public bool HasReferences(int ID)
+        public bool HasReferences(int id)
         {
             string query = "SELECT 1 FROM Access WHERE FolderID = @ID";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if(reader.HasRows)
-                    {
-                        return true;
-                    }
-                    
+                    if (reader.HasRows) return true;
                 }
             }
 
             query = "SELECT 1 FROM Attachment WHERE FolderID = @ID";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.HasRows;
@@ -144,13 +134,13 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public static bool Exist(int ID)
+        public static bool Exist(int id)
         {
-            string query = "SELECT 1 FROM Folder WHERE ID = @ID";
+            const string query = "SELECT 1 FROM Folder WHERE ID = @ID";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -161,7 +151,6 @@ namespace DatabaseEditorForUser.DAOs
 
         public void ImportAll(IEnumerable<Folder> rows)
         {
-
             string query = "SET IDENTITY_INSERT Folder ON;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -169,21 +158,19 @@ namespace DatabaseEditorForUser.DAOs
             }
 
             query = "INSERT INTO Folder (ID, FolderName, ColorID, IsShared, CreatedAt) VALUES" +
-                                "(@ID, @FolderName, @ColorID, @IsShared, @CreatedAt);";
+                    "(@ID, @FolderName, @ColorID, @IsShared, @CreatedAt);";
 
             foreach (Folder element in rows)
-            {
                 using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
                 {
-                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@ID", element.Id);
                     command.Parameters.AddWithValue("@FolderName", element.Name);
-                    command.Parameters.AddWithValue("@ColorID", element.ColorID);
+                    command.Parameters.AddWithValue("@ColorID", element.ColorId);
                     command.Parameters.AddWithValue("@IsShared", element.IsShared ? 1 : 0);
                     command.Parameters.AddWithValue("@CreatedAt", element.CreatedAt);
 
                     command.ExecuteNonQuery();
                 }
-            }
 
             query = "SET IDENTITY_INSERT Folder OFF;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
@@ -194,7 +181,7 @@ namespace DatabaseEditorForUser.DAOs
 
         public void ClearTable()
         {
-            string query = "DELETE FROM Folder;";
+            const string query = "DELETE FROM Folder;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.ExecuteNonQuery();

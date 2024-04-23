@@ -1,15 +1,9 @@
-﻿using DatabaseEditorForUser.DAOs;
+﻿using System;
+using System.Globalization;
+using System.Windows.Forms;
+using DatabaseEditorForUser.DAOs;
 using DatabaseEditorForUser.Entities;
 using DatabaseEditorForUser.Graphics;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DatabaseEditorForUser.Subforms
 {
@@ -24,7 +18,7 @@ namespace DatabaseEditorForUser.Subforms
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
         private DataGridViewRow selectedRow;
-        private bool UserIsEditingRow;
+        private bool userIsEditingRow;
         private Attachment selectedAttachment;
 
         public AttachmentForm()
@@ -36,7 +30,7 @@ namespace DatabaseEditorForUser.Subforms
             refreshBtnTimerMaxCooldown = 5;
 
             SwitchPanelTo(Panels.Navigation);
-            FillComboBox(DAOContainer.attachmentType);
+            FillComboBox(DaoContainer.AttachmentType);
         }
 
         private void ChangeDefaultComponent()
@@ -50,25 +44,23 @@ namespace DatabaseEditorForUser.Subforms
             sizeMBLabel.ForeColor = Palettes.GetLast();
         }
 
-        private void FillComboBox(AttachmentTypeDAO attachmentTypeDAO)
+        private void FillComboBox(AttachmentTypeDao attachmentTypeDao)
         {
-            foreach (AttachmentType attachmentType in attachmentTypeDAO.GetAll())
-            {
+            foreach (AttachmentType attachmentType in attachmentTypeDao.GetAll())
                 typeNameComboBox.Items.Add(attachmentType.TypeName);
-            }
         }
 
         private void ResetComponentToDefault()
         {
-            UserIsEditingRow = false;
+            userIsEditingRow = false;
         }
 
         private void GetAllDataFromDatabase()
         {
             selectedRow = null;
-            attachmentGridView.DataSource = new BindingSource()
+            attachmentGridView.DataSource = new BindingSource
             {
-                DataSource = DAOContainer.attachment.GetAll()
+                DataSource = DaoContainer.Attachment.GetAll()
             };
 
             bool hasRows = attachmentGridView.Rows.Count > 0;
@@ -81,7 +73,7 @@ namespace DatabaseEditorForUser.Subforms
             refreshBtnTimer.Enabled = true;
             refreshBtnTimer.Start();
             refreshBtnTimerCounter = 0;
-            refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+            refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             refreshTableBtn.Enabled = false;
         }
 
@@ -94,10 +86,10 @@ namespace DatabaseEditorForUser.Subforms
 
         private void FillTextBoxWithData(Attachment attachment)
         {
-            folderIDTextBox.Text = attachment.FolderID.ToString();
+            folderIDTextBox.Text = attachment.FolderId.ToString();
             attachmentNameTextBox.Text = attachment.AttachmentName;
-            sizeMBTextBox.Text = attachment.SizeMB.ToString();
-            typeNameComboBox.SelectedItem = DAOContainer.attachmentType.GetByID(attachment.TypeID).TypeName;
+            sizeMBTextBox.Text = attachment.SizeMb.ToString(CultureInfo.InvariantCulture);
+            typeNameComboBox.SelectedItem = DaoContainer.AttachmentType.GetById(attachment.TypeId).TypeName;
         }
 
         private void SwitchPanelTo(Panels panel)
@@ -125,7 +117,6 @@ namespace DatabaseEditorForUser.Subforms
         private void AddRowBtn_Click(object sender, EventArgs e)
         {
             SwitchPanelTo(Panels.DataManager);
-            typeNameComboBox.SelectedIndex = 0;
         }
 
         private void BackBtn_Click(object sender, EventArgs e)
@@ -149,37 +140,37 @@ namespace DatabaseEditorForUser.Subforms
                 refreshBtnTimer.Stop();
                 refreshBtnTimerCounter = 0;
                 refreshTableBtn.Enabled = true;
-                refreshTableBtn.Text = "Refresh";
+                refreshTableBtn.Text = @"Refresh";
             }
             else
             {
                 refreshBtnTimerCounter++;
-                refreshTableBtn.Text = $"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
+                refreshTableBtn.Text = $@"{refreshBtnTimerMaxCooldown - refreshBtnTimerCounter}";
             }
         }
 
         private void SaveRowBtn_Click(object sender, EventArgs e)
         {
             if (folderIDTextBox.Text == string.Empty || attachmentNameTextBox.Text == string.Empty
-                    || sizeMBTextBox.Text == string.Empty)
+                                                     || sizeMBTextBox.Text == string.Empty)
             {
-                MessageBox.Show("Complete all the fields.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"Complete all the fields.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (typeNameComboBox.SelectedIndex == -1)
             {
-                MessageBox.Show("Type name doesn't exist in database.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(@"Type name doesn't exist in database.", @"Warning", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!UserIsEditingRow)
-            {
+            if (!userIsEditingRow)
                 try
                 {
-                    DAOContainer.attachment.Add(new Attachment(
+                    DaoContainer.Attachment.Add(new Attachment(
                         Convert.ToInt32(folderIDTextBox.Text),
-                        AttachmentTypeDAO.GetIDByName((string)typeNameComboBox.SelectedItem),
+                        AttachmentTypeDao.GetIdByName((string)typeNameComboBox.SelectedItem),
                         attachmentNameTextBox.Text,
                         float.Parse(sizeMBTextBox.Text)
                     ));
@@ -191,17 +182,15 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
             else
-            {
                 try
                 {
-                    DAOContainer.attachment.Edit(new Attachment(
-                        selectedAttachment.ID,
+                    DaoContainer.Attachment.Edit(new Attachment(
+                        selectedAttachment.Id,
                         Convert.ToInt32(folderIDTextBox.Text),
-                        AttachmentTypeDAO.GetIDByName((string)typeNameComboBox.SelectedItem),
+                        AttachmentTypeDao.GetIdByName((string)typeNameComboBox.SelectedItem),
                         attachmentNameTextBox.Text,
                         float.Parse(sizeMBTextBox.Text),
                         selectedAttachment.CreatedAt
@@ -215,22 +204,18 @@ namespace DatabaseEditorForUser.Subforms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
         }
 
         private void EditBtn_Click(object sender, EventArgs e)
         {
-            UserIsEditingRow = true;
+            userIsEditingRow = true;
 
-            if (selectedRow is null)
-            {
-                selectedRow = attachmentGridView.Rows[0];
-            }
+            if (selectedRow is null) selectedRow = attachmentGridView.Rows[0];
 
             int id = (int)selectedRow.Cells[0].Value;
-            this.selectedAttachment = DAOContainer.attachment.GetByID(id);
+            selectedAttachment = DaoContainer.Attachment.GetById(id);
 
             SwitchPanelTo(Panels.DataManager);
             FillTextBoxWithData(selectedAttachment);
@@ -238,37 +223,30 @@ namespace DatabaseEditorForUser.Subforms
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
-            DialogResult result = MessageBox.Show("Are you sure you want to delete this attachment?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show(@"Are you sure you want to delete this attachment?", @"Confirmation",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if (result == DialogResult.Yes)
+            if (result != DialogResult.Yes) return;
+            if (selectedRow is null) selectedRow = attachmentGridView.Rows[0];
+
+            int id = (int)selectedRow.Cells[0].Value;
+
+            try
             {
-                if (selectedRow is null)
-                {
-                    selectedRow = attachmentGridView.Rows[0];
-                }
+                DaoContainer.Attachment.Delete(id);
 
-                int id = (int)selectedRow.Cells[0].Value;
-
-                try
-                {
-                    DAOContainer.attachment.Delete(id);
-
-                    GetAllDataFromDatabase();
-                    SetRefreshCooldown();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                GetAllDataFromDatabase();
+                SetRefreshCooldown();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void CheckIntegerInput(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
-            {
-                e.Handled = true;
-            }
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar)) e.Handled = true;
         }
     }
 }

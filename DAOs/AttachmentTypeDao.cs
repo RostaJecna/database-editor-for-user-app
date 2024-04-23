@@ -1,25 +1,19 @@
-﻿using DatabaseEditorForUser.Entities;
-using DatabaseEditorForUser.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DatabaseEditorForUser.Entities;
+using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.DAOs
 {
-    internal class AttachmentTypeDAO : IDAO<AttachmentType>
+    internal class AttachmentTypeDao : IDao<AttachmentType>
     {
         public void Add(AttachmentType element)
         {
-            if (HasDuplicate(element))
-            {
-                throw new Exception("Type must be unique.");
-            }
+            if (HasDuplicate(element)) throw new Exception("Type must be unique.");
 
-            string query = "INSERT INTO AttachmentType (TypeName) VALUES" +
-                                "(@TypeName);";
+            const string query = "INSERT INTO AttachmentType (TypeName) VALUES" +
+                                 "(@TypeName);";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -29,18 +23,16 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public void Delete(int ID)
+        public void Delete(int id)
         {
-            if (HasReferences(ID))
-            {
+            if (HasReferences(id))
                 throw new InvalidOperationException("Can't delete Type with references in Attachment table.");
-            }
 
-            string query = "DELETE FROM AttachmentType WHERE ID = @ID;";
+            const string query = "DELETE FROM AttachmentType WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 command.ExecuteNonQuery();
             }
@@ -48,16 +40,13 @@ namespace DatabaseEditorForUser.DAOs
 
         public void Edit(AttachmentType element)
         {
-            if (HasDuplicate(element))
-            {
-                throw new Exception("Duplicate type found. Please provide a unique type name.");
-            }
+            if (HasDuplicate(element)) throw new Exception("Duplicate type found. Please provide a unique type name.");
 
-            string query = "UPDATE AttachmentType SET TypeName = @TypeName WHERE ID = @ID;";
+            const string query = "UPDATE AttachmentType SET TypeName = @TypeName WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", element.ID);
+                command.Parameters.AddWithValue("@ID", element.Id);
                 command.Parameters.AddWithValue("@TypeName", element.TypeName);
 
                 command.ExecuteNonQuery();
@@ -66,7 +55,7 @@ namespace DatabaseEditorForUser.DAOs
 
         public IEnumerable<AttachmentType> GetAll()
         {
-            string query = "SELECT * FROM AttachmentType";
+            const string query = "SELECT * FROM AttachmentType";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -85,33 +74,31 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public AttachmentType GetByID(int ID)
+        public AttachmentType GetById(int id)
         {
-            string query = "SELECT * FROM AttachmentType WHERE ID = @ID";
+            const string query = "SELECT * FROM AttachmentType WHERE ID = @ID";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
+                    if (!reader.HasRows) throw new Exception("No rows found in database.");
+                    reader.Read();
 
-                        return new AttachmentType(
-                            reader.GetInt32(0),
-                            reader.GetString(1)
-                        );
-                    }
-                    throw new Exception("No rows found in database.");
+                    return new AttachmentType(
+                        reader.GetInt32(0),
+                        reader.GetString(1)
+                    );
+
                 }
             }
         }
 
         public bool HasDuplicate(AttachmentType element)
         {
-            string query = "SELECT 1 FROM AttachmentType WHERE TypeName = @TypeName";
+            const string query = "SELECT 1 FROM AttachmentType WHERE TypeName = @TypeName";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.Parameters.AddWithValue("@TypeName", element.TypeName);
@@ -122,12 +109,12 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public bool HasReferences(int ID)
+        public bool HasReferences(int id)
         {
-            string query = "SELECT 1 FROM Attachment WHERE TypeID = @ID";
+            const string query = "SELECT 1 FROM Attachment WHERE TypeID = @ID";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.HasRows;
@@ -135,28 +122,25 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public static int GetIDByName(string name)
+        public static int GetIdByName(string name)
         {
-            string query = "SELECT ID FROM AttachmentType WHERE TypeName = @TypeName";
+            const string query = "SELECT ID FROM AttachmentType WHERE TypeName = @TypeName";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.Parameters.AddWithValue("@TypeName", name);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
-                        return reader.GetInt32(0);
-                    }
+                    if (!reader.HasRows)
+                        throw new ArgumentException("Failed to get type ID in the database.", nameof(name));
+                    reader.Read();
+                    return reader.GetInt32(0);
 
-                    throw new ArgumentException("Failed to get type ID in the database.", nameof(name));
                 }
             }
         }
 
         public void ImportAll(IEnumerable<AttachmentType> rows)
         {
-
             string query = "SET IDENTITY_INSERT AttachmentType ON;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -164,18 +148,16 @@ namespace DatabaseEditorForUser.DAOs
             }
 
             query = "INSERT INTO AttachmentType (ID, TypeName) VALUES" +
-                                "(@ID, @TypeName);";
+                    "(@ID, @TypeName);";
 
             foreach (AttachmentType element in rows)
-            {
                 using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
                 {
-                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@ID", element.Id);
                     command.Parameters.AddWithValue("@TypeName", element.TypeName);
 
                     command.ExecuteNonQuery();
                 }
-            }
 
             query = "SET IDENTITY_INSERT AttachmentType OFF;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
@@ -186,7 +168,7 @@ namespace DatabaseEditorForUser.DAOs
 
         public void ClearTable()
         {
-            string query = "DELETE FROM AttachmentType;";
+            const string query = "DELETE FROM AttachmentType;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.ExecuteNonQuery();

@@ -1,58 +1,31 @@
 ﻿using DatabaseEditorForUser.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DatabaseEditorForUser.Entities
 {
     internal class Access : IBaseClass
     {
-        private int id;
-        private int accountID;
-        private int folderID;
-
-        public Access(int id, int accountID, int folderID)
+        public Access(int id, int accountId, int folderId)
         {
-            ID = id;
-            AccountID = accountID;
-            FolderID = folderID;
+            Id = id;
+            AccountId = accountId;
+            FolderId = folderId;
         }
 
-        public Access(int accountID, int folderID)
+        public Access(int accountId, int folderId)
         {
-            AccountID = accountID;
-            FolderID = folderID;
+            AccountId = accountId;
+            FolderId = folderId;
         }
 
-        public int ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        public int Id { get; set; }
 
-        public int AccountID
-        {
-            get { return accountID; }
-            set { accountID = value; }
-        }
+        public int AccountId { get; set; }
 
-        public int FolderID
-        {
-            set { folderID = value; }
-            get { return folderID; }
-        }
+        public int FolderId { set; get; }
 
         public override string ToString()
         {
-            if(ID == default)
-            {
-                return $"{AccountID}, {FolderID}";
-            }
-
-            return $"{ID}: {AccountID}, {FolderID}";
+            return Id == default ? $"{AccountId}, {FolderId}" : $"{Id}: {AccountId}, {FolderId}";
         }
     }
 }

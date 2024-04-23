@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,9 +14,9 @@ namespace DatabaseEditorForUser
             Connection
         }
 
-        Point lastMouseCoor;
-        int connectionTimerCounter;
-        Task connectionTask;
+        private Point lastMouseCoordinate;
+        private int connectionTimerCounter;
+        private Task connectionTask;
 
         public ConnectForm()
         {
@@ -31,7 +26,7 @@ namespace DatabaseEditorForUser
 
         private void SwitchPanelTo(Panels panel)
         {
-            switch(panel)
+            switch (panel)
             {
                 case Panels.Welcome:
                     welcomePanel.Visible = true;
@@ -41,28 +36,28 @@ namespace DatabaseEditorForUser
                     welcomePanel.Visible = false;
                     connectionPanel.Visible = true;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(panel), panel, null);
             }
         }
 
         private void BgPanel_Paint(object sender, PaintEventArgs e)
         {
-            Rectangle gradient_rectangle = new Rectangle(0, 0, bgPanel.Width, bgPanel.Height);
-            e.Graphics.FillRectangle(new LinearGradientBrush(gradient_rectangle,
-                Color.FromArgb(36, 63, 114), Color.FromArgb(3, 7, 12), 65f), gradient_rectangle);
+            Rectangle gradientRectangle = new Rectangle(0, 0, bgPanel.Width, bgPanel.Height);
+            e.Graphics.FillRectangle(new LinearGradientBrush(gradientRectangle,
+                Color.FromArgb(36, 63, 114), Color.FromArgb(3, 7, 12), 65f), gradientRectangle);
         }
 
         private void DragPanel_MouseDown(object sender, MouseEventArgs e)
         {
-            lastMouseCoor = e.Location;
+            lastMouseCoordinate = e.Location;
         }
 
         private void DragPanel_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                Left += e.X - lastMouseCoor.X;
-                Top += e.Y - lastMouseCoor.Y;
-            }
+            if (e.Button != MouseButtons.Left) return;
+            Left += e.X - lastMouseCoordinate.X;
+            Top += e.Y - lastMouseCoordinate.Y;
         }
 
         private void FormCloseBtn_Click(object sender, EventArgs e)
@@ -82,11 +77,11 @@ namespace DatabaseEditorForUser
                 try
                 {
                     DatabaseSingleton.Instance().Open();
-                    DatabaseSingleton.status = DatabaseSingleton.Status.Connected;
+                    DatabaseSingleton.DbStatus = DatabaseSingleton.Status.Connected;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
-                    DatabaseSingleton.status = DatabaseSingleton.Status.Failure;
+                    DatabaseSingleton.DbStatus = DatabaseSingleton.Status.Failure;
                     MessageBox.Show(ex.Message);
                 }
             });
@@ -96,9 +91,9 @@ namespace DatabaseEditorForUser
 
         private void ConnectionTimer_Tick(object sender, EventArgs e)
         {
-            if(DatabaseSingleton.IsConnected())
+            if (DatabaseSingleton.IsConnected())
             {
-                DatabaseSingleton.status = DatabaseSingleton.Status.Success;
+                DatabaseSingleton.DbStatus = DatabaseSingleton.Status.Success;
                 Close();
             }
             else if (DatabaseSingleton.IsFailure())
@@ -107,7 +102,7 @@ namespace DatabaseEditorForUser
                 connectionTimer.Enabled = false;
                 connectionTimer.Stop();
                 connectionTimerCounter = 0;
-                welcomeConnectBtn.Text = "Re-connect To Database";
+                welcomeConnectBtn.Text = @"Re-connect To Database";
                 configurationBtn.Enabled = true;
                 DatabaseSingleton.CloseAndDispose();
             }
@@ -115,15 +110,15 @@ namespace DatabaseEditorForUser
             switch (connectionTimerCounter)
             {
                 case 0:
-                    connectionStatusLabel.Text = "Connecting.";
+                    connectionStatusLabel.Text = @"Connecting.";
                     connectionTimerCounter++;
                     break;
                 case 50:
-                    connectionStatusLabel.Text = "Connecting..";
+                    connectionStatusLabel.Text = @"Connecting..";
                     connectionTimerCounter++;
                     break;
                 case 100:
-                    connectionStatusLabel.Text = "Connecting...";
+                    connectionStatusLabel.Text = @"Connecting...";
                     connectionTimerCounter++;
                     break;
                 case 150:
@@ -135,7 +130,7 @@ namespace DatabaseEditorForUser
             }
         }
 
-        private void СonfigurationBtn_Click(object sender, EventArgs e)
+        private void ConfigurationBtn_Click(object sender, EventArgs e)
         {
             new ConfigurationForm().ShowDialog();
         }

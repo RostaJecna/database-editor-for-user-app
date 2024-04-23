@@ -1,32 +1,26 @@
-﻿using DatabaseEditorForUser.Entities;
-using DatabaseEditorForUser.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DatabaseEditorForUser.Entities;
+using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.DAOs
 {
-    internal class AttachmentDAO : IDAO<Attachment>
+    internal class AttachmentDao : IDao<Attachment>
     {
         public void Add(Attachment element)
         {
-            if (!FolderDAO.Exist(element.FolderID))
-            {
-                throw new Exception("The folder with this ID does not exist.");
-            }
+            if (!FolderDao.Exist(element.FolderId)) throw new Exception("The folder with this ID does not exist.");
 
-            string query = "INSERT INTO Attachment (FolderID, TypeID, AttachmentName, SizeMB) VALUES" +
-                                "(@FolderID, @TypeID, @AttachmentName, @SizeMB);";
+            const string query = "INSERT INTO Attachment (FolderID, TypeID, AttachmentName, SizeMB) VALUES" +
+                                 "(@FolderID, @TypeID, @AttachmentName, @SizeMB);";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@FolderID", element.FolderID);
-                command.Parameters.AddWithValue("@TypeID", element.TypeID);
+                command.Parameters.AddWithValue("@FolderID", element.FolderId);
+                command.Parameters.AddWithValue("@TypeID", element.TypeId);
                 command.Parameters.AddWithValue("@AttachmentName", element.AttachmentName);
-                command.Parameters.AddWithValue("@SizeMB", Math.Round(element.SizeMB, 2));
+                command.Parameters.AddWithValue("@SizeMB", Math.Round(element.SizeMb, 2));
 
                 command.ExecuteNonQuery();
             }
@@ -34,20 +28,20 @@ namespace DatabaseEditorForUser.DAOs
 
         public void ClearTable()
         {
-            string query = "DELETE FROM Attachment;";
+            const string query = "DELETE FROM Attachment;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.ExecuteNonQuery();
             }
         }
 
-        public void Delete(int ID)
+        public void Delete(int id)
         {
-            string query = "DELETE FROM Attachment WHERE ID = @ID;";
+            const string query = "DELETE FROM Attachment WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 command.ExecuteNonQuery();
             }
@@ -55,25 +49,22 @@ namespace DatabaseEditorForUser.DAOs
 
         public void Edit(Attachment element)
         {
-            if (!FolderDAO.Exist(element.FolderID))
-            {
-                throw new Exception("The folder with this ID does not exist.");
-            }
+            if (!FolderDao.Exist(element.FolderId)) throw new Exception("The folder with this ID does not exist.");
 
-            string query = "UPDATE Attachment SET FolderID = @FolderID, " +
-                                              "TypeID = @TypeID," +
-                                              "AttachmentName = @AttachmentName," +
-                                              "SizeMB = @SizeMB," +
-                                              "UpdatedAt = @UpdatedAt" +
-                                          " WHERE ID = @ID;";
+            const string query = "UPDATE Attachment SET FolderID = @FolderID, " +
+                                 "TypeID = @TypeID," +
+                                 "AttachmentName = @AttachmentName," +
+                                 "SizeMB = @SizeMB," +
+                                 "UpdatedAt = @UpdatedAt" +
+                                 " WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", element.ID);
-                command.Parameters.AddWithValue("@FolderID", element.FolderID);
-                command.Parameters.AddWithValue("@TypeID", element.TypeID);
+                command.Parameters.AddWithValue("@ID", element.Id);
+                command.Parameters.AddWithValue("@FolderID", element.FolderId);
+                command.Parameters.AddWithValue("@TypeID", element.TypeId);
                 command.Parameters.AddWithValue("@AttachmentName", element.AttachmentName);
-                command.Parameters.AddWithValue("@SizeMB", Math.Round(element.SizeMB, 2));
+                command.Parameters.AddWithValue("@SizeMB", Math.Round(element.SizeMb, 2));
                 command.Parameters.AddWithValue("@UpdatedAt", element.UpdatedAt);
 
                 command.ExecuteNonQuery();
@@ -82,7 +73,7 @@ namespace DatabaseEditorForUser.DAOs
 
         public IEnumerable<Attachment> GetAll()
         {
-            string query = "SELECT * FROM Attachment";
+            const string query = "SELECT * FROM Attachment";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -106,31 +97,29 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public Attachment GetByID(int ID)
+        public Attachment GetById(int id)
         {
-            string query = "SELECT * FROM Attachment WHERE ID = @ID";
+            const string query = "SELECT * FROM Attachment WHERE ID = @ID";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if (reader.HasRows)
-                    {
-                        reader.Read();
+                    if (!reader.HasRows) throw new Exception("No rows found in database.");
+                    reader.Read();
 
-                        return new Attachment(
-                            reader.GetInt32(0),
-                            reader.GetInt32(1),
-                            reader.GetInt32(2),
-                            reader.GetString(3),
-                            (float)reader.GetDouble(4),
-                            reader.GetDateTime(5),
-                            reader.GetDateTime(6)
-                        );
-                    }
-                    throw new Exception("No rows found in database.");
+                    return new Attachment(
+                        reader.GetInt32(0),
+                        reader.GetInt32(1),
+                        reader.GetInt32(2),
+                        reader.GetString(3),
+                        (float)reader.GetDouble(4),
+                        reader.GetDateTime(5),
+                        reader.GetDateTime(6)
+                    );
+
                 }
             }
         }
@@ -140,7 +129,7 @@ namespace DatabaseEditorForUser.DAOs
             throw new NotImplementedException();
         }
 
-        public bool HasReferences(int ID)
+        public bool HasReferences(int id)
         {
             throw new NotImplementedException();
         }
@@ -154,24 +143,23 @@ namespace DatabaseEditorForUser.DAOs
                 command.ExecuteNonQuery();
             }
 
-            query = "INSERT INTO Attachment (ID, FolderID, TypeID, AttachmentName, SizeMB, CreatedAt, UpdatedAt) VALUES" +
-                                "(@ID, @FolderID, @TypeID, @AttachmentName, @SizeMB, @CreatedAt, @UpdatedAt);";
+            query =
+                "INSERT INTO Attachment (ID, FolderID, TypeID, AttachmentName, SizeMB, CreatedAt, UpdatedAt) VALUES" +
+                "(@ID, @FolderID, @TypeID, @AttachmentName, @SizeMB, @CreatedAt, @UpdatedAt);";
 
             foreach (Attachment element in rows)
-            {
                 using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
                 {
-                    command.Parameters.AddWithValue("@ID", element.ID);
-                    command.Parameters.AddWithValue("@FolderID", element.FolderID);
-                    command.Parameters.AddWithValue("@TypeID", element.TypeID);
+                    command.Parameters.AddWithValue("@ID", element.Id);
+                    command.Parameters.AddWithValue("@FolderID", element.FolderId);
+                    command.Parameters.AddWithValue("@TypeID", element.TypeId);
                     command.Parameters.AddWithValue("@AttachmentName", element.AttachmentName);
-                    command.Parameters.AddWithValue("@SizeMB", Math.Round(element.SizeMB, 2));
+                    command.Parameters.AddWithValue("@SizeMB", Math.Round(element.SizeMb, 2));
                     command.Parameters.AddWithValue("@CreatedAt", element.CreatedAt);
                     command.Parameters.AddWithValue("@UpdatedAt", element.UpdatedAt);
 
                     command.ExecuteNonQuery();
                 }
-            }
 
             query = "SET IDENTITY_INSERT Attachment OFF;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))

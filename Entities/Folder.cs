@@ -1,80 +1,45 @@
-﻿using DatabaseEditorForUser.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.Entities
 {
     internal class Folder : IBaseClass
     {
-        private int id;
         private string name;
-        private int colorID;
-        private bool isShared;
-        private DateTime createdAt;
 
-        public Folder(int id, string name, int colorID, bool isShared, DateTime createdAt)
+        public Folder(int id, string name, int colorId, bool isShared, DateTime createdAt)
         {
-            ID = id;
+            Id = id;
             Name = name;
-            ColorID = colorID;
+            ColorId = colorId;
             IsShared = isShared;
             CreatedAt = createdAt;
         }
 
-        public Folder(string name, int colorID, bool isShared)
+        public Folder(string name, int colorId, bool isShared)
         {
             Name = name;
-            ColorID = colorID;
+            ColorId = colorId;
             IsShared = isShared;
         }
 
-        public int ID
-        {
-            get { return id; }
-            set { id = value; }
-        }
+        public int Id { get; set; }
 
         public string Name
         {
-            get { return name; }
-            set
-            {
-                if(value is null)
-                {
-                    throw new ArgumentException("Name can't be null.");
-                }
-                name = value;
-            }
+            get => name;
+            private set => name = value ?? throw new ArgumentException("Name can't be null.");
         }
 
-        public int ColorID
-        {
-            get { return colorID; }
-            set { colorID = value; }
-        }
+        public int ColorId { get; set; }
 
-        public bool IsShared
-        {
-            get { return isShared; }
-            set { isShared = value; }
-        }
+        public bool IsShared { get; set; }
 
-        public DateTime CreatedAt
-        {
-            get { return createdAt; }
-            set { createdAt = value; }
-        }
+        public DateTime CreatedAt { get; set; }
 
         public override string ToString()
         {
-            if(ID == default)
-            {
-                return $"{Name}, {ColorID}, {IsShared}";
-            }
-            return $"{ID}: {Name}, {ColorID}, {IsShared}";
+            return Id == default ? $"{Name}, {ColorId}, {IsShared}" : $"{Id}: {Name}, {ColorId}, {IsShared}";
         }
     }
 }

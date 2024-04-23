@@ -1,50 +1,47 @@
-﻿using DatabaseEditorForUser.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.Entities
 {
     internal class Attachment : IBaseClass
     {
-        public int ID { get; set; }
-        public int FolderID { get; set; }
-        public int TypeID { get; set; }
+        public int Id { get; set; }
+        public int FolderId { get; set; }
+        public int TypeId { get; set; }
         public string AttachmentName { get; set; }
-        public float SizeMB { get; set; }
+        public float SizeMb { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public Attachment(int id, int folderID, int typeID, string attachmentName, float sizeMB, DateTime createAt, DateTime updatedAt)
+        public Attachment(int id, int folderId, int typeId, string attachmentName, float sizeMb, DateTime createAt,
+            DateTime updatedAt)
         {
-            ID = id;
-            FolderID = folderID;
-            TypeID = typeID;
+            Id = id;
+            FolderId = folderId;
+            TypeId = typeId;
             AttachmentName = attachmentName;
-            SizeMB = sizeMB;
+            SizeMb = sizeMb;
             CreatedAt = createAt;
             UpdatedAt = updatedAt;
         }
 
-        public Attachment(int id, int folderID, int typeID, string attachmentName, float sizeMB, DateTime createAt)
+        public Attachment(int id, int folderId, int typeId, string attachmentName, float sizeMB, DateTime createAt)
         {
-            ID = id;
-            FolderID = folderID;
-            TypeID = typeID;
+            Id = id;
+            FolderId = folderId;
+            TypeId = typeId;
             AttachmentName = attachmentName;
-            SizeMB = sizeMB;
+            SizeMb = sizeMB;
             CreatedAt = createAt;
             UpdatedAt = DateTime.Now;
         }
 
-        public Attachment(int folderID, int typeID, string attachmentName, float sizeMB)
+        public Attachment(int folderId, int typeId, string attachmentName, float sizeMb)
         {
-            FolderID = folderID;
-            TypeID = typeID;
+            FolderId = folderId;
+            TypeId = typeId;
             AttachmentName = attachmentName;
-            SizeMB = sizeMB;
+            SizeMb = sizeMb;
         }
     }
 }

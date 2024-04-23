@@ -1,22 +1,16 @@
-﻿using DatabaseEditorForUser.Entities;
-using DatabaseEditorForUser.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Xml.Linq;
+using DatabaseEditorForUser.Entities;
+using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.DAOs
 {
-    internal class AccountDAO : IDAO<Account>
+    internal class AccountDao : IDao<Account>
     {
         public IEnumerable<Account> GetAll()
         {
-            string query = "SELECT * FROM Account";
+            const string query = "SELECT * FROM Account";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -41,13 +35,10 @@ namespace DatabaseEditorForUser.DAOs
 
         public void Add(Account element)
         {
-            if (HasDuplicate(element))
-            {
-                throw new Exception("Email must be unique.");
-            }
+            if (HasDuplicate(element)) throw new Exception("Email must be unique.");
 
-            string query = "INSERT INTO Account (FirstName, LastName, Email, HashedPassword) VALUES" +
-                                "(@FirstName, @LastName, @Email, @HashedPassword);";
+            const string query = "INSERT INTO Account (FirstName, LastName, Email, HashedPassword) VALUES" +
+                                 "(@FirstName, @LastName, @Email, @HashedPassword);";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -58,25 +49,21 @@ namespace DatabaseEditorForUser.DAOs
 
                 command.ExecuteNonQuery();
             }
-
         }
 
         public void Edit(Account element)
         {
-            if(HasDuplicate(element))
-            {
-                throw new Exception("Duplicate email found. Please provide a unique email.");
-            }
+            if (HasDuplicate(element)) throw new Exception("Duplicate email found. Please provide a unique email.");
 
-            string query = "UPDATE Account SET FirstName = @FirstName, " +
-                                              "LastName = @LastName," +
-                                              "Email = @Email," +
-                                              "HashedPassword = @HashedPassword" +
-                                          " WHERE ID = @ID;";
+            const string query = "UPDATE Account SET FirstName = @FirstName, " +
+                                 "LastName = @LastName," +
+                                 "Email = @Email," +
+                                 "HashedPassword = @HashedPassword" +
+                                 " WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", element.ID);
+                command.Parameters.AddWithValue("@ID", element.Id);
                 command.Parameters.AddWithValue("@FirstName", element.FirstName);
                 command.Parameters.AddWithValue("@LastName", element.LastName);
                 command.Parameters.AddWithValue("@Email", element.Email);
@@ -86,58 +73,53 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
-        public void Delete(int ID)
+        public void Delete(int id)
         {
-
-            if(HasReferences(ID))
-            {
+            if (HasReferences(id))
                 throw new InvalidOperationException("Cannot delete Account with references in Access table.");
-            }
 
-            string query = "DELETE FROM Account WHERE ID = @ID;";
+            const string query = "DELETE FROM Account WHERE ID = @ID;";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 command.ExecuteNonQuery();
             }
         }
 
-        public Account GetByID(int ID)
+        public Account GetById(int id)
         {
-            string query = "SELECT * FROM Account WHERE ID = @ID";
+            const string query = "SELECT * FROM Account WHERE ID = @ID";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if(reader.HasRows)
-                    {
-                        reader.Read();
+                    if (!reader.HasRows) throw new Exception("No rows found in database.");
+                    reader.Read();
 
-                        return new Account(
-                            reader.GetInt32(0),
-                            reader.GetString(1),
-                            reader.GetString(2),
-                            reader.GetString(3),
-                            reader.GetString(4),
-                            reader.GetDateTime(5)
-                        );
-                    }
-                    throw new Exception("No rows found in database.");
+                    return new Account(
+                        reader.GetInt32(0),
+                        reader.GetString(1),
+                        reader.GetString(2),
+                        reader.GetString(3),
+                        reader.GetString(4),
+                        reader.GetDateTime(5)
+                    );
+
                 }
             }
         }
 
-        public bool HasReferences(int ID)
+        public bool HasReferences(int id)
         {
-            string query = "SELECT 1 FROM Access WHERE AccountID = @ID";
+            const string query = "SELECT 1 FROM Access WHERE AccountID = @ID";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     return reader.HasRows;
@@ -147,30 +129,27 @@ namespace DatabaseEditorForUser.DAOs
 
         public bool HasDuplicate(Account element)
         {
-            string query = "SELECT ID FROM Account WHERE Email = @Email";
+            const string query = "SELECT ID FROM Account WHERE Email = @Email";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.Parameters.AddWithValue("@Email", element.Email);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    if(reader.HasRows)
-                    {
-                        reader.Read();
-                        return element.ID != reader.GetInt32(0);
-                    }
+                    if (!reader.HasRows) return false;
+                    reader.Read();
+                    return element.Id != reader.GetInt32(0);
 
-                    return false;
                 }
             }
         }
 
-        public static bool Exist(int ID)
+        public static bool Exist(int id)
         {
-            string query = "SELECT 1 FROM Account WHERE ID = @ID";
+            const string query = "SELECT 1 FROM Account WHERE ID = @ID";
 
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
-                command.Parameters.AddWithValue("@ID", ID);
+                command.Parameters.AddWithValue("@ID", id);
 
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
@@ -181,7 +160,6 @@ namespace DatabaseEditorForUser.DAOs
 
         public void ImportAll(IEnumerable<Account> rows)
         {
-
             string query = "SET IDENTITY_INSERT Account ON;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
@@ -189,13 +167,12 @@ namespace DatabaseEditorForUser.DAOs
             }
 
             query = "INSERT INTO Account (ID, FirstName, LastName, Email, HashedPassword, Registered) VALUES" +
-                                "(@ID, @FirstName, @LastName, @Email, @HashedPassword, @Registered);";
+                    "(@ID, @FirstName, @LastName, @Email, @HashedPassword, @Registered);";
 
-            foreach(Account element in rows)
-            {
+            foreach (Account element in rows)
                 using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
                 {
-                    command.Parameters.AddWithValue("@ID", element.ID);
+                    command.Parameters.AddWithValue("@ID", element.Id);
                     command.Parameters.AddWithValue("@FirstName", element.FirstName);
                     command.Parameters.AddWithValue("@LastName", element.LastName);
                     command.Parameters.AddWithValue("@Email", element.Email);
@@ -204,7 +181,6 @@ namespace DatabaseEditorForUser.DAOs
 
                     command.ExecuteNonQuery();
                 }
-            }
 
             query = "SET IDENTITY_INSERT Account OFF;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
@@ -215,7 +191,7 @@ namespace DatabaseEditorForUser.DAOs
 
         public void ClearTable()
         {
-            string query = "DELETE FROM Account;";
+            const string query = "DELETE FROM Account;";
             using (SqlCommand command = new SqlCommand(query, DatabaseSingleton.Instance()))
             {
                 command.ExecuteNonQuery();
@@ -223,4 +199,3 @@ namespace DatabaseEditorForUser.DAOs
         }
     }
 }
-
