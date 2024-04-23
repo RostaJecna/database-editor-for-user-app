@@ -6,8 +6,16 @@ using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.DAOs
 {
+    /// <summary>
+    ///     Provides data access operations for the 'Attachment' entity.
+    /// </summary>
     internal class AttachmentDao : IDao<Attachment>
     {
+        /// <summary>
+        ///     Adds a new attachment entity to the database.
+        /// </summary>
+        /// <param name="element">The attachment entity to add.</param>
+        /// <exception cref="Exception">Thrown if the folder with the specified ID does not exist or if a database error occurs.</exception>
         public void Add(Attachment element)
         {
             if (!FolderDao.Exist(element.FolderId)) throw new Exception("The folder with this ID does not exist.");
@@ -26,6 +34,9 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Clears all attachment entities from the database.
+        /// </summary>
         public void ClearTable()
         {
             const string query = "DELETE FROM Attachment;";
@@ -35,6 +46,10 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Deletes an attachment entity from the database by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the attachment entity to delete.</param>
         public void Delete(int id)
         {
             const string query = "DELETE FROM Attachment WHERE ID = @ID;";
@@ -47,6 +62,11 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Updates an existing attachment entity in the database.
+        /// </summary>
+        /// <param name="element">The updated attachment entity.</param>
+        /// <exception cref="Exception">Thrown if the folder with the specified ID does not exist or if a database error occurs.</exception>
         public void Edit(Attachment element)
         {
             if (!FolderDao.Exist(element.FolderId)) throw new Exception("The folder with this ID does not exist.");
@@ -71,6 +91,10 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Retrieves all attachment entities from the database.
+        /// </summary>
+        /// <returns>An enumerable collection of attachment entities.</returns>
         public IEnumerable<Attachment> GetAll()
         {
             const string query = "SELECT * FROM Attachment";
@@ -97,6 +121,12 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Retrieves an attachment entity from the database by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the attachment entity to retrieve.</param>
+        /// <returns>The attachment entity with the specified ID.</returns>
+        /// <exception cref="Exception">Thrown if no attachment entity with the provided ID is found in the database.</exception>
         public Attachment GetById(int id)
         {
             const string query = "SELECT * FROM Attachment WHERE ID = @ID";
@@ -119,21 +149,34 @@ namespace DatabaseEditorForUser.DAOs
                         reader.GetDateTime(5),
                         reader.GetDateTime(6)
                     );
-
                 }
             }
         }
 
+        /// <summary>
+        ///     Checks if a duplicate attachment entity exists in the database.
+        /// </summary>
+        /// <param name="element">The attachment entity to check for duplicates.</param>
+        /// <returns>True if a duplicate attachment entity exists, otherwise false.</returns>
         public bool HasDuplicate(Attachment element)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///     Checks if any references to the attachment entity exist in other tables.
+        /// </summary>
+        /// <param name="id">The ID of the attachment entity to check.</param>
+        /// <returns>True if references to the attachment entity exist, otherwise false.</returns>
         public bool HasReferences(int id)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///     Imports a collection of attachment entities into the database.
+        /// </summary>
+        /// <param name="rows">The collection of attachment entities to import.</param>
         public void ImportAll(IEnumerable<Attachment> rows)
         {
             string query = "SET IDENTITY_INSERT Attachment ON;";

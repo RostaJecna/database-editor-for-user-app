@@ -5,20 +5,37 @@ using DatabaseEditorForUser.Graphics;
 
 namespace DatabaseEditorForUser.Subforms
 {
+    /// <summary>
+    ///     Represents the AccountForm class, which is a subform for managing accounts in the application.
+    /// </summary>
     public partial class AccountForm : Form
     {
+        /// <summary>
+        ///     Enum representing the panels in the form.
+        /// </summary>
         internal enum Panels
         {
+            /// <summary>
+            ///     Navigation panel.
+            /// </summary>
             Navigation,
+
+            /// <summary>
+            ///     Data manager panel.
+            /// </summary>
             DataManager
         }
 
+        // Fields
         private int refreshBtnTimerCounter;
         private readonly int refreshBtnTimerMaxCooldown;
         private DataGridViewRow selectedRow;
         private bool userIsEditingRow;
         private Account selectedAccount;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="AccountForm" /> class.
+        /// </summary>
         public AccountForm()
         {
             InitializeComponent();
@@ -30,6 +47,9 @@ namespace DatabaseEditorForUser.Subforms
             SwitchPanelTo(Panels.Navigation);
         }
 
+        /// <summary>
+        ///     Changes the default component settings.
+        /// </summary>
         private void ChangeDefaultComponent()
         {
             addRowBtn.BackColor = Palettes.GetLast();
@@ -43,6 +63,9 @@ namespace DatabaseEditorForUser.Subforms
             passwordCheckBox.ForeColor = Palettes.GetLastDarkness(15);
         }
 
+        /// <summary>
+        ///     Resets the component to its default state.
+        /// </summary>
         private void ResetComponentToDefault()
         {
             passwordCheckBox.Checked = true;
@@ -52,6 +75,9 @@ namespace DatabaseEditorForUser.Subforms
             userIsEditingRow = false;
         }
 
+        /// <summary>
+        ///     Retrieves all data from the database and populates the DataGridView.
+        /// </summary>
         private void GetAllDataFromDatabase()
         {
             selectedRow = null;
@@ -65,6 +91,9 @@ namespace DatabaseEditorForUser.Subforms
             editBtn.Visible = hasRows;
         }
 
+        /// <summary>
+        ///     Sets the refresh cooldown for the refresh button.
+        /// </summary>
         private void SetRefreshCooldown()
         {
             refreshBtnTimer.Enabled = true;
@@ -74,6 +103,9 @@ namespace DatabaseEditorForUser.Subforms
             refreshTableBtn.Enabled = false;
         }
 
+        /// <summary>
+        ///     Clears the text boxes.
+        /// </summary>
         private void ClearTextBoxes()
         {
             firstNameTextBox.Text = string.Empty;
@@ -82,6 +114,10 @@ namespace DatabaseEditorForUser.Subforms
             passwordTextBox.Text = string.Empty;
         }
 
+
+        /// <summary>
+        ///     Fills the text boxes with data from the specified Access object.
+        /// </summary>
         private void FillTextBoxesWithData(Account account)
         {
             firstNameTextBox.Text = account.FirstName;
@@ -89,6 +125,10 @@ namespace DatabaseEditorForUser.Subforms
             emailTextBox.Text = account.Email;
         }
 
+        /// <summary>
+        ///     Switches the panel to the specified one.
+        /// </summary>
+        /// <param name="panel">The panel to switch to.</param>
         private void SwitchPanelTo(Panels panel)
         {
             switch (panel)
@@ -106,16 +146,27 @@ namespace DatabaseEditorForUser.Subforms
             }
         }
 
+        /// <summary>
+        ///     Handles the CellClick event of the accessGridView control.
+        /// </summary>
         private void AccountGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             selectedRow = e.RowIndex >= 0 ? selectedRow = accountGridView.Rows[e.RowIndex] : null;
         }
 
+        /// <summary>
+        ///     Handles the click event of the "Add Row" button.
+        ///     Switches the panel to the data manager panel.
+        /// </summary>
         private void AddRowBtn_Click(object sender, EventArgs e)
         {
             SwitchPanelTo(Panels.DataManager);
         }
 
+        /// <summary>
+        ///     Handles the click event of the "Back" button.
+        ///     Switches the panel to the navigation panel, resets component state, and clears text boxes.
+        /// </summary>
         private void BackBtn_Click(object sender, EventArgs e)
         {
             SwitchPanelTo(Panels.Navigation);
@@ -123,12 +174,20 @@ namespace DatabaseEditorForUser.Subforms
             ClearTextBoxes();
         }
 
+        /// <summary>
+        ///     Handles the click event of the "Refresh Table" button.
+        ///     Sets a refresh cooldown and retrieves all data from the database to refresh the DataGridView.
+        /// </summary>
         private void RefreshTableBtn_Click(object sender, EventArgs e)
         {
             SetRefreshCooldown();
             GetAllDataFromDatabase();
         }
 
+        /// <summary>
+        ///     Handles the tick event of the refresh button timer.
+        ///     Updates the refresh button text and stops the timer when the cooldown is reached.
+        /// </summary>
         private void RefreshBtnTimer_Tick(object sender, EventArgs e)
         {
             if (refreshBtnTimerCounter == refreshBtnTimerMaxCooldown)
@@ -146,6 +205,10 @@ namespace DatabaseEditorForUser.Subforms
             }
         }
 
+        /// <summary>
+        ///     Handles the click event of the "Save Row" button.
+        ///     Validates input and saves or edits the account row in the database.
+        /// </summary>
         private void SaveRowBtn_Click(object sender, EventArgs e)
         {
             if (firstNameTextBox.Text == string.Empty || lastNameTextBox.Text == string.Empty ||
@@ -211,6 +274,11 @@ namespace DatabaseEditorForUser.Subforms
             }
         }
 
+        /// <summary>
+        ///     Event handler for the "Edit" button click.
+        /// </summary>
+        /// <param name="sender">The object that triggered the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void EditBtn_Click(object sender, EventArgs e)
         {
             userIsEditingRow = true;
@@ -228,6 +296,11 @@ namespace DatabaseEditorForUser.Subforms
             FillTextBoxesWithData(selectedAccount);
         }
 
+        /// <summary>
+        ///     Event handler for the "Delete" button click.
+        /// </summary>
+        /// <param name="sender">The object that triggered the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show(@"Are you sure you want to delete this account?", @"Confirmation",

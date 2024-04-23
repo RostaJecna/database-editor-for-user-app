@@ -4,8 +4,14 @@ using System.Data.SqlClient;
 
 namespace DatabaseEditorForUser
 {
+    /// <summary>
+    /// Represents a singleton class responsible for managing database connections.
+    /// </summary>
     internal static class DatabaseSingleton
     {
+        /// <summary>
+        /// Represents the status of the database connection.
+        /// </summary>
         internal enum Status
         {
             Null,
@@ -15,9 +21,21 @@ namespace DatabaseEditorForUser
         }
 
         private static SqlConnection _connection;
-        public static Status DbStatus = Status.Null;
-        public static DatabaseConfiguration DatabaseConfiguration = null;
+        
+        /// <summary>
+        /// Gets or sets the current status of the database connection.
+        /// </summary>
+        public static Status DbStatus { get; set; } = Status.Null;
+        
+        /// <summary>
+        /// Gets or sets the configuration for the database connection.
+        /// </summary>
+        public static DatabaseConfiguration DatabaseConfiguration { get; set; } = null;
 
+        /// <summary>
+        /// Gets an instance of the database connection.
+        /// </summary>
+        /// <returns>An instance of SqlConnection representing the database connection.</returns>
         public static SqlConnection Instance()
         {
             if (_connection != null) return _connection;
@@ -48,6 +66,9 @@ namespace DatabaseEditorForUser
             return _connection;
         }
 
+        /// <summary>
+        /// Closes and disposes the current database connection.
+        /// </summary>
         public static void CloseAndDispose()
         {
             try
@@ -70,11 +91,19 @@ namespace DatabaseEditorForUser
             return result;
         }
 
+        /// <summary>
+        /// Checks if the database is currently connected.
+        /// </summary>
+        /// <returns>True if the database is connected; otherwise, false.</returns>
         public static bool IsConnected()
         {
             return DbStatus == Status.Connected;
         }
 
+        /// <summary>
+        /// Checks if there was a failure in establishing the database connection.
+        /// </summary>
+        /// <returns>True if there was a failure; otherwise, false.</returns>
         public static bool IsFailure()
         {
             return DbStatus == Status.Failure;

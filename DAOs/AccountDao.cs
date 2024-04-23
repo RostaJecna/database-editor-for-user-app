@@ -6,8 +6,15 @@ using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.DAOs
 {
+    /// <summary>
+    ///     Provides data access operations for the 'Account' entity.
+    /// </summary>
     internal class AccountDao : IDao<Account>
     {
+        /// <summary>
+        ///     Retrieves all account entities from the database.
+        /// </summary>
+        /// <returns>An enumerable collection of account entities.</returns>
         public IEnumerable<Account> GetAll()
         {
             const string query = "SELECT * FROM Account";
@@ -33,6 +40,14 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Adds a new account entity to the database.
+        /// </summary>
+        /// <param name="element">The account entity to add.</param>
+        /// <exception cref="Exception">
+        ///     Thrown if an account with the same email already exists in the database or if a database
+        ///     error occurs.
+        /// </exception>
         public void Add(Account element)
         {
             if (HasDuplicate(element)) throw new Exception("Email must be unique.");
@@ -51,6 +66,15 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+
+        /// <summary>
+        ///     Updates an existing account entity in the database.
+        /// </summary>
+        /// <param name="element">The updated account entity.</param>
+        /// <exception cref="Exception">
+        ///     Thrown if an account with the same email already exists in the database or if a database
+        ///     error occurs.
+        /// </exception>
         public void Edit(Account element)
         {
             if (HasDuplicate(element)) throw new Exception("Duplicate email found. Please provide a unique email.");
@@ -73,6 +97,11 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Deletes an account entity from the database by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the account entity to delete.</param>
+        /// <exception cref="InvalidOperationException">Thrown if the account has references in the 'Access' table.</exception>
         public void Delete(int id)
         {
             if (HasReferences(id))
@@ -88,6 +117,13 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+
+        /// <summary>
+        ///     Retrieves an account entity from the database by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the account entity to retrieve.</param>
+        /// <returns>The account entity with the specified ID.</returns>
+        /// <exception cref="Exception">Thrown if no account entity with the provided ID is found in the database.</exception>
         public Account GetById(int id)
         {
             const string query = "SELECT * FROM Account WHERE ID = @ID";
@@ -109,11 +145,15 @@ namespace DatabaseEditorForUser.DAOs
                         reader.GetString(4),
                         reader.GetDateTime(5)
                     );
-
                 }
             }
         }
 
+        /// <summary>
+        ///     Checks if any references to the account entity exist in other tables.
+        /// </summary>
+        /// <param name="id">The ID of the account entity to check.</param>
+        /// <returns>True if references to the account entity exist, otherwise false.</returns>
         public bool HasReferences(int id)
         {
             const string query = "SELECT 1 FROM Access WHERE AccountID = @ID";
@@ -127,6 +167,11 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Checks if an account entity with the same email already exists in the database.
+        /// </summary>
+        /// <param name="element">The account entity to check for duplicates.</param>
+        /// <returns>True if a duplicate account entity exists, otherwise false.</returns>
         public bool HasDuplicate(Account element)
         {
             const string query = "SELECT ID FROM Account WHERE Email = @Email";
@@ -138,11 +183,15 @@ namespace DatabaseEditorForUser.DAOs
                     if (!reader.HasRows) return false;
                     reader.Read();
                     return element.Id != reader.GetInt32(0);
-
                 }
             }
         }
 
+        /// <summary>
+        ///     Checks if an account entity with the provided ID exists in the database.
+        /// </summary>
+        /// <param name="id">The ID of the account entity to check.</param>
+        /// <returns>True if an account entity with the provided ID exists, otherwise false.</returns>
         public static bool Exist(int id)
         {
             const string query = "SELECT 1 FROM Account WHERE ID = @ID";
@@ -158,6 +207,10 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Imports a collection of account entities into the database.
+        /// </summary>
+        /// <param name="rows">The collection of account entities to import.</param>
         public void ImportAll(IEnumerable<Account> rows)
         {
             string query = "SET IDENTITY_INSERT Account ON;";
@@ -189,6 +242,9 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Clears all account entities from the database.
+        /// </summary>
         public void ClearTable()
         {
             const string query = "DELETE FROM Account;";

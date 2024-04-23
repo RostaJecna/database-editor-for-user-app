@@ -6,8 +6,15 @@ using DatabaseEditorForUser.Interfaces;
 
 namespace DatabaseEditorForUser.DAOs
 {
+    /// <summary>
+    ///     Provides data access operations for the 'Folder' entity.
+    /// </summary>
     internal class FolderDao : IDao<Folder>
     {
+        /// <summary>
+        ///     Adds a new folder entity to the database.
+        /// </summary>
+        /// <param name="element">The folder entity to add.</param>
         public void Add(Folder element)
         {
             const string query = "INSERT INTO Folder (FolderName, ColorID, IsShared) VALUES" +
@@ -23,6 +30,11 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Deletes a folder entity from the database by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the folder entity to delete.</param>
+        /// <exception cref="InvalidOperationException">Thrown if the folder has references in other tables.</exception>
         public void Delete(int id)
         {
             if (HasReferences(id))
@@ -39,6 +51,10 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Updates an existing folder entity in the database.
+        /// </summary>
+        /// <param name="element">The updated folder entity.</param>
         public void Edit(Folder element)
         {
             const string query = "UPDATE Folder SET FolderName = @FolderName, " +
@@ -57,6 +73,10 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Retrieves all folder entities from the database.
+        /// </summary>
+        /// <returns>An enumerable collection of folder entities.</returns>
         public IEnumerable<Folder> GetAll()
         {
             const string query = "SELECT * FROM Folder";
@@ -81,6 +101,12 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Retrieves a folder entity from the database by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the folder entity to retrieve.</param>
+        /// <returns>The folder entity with the specified ID.</returns>
+        /// <exception cref="Exception">Thrown if no folder entity with the provided ID is found in the database.</exception>
         public Folder GetById(int id)
         {
             const string query = "SELECT * FROM Folder WHERE ID = @ID";
@@ -101,16 +127,25 @@ namespace DatabaseEditorForUser.DAOs
                         reader.GetBoolean(3),
                         reader.GetDateTime(4)
                     );
-
                 }
             }
         }
 
+        /// <summary>
+        ///     Checks if a folder entity has a duplicate entry in the database.
+        /// </summary>
+        /// <param name="element">The folder entity to check for duplicates.</param>
+        /// <returns>True if a duplicate entry exists in the database; otherwise, false.</returns>
         public bool HasDuplicate(Folder element)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///     Checks if any references to the folder entity exist in other tables.
+        /// </summary>
+        /// <param name="id">The ID of the folder entity to check.</param>
+        /// <returns>True if references to the folder entity exist, otherwise false.</returns>
         public bool HasReferences(int id)
         {
             string query = "SELECT 1 FROM Access WHERE FolderID = @ID";
@@ -134,6 +169,11 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Checks if a folder with the specified ID exists in the database.
+        /// </summary>
+        /// <param name="id">The ID of the folder to check for existence.</param>
+        /// <returns>True if a folder with the given ID exists in the database; otherwise, false.</returns>
         public static bool Exist(int id)
         {
             const string query = "SELECT 1 FROM Folder WHERE ID = @ID";
@@ -149,6 +189,10 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Imports a collection of folder entities into the database.
+        /// </summary>
+        /// <param name="rows">The collection of folder entities to import.</param>
         public void ImportAll(IEnumerable<Folder> rows)
         {
             string query = "SET IDENTITY_INSERT Folder ON;";
@@ -179,6 +223,9 @@ namespace DatabaseEditorForUser.DAOs
             }
         }
 
+        /// <summary>
+        ///     Clears all folder entities from the database.
+        /// </summary>
         public void ClearTable()
         {
             const string query = "DELETE FROM Folder;";

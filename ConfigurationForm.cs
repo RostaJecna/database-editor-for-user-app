@@ -3,8 +3,14 @@ using System.Windows.Forms;
 
 namespace DatabaseEditorForUser
 {
+    /// <summary>
+    ///     Form for configuring database connection settings.
+    /// </summary>
     public partial class ConfigurationForm : Form
     {
+        /// <summary>
+        ///     Initializes a new instance of the ConfigurationForm class.
+        /// </summary>
         public ConfigurationForm()
         {
             InitializeComponent();
@@ -21,6 +27,11 @@ namespace DatabaseEditorForUser
             }
         }
 
+        /// <summary>
+        ///     Handles the click event for the Save button.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void SaveBtn_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(serverNameTextBox.Text) ||
@@ -45,6 +56,11 @@ namespace DatabaseEditorForUser
             Close();
         }
 
+        /// <summary>
+        ///     Handles the checked changed event for the Integrated Security check box.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void IntegratedSecurityCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             userNameTextBox.Enabled = passwordTextBox.Enabled = authenticationCheckBox.Checked;

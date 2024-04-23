@@ -6,6 +6,9 @@ using System.Windows.Forms;
 
 namespace DatabaseEditorForUser
 {
+    /// <summary>
+    ///     Form for connecting to the database.
+    /// </summary>
     public partial class ConnectForm : Form
     {
         private enum Panels
@@ -18,12 +21,19 @@ namespace DatabaseEditorForUser
         private int connectionTimerCounter;
         private Task connectionTask;
 
+        /// <summary>
+        ///     Initializes a new instance of the ConnectForm class.
+        /// </summary>
         public ConnectForm()
         {
             InitializeComponent();
             SwitchPanelTo(Panels.Welcome);
         }
 
+        /// <summary>
+        ///     Switches the visible panel to the specified one.
+        /// </summary>
+        /// <param name="panel">The panel to switch to.</param>
         private void SwitchPanelTo(Panels panel)
         {
             switch (panel)
@@ -41,6 +51,11 @@ namespace DatabaseEditorForUser
             }
         }
 
+        /// <summary>
+        ///     Handles the Paint event for the background panel.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void BgPanel_Paint(object sender, PaintEventArgs e)
         {
             Rectangle gradientRectangle = new Rectangle(0, 0, bgPanel.Width, bgPanel.Height);
@@ -48,11 +63,21 @@ namespace DatabaseEditorForUser
                 Color.FromArgb(36, 63, 114), Color.FromArgb(3, 7, 12), 65f), gradientRectangle);
         }
 
+        /// <summary>
+        ///     Handles the MouseDown event for the drag panel.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void DragPanel_MouseDown(object sender, MouseEventArgs e)
         {
             lastMouseCoordinate = e.Location;
         }
 
+        /// <summary>
+        ///     Handles the MouseMove event for the drag panel.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void DragPanel_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
@@ -60,11 +85,21 @@ namespace DatabaseEditorForUser
             Top += e.Y - lastMouseCoordinate.Y;
         }
 
+        /// <summary>
+        ///     Handles the Click event for the close button.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void FormCloseBtn_Click(object sender, EventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        ///     Handles the Click event for the welcome connect button.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void WelcomeConnectBtn_Click(object sender, EventArgs e)
         {
             SwitchPanelTo(Panels.Connection);
@@ -89,6 +124,11 @@ namespace DatabaseEditorForUser
             connectionTask.Start();
         }
 
+        /// <summary>
+        ///     Handles the Tick event for the connection timer.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void ConnectionTimer_Tick(object sender, EventArgs e)
         {
             if (DatabaseSingleton.IsConnected())
@@ -130,6 +170,11 @@ namespace DatabaseEditorForUser
             }
         }
 
+        /// <summary>
+        ///     Handles the Click event for the configuration button.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void ConfigurationBtn_Click(object sender, EventArgs e)
         {
             new ConfigurationForm().ShowDialog();
